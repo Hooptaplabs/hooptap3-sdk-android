@@ -22,7 +22,7 @@ import java.util.ArrayList;
  *
  */
 public abstract class HooptapApi{
-
+    //Primer commit Development
     private static int retry = 0;
 
     private static JSONObject generateJsonToResponse(Response response) throws Exception {
