@@ -1,11 +1,13 @@
 package com.hooptap.sdkgameroom.Customs;
 
+import java.io.Serializable;
+
 /**
  * Clase custom para encapsular los datos de un juego y facilitar su uso
  *
  * @author Hooptap Team
  */
-public class HooptapGame {
+public class HooptapGame implements Serializable{
     private String image;
     private String title;
     private String url;

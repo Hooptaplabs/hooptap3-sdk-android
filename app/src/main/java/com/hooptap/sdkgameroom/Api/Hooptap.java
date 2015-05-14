@@ -117,8 +117,8 @@ public class Hooptap {
                         .setRequestInterceptor(new RequestInterceptor() {
                             @Override
                             public void intercept(RequestFacade request) {
-                                request.addHeader("access_token", settings.getString("ht_token", ""));
-
+                                //request.addHeader("access_token", settings.getString("ht_token", ""));
+                                request.addHeader("authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI1NTI2M2E5NTYwYTE0NjU5MDU1NTNkZDAiLCJpYXQiOjE0Mjg1Njg3MjV9.1TA54l7zksq1LjuOo0BQV7quoaLDXR9Z3qfgGgKrZzw");
                                 if (settings.getString("ht_api_key", "").equals("")) {
                                     try {
                                         throw new Exception("ApiKey cant be empty");

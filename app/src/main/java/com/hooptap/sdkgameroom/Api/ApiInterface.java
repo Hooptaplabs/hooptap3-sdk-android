@@ -12,13 +12,21 @@ import com.hooptap.a.http.Path;
 public interface ApiInterface {
 
     String url = "//api.hooptap.com:8080/api/v1.1.0";
+    String url_old = "//dev.hooptap.com:8081/api/v1.0/";
 
     @GET(url+"/Item/{item_id}")
     void getList(@Path("item_id") String item_id, Callback<Response> cb);
 
+    @GET(url_old+"/nicktv.gameroomcorner/Game/{item_id}")
+    void getListGame(@Path("item_id") String item_id, Callback<Response> cb);
+
     @FormUrlEncoded
     @POST(url+"/Auth/")
     Response getToken(@Field("api_key") String api_key);
+
+    @FormUrlEncoded
+    @POST(url_old+"/nicktv.gameroomcorner/game_played/{item_id}")
+    void play(@Path("item_id") String item_id, @Field("score") String puntuation, Callback<Response> cb);
 
     /*@FormUrlEncoded
     @POST(url+"/Auth/")
