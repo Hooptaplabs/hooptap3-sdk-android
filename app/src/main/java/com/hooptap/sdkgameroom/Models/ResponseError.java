@@ -1,4 +1,4 @@
-package com.hooptap.sdkgameroom.Customs;
+package com.hooptap.sdkgameroom.Models;
 
 import com.hooptap.a.client.Response;
 import com.hooptap.a.mime.TypedInput;

@@ -50,6 +50,12 @@ public class Hooptap {
         editor.apply();
     }
 
+    public static void setApiKey(String apiKey) {
+        editor.putString("ht_api_key", apiKey);
+        editor.apply();
+    }
+
+
     /**
      * Constructor generico en el cual podremos configurar ciertos parametros
      */
@@ -90,7 +96,7 @@ public class Hooptap {
             if (sClientService == null) {
 
                 client = new OkHttpClient();
-                client.interceptors().add(new HooptapInterceptor(context));
+                //client.interceptors().add(new HooptapInterceptor(context));
                 client.setHostnameVerifier(org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 
                 try {
@@ -118,15 +124,10 @@ public class Hooptap {
                             @Override
                             public void intercept(RequestFacade request) {
                                 //request.addHeader("access_token", settings.getString("ht_token", ""));
-                                request.addHeader("authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI1NTI2M2E5NTYwYTE0NjU5MDU1NTNkZDAiLCJpYXQiOjE0Mjg1Njg3MjV9.1TA54l7zksq1LjuOo0BQV7quoaLDXR9Z3qfgGgKrZzw");
-                                if (settings.getString("ht_api_key", "").equals("")) {
-                                    try {
-                                        throw new Exception("ApiKey cant be empty");
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                } else
-                                    request.addHeader("api_key", settings.getString("ht_api_key", ""));
+                                request.addHeader("disp_platform", "android");
+                                request.addHeader("authorization", "Bearer "+settings.getString("ht_token", ""));
+
+                                request.addHeader("api_key", settings.getString("ht_api_key", ""));
                             }
                         })
                         .setLogLevel(debugVariable)

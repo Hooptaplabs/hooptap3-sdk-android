@@ -1,9 +1,10 @@
-package com.hooptap.sdkgameroom.Customs;
+package com.hooptap.sdkgameroom.Models;
 
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
@@ -60,8 +61,9 @@ public class HooptapWebView extends WebView {
                 if (inter != null){
                     try{
                         JSONObject jsonGame = new JSONObject(json);
+                        Log.e("FINISH",jsonGame+"");
                         HooptapGameStatus gameStatus = new HooptapGameStatus();
-                        gameStatus.setPoints(jsonGame.getInt("points"));
+                        gameStatus.setScore(jsonGame.getString("points"));
                         inter.gameDidFinish(gameStatus);
                     }catch (Exception e){e.printStackTrace();}
 

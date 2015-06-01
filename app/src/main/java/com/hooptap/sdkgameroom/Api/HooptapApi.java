@@ -1,21 +1,19 @@
 package com.hooptap.sdkgameroom.Api;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.hooptap.a.Callback;
 import com.hooptap.a.RetrofitError;
 import com.hooptap.a.client.Response;
 import com.hooptap.a.mime.TypedInput;
-import com.hooptap.sdkgameroom.Customs.HooptapGame;
-import com.hooptap.sdkgameroom.Customs.HooptapGameStatus;
-import com.hooptap.sdkgameroom.Customs.ResponseError;
+import com.hooptap.sdkgameroom.Models.HooptapGameStatus;
+import com.hooptap.sdkgameroom.Models.HooptapItem;
+import com.hooptap.sdkgameroom.Models.ResponseError;
+import com.hooptap.sdkgameroom.Engine.ItemParse;
+import com.hooptap.sdkgameroom.Engine.ItemParseFolder;
 import com.hooptap.sdkgameroom.Interfaces.HooptapCallback;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -51,29 +49,23 @@ public abstract class HooptapApi {
      * @param id       Identificador del recurso
      * @param callback Callback donde recebiremos el resultado
      */
-    public static void getListGamesForId(final String id, final HooptapCallback<ArrayList<HooptapGame>> callback) {
+    public static void getListItemsForId(final String path, final String id, final HooptapCallback<ArrayList<HooptapItem>> callback) {
 
         Hooptap.getClient().
-                getListGame(id, new Callback<Response>() {
+                getListGame(path, id, new Callback<Response>() {
                     @Override
                     public void success(Response result, Response response) {
 
-                        ArrayList<HooptapGame> games = new ArrayList<>();
+                        ArrayList<HooptapItem> arrayItems;
+
                         try {
                             JSONObject json = generateJsonToResponse(response);
                             JSONObject genericJson = json.getJSONObject("response");
                             JSONArray jsonItems = genericJson.getJSONArray("items");
-                            for (int i = 0; i < jsonItems.length(); i++) {
-                                JSONObject jsonGame = jsonItems.getJSONObject(i);
-                                HooptapGame game = new HooptapGame();
-                                game.setId(jsonGame.getString("_id"));
-                                game.setTitle(jsonGame.getString("name"));
-                                game.setImage(jsonGame.getString("image"));
-                                if (!jsonGame.isNull("url_game"))
-                                    game.setUrl(jsonGame.getString("url_game"));
-                                games.add(game);
-                            }
-                            callback.onSuccess(games);
+
+                            arrayItems = new ItemParse().convertJson(jsonItems);
+
+                            callback.onSuccess(arrayItems);
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -85,7 +77,7 @@ public abstract class HooptapApi {
                     public void failure(RetrofitError retrofitError) {
                         if (retry < 1) {
                             retry++;
-                            getListGamesForId(id, callback);
+                            getListItemsForId(path, id, callback);
                         } else
                             callback.onError(generateError(retrofitError.getResponse()));
 
@@ -113,7 +105,7 @@ public abstract class HooptapApi {
      * @param id       Identificador del juego
      * @param callback Callback donde recebiremos el resultado
      */
-    public static void getGameDetail(final String id, final HooptapCallback<HooptapGame> callback) {
+    public static void getGameDetail(final String id, final HooptapCallback<HooptapItem> callback) {
 
         Hooptap.getClient().
                 getList(id, new Callback<Response>() {
@@ -124,14 +116,9 @@ public abstract class HooptapApi {
                             JSONObject json = generateJsonToResponse(response);
                             JSONObject jsonGame = json.getJSONObject("response");
 
-                            HooptapGame game = new HooptapGame();
-                            game.setId(jsonGame.getString("_id"));
-                            game.setTitle(jsonGame.getString("name"));
-                            game.setImage(jsonGame.getString("image"));
-                            if (!jsonGame.isNull("url_game"))
-                                game.setUrl(jsonGame.getString("url_game"));
+                            HooptapItem item =new ItemParseFolder().convertJson(jsonGame);
 
-                            callback.onSuccess(game);
+                            callback.onSuccess(item);
 
                         } catch (Exception e) {
                             callback.onError(new ResponseError(response));
@@ -161,18 +148,19 @@ public abstract class HooptapApi {
         return newError;
     }
 
-    public static void play(final String itemId, final String puntuation, final HooptapCallback<HooptapGameStatus> callback) {
+    public static void play(final String path,final String itemId, final String puntuation, final HooptapCallback<HooptapGameStatus> callback) {
 
         Hooptap.getClient().
-                play(itemId, puntuation, new Callback<Response>() {
+                play(path, itemId, puntuation, new Callback<Response>() {
                     @Override
                     public void success(Response result, Response response) {
                         try {
                             JSONObject json = generateJsonToResponse(response);
-
                             JSONObject jsonStatus = json.getJSONObject("response");
-                            Log.e("PLAY",json+" / "+jsonStatus);
+                            Log.e("PLAY", json + " / " + jsonStatus);
                             HooptapGameStatus status = new HooptapGameStatus();
+                            status.setResult(jsonStatus.getBoolean("result"));
+                            status.setRewards(jsonStatus.getJSONArray("rewards"));
                             callback.onSuccess(status);
                         } catch (Exception e) {
                             callback.onError(new ResponseError(response));
@@ -185,7 +173,7 @@ public abstract class HooptapApi {
 
                         if (retry < 1) {
                             retry++;
-                            play(itemId, puntuation, callback);
+                            play(path, itemId, puntuation, callback);
                         } else
                             callback.onError(generateError(retrofitError.getResponse()));
 
@@ -194,7 +182,71 @@ public abstract class HooptapApi {
 
     }
 
-    /*public static void register(final String username, final String password, final String email,
+    public static void getConfig(final String path, final HooptapCallback<JSONObject> callback) {
+        Log.e("CONFIG",path+" /");
+        Hooptap.getClient().
+                getConfig(path, new Callback<Response>() {
+                    @Override
+                    public void success(Response result, Response response) {
+
+                        try {
+                            JSONObject json = generateJsonToResponse(response);
+                            callback.onSuccess(json);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            callback.onError(new ResponseError(response));
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError retrofitError) {
+                        if (retry < 1) {
+                            retry++;
+                            getConfig(path, callback);
+                        } else
+                            callback.onError(generateError(retrofitError.getResponse()));
+
+                    }
+                });
+    }
+
+    public static JSONObject getStrings(final String language) {
+
+        Response response = Hooptap.getClient().getStrings(language);
+        try {
+            JSONObject json = generateJsonToResponse(response);
+            JSONObject jsonStatus = json.getJSONObject("response");
+            return jsonStatus;
+        }catch(Exception e){e.printStackTrace();}
+
+        return null;
+    }
+
+    public static void redem(final String path, final String id, final String name, final String email, final HooptapCallback<Boolean> callback) {
+
+        Hooptap.getClient().
+                redem(path, id, name, email, new Callback<Response>() {
+                    @Override
+                    public void success(Response result, Response response) {
+                        callback.onSuccess(true);
+                    }
+
+                    @Override
+                    public void failure(final RetrofitError retrofitError) {
+
+                        if (retry < 1) {
+                            retry++;
+                            redem(path, id, name, email, callback);
+                        } else
+                            callback.onSuccess(false);
+
+                    }
+                });
+
+    }
+
+    public static void register(final String username, final String password, final String email,
                          final String birth,  final String lang, final int gender,
                                 final HooptapCallback<JSONObject> callback){
 
@@ -206,17 +258,21 @@ public abstract class HooptapApi {
                         JSONObject json = generateJsonToResponse(response);
                         callback.onSuccess(json);
                     } catch (Exception e) {
-                        callback.onError(e.getMessage() + "");
+                        callback.onError(new ResponseError(response));
                     }
                 }
 
                 @Override
                 public void failure(final RetrofitError retrofitError) {
-                    callback.onError(retrofitError.getMessage()+"");
+                    if (retry < 1) {
+                        retry++;
+                        register(username, password, email, birth, lang, gender, callback);
+                    } else
+                        callback.onError(generateError(retrofitError.getResponse()));
                 }
             });
 
-    }*/
+    }
 
 
 }

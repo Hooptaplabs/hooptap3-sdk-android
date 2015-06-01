@@ -70,9 +70,9 @@ android.libraryVariants.all { variant ->
         def Upload variantTask = project.tasks.create("${variant.name}Install", Upload)
         variantTask.configuration = variantConfiguration
         variantTask.repositories.mavenInstaller {
-            pom.groupId = "com.hooptap.sdk"
-            pom.artifactId = "HooptapSdk"
-            pom.version = "1.0.0" //Give a different version for each variant
+            pom.groupId = "com.hooptap.sdkgameroom"
+            pom.artifactId = "HooptapSdkGameRoom"
+            pom.version = "1.0.1" //Give a different version for each variant
             pom.packaging = "aar"
         }
 
@@ -81,35 +81,6 @@ android.libraryVariants.all { variant ->
         masterTask = variantTask
     }
 }
-
-configurations {
-    jaxDoclet
-}
-
-android.libraryVariants.all { variant ->
-    task("generate${variant.name.capitalize()}Javadoc", type: Javadoc) {
-        description "Generates Javadoc for $variant.name."
-        source = variant.javaCompile.source
-        ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
-        classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
-        destinationDir = file("${project.docsDir}/apidocsgame")
-        options.docletpath = configurations.jaxDoclet.files.asType(List)
-        exclude '**/BuildConfig.java'
-        exclude '**/R.java'
-
-        options {
-            doclet "com.google.doclava.Doclava"
-            bootClasspath new File(System.getenv('JAVA_HOME') + "/jre/lib/rt.jar")
-            addStringOption "hdf project.name", project.name
-            addStringOption "federate android", "http://d.android.com/reference"
-        }
-    }
-}
-
-dependencies {
-    jaxDoclet 'com.google.doclava:doclava:1.0.6'
-}
-
 
 dependencies {
     //compile 'com.android.support:appcompat-v7:21.0.3'

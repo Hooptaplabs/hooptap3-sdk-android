@@ -1,7 +1,7 @@
 package com.hooptap.sdkgameroom.Interfaces;
 
 
-import com.hooptap.sdkgameroom.Customs.HooptapGameStatus;
+import com.hooptap.sdkgameroom.Models.HooptapGameStatus;
 
 /**
  * Interfaz necesaria para interactuar con los juegos HTML5
