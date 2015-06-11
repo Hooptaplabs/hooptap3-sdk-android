@@ -1,4 +1,4 @@
-package com.hooptap.sdkgameroom.Api;
+package com.hooptap.sdkbrandclub.Api;
 
 import android.content.Context;
 import android.content.SharedPreferences;

@@ -1,7 +1,7 @@
-package com.hooptap.sdkgameroom.Engine;
+package com.hooptap.sdkbrandclub.Engine;
 
-import com.hooptap.sdkgameroom.Models.HooptapFolder;
-import com.hooptap.sdkgameroom.Models.HooptapItem;
+import com.hooptap.sdkbrandclub.Models.HooptapFolder;
+import com.hooptap.sdkbrandclub.Models.HooptapItem;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -21,7 +21,7 @@ public class ItemParseFolder {
             if (type.contains("Quiz"))
                 type = "Game";
 
-            Class<HooptapItem> clsItem = (Class<HooptapItem>) Class.forName("com.hooptap.sdkgameroom.Models.Hooptap" + type);
+            Class<HooptapItem> clsItem = (Class<HooptapItem>) Class.forName("com.hooptap.sdkbrandclub.Models.Hooptap" + type);
             item = clsItem.getDeclaredConstructor(String.class).newInstance(json.toString());
 
             if (!json.isNull("items")) {

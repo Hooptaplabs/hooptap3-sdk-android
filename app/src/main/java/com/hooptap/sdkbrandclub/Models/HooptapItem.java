@@ -1,4 +1,4 @@
-package com.hooptap.sdkgameroom.Models;
+package com.hooptap.sdkbrandclub.Models;
 
 import org.json.JSONObject;
 

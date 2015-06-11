@@ -1,4 +1,4 @@
-package com.hooptap.sdkgameroom;
+package com.hooptap.sdkbrandclub;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

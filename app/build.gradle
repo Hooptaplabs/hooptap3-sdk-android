@@ -70,8 +70,8 @@ android.libraryVariants.all { variant ->
         def Upload variantTask = project.tasks.create("${variant.name}Install", Upload)
         variantTask.configuration = variantConfiguration
         variantTask.repositories.mavenInstaller {
-            pom.groupId = "com.hooptap.sdkgameroom"
-            pom.artifactId = "HooptapSdkGameRoom"
+            pom.groupId = "com.hooptap.sdkbrandclub"
+            pom.artifactId = "HooptapSdkBrandClub"
             pom.version = "1.0.1" //Give a different version for each variant
             pom.packaging = "aar"
         }

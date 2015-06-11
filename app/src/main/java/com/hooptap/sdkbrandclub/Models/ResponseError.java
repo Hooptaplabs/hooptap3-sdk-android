@@ -1,4 +1,4 @@
-package com.hooptap.sdkgameroom.Models;
+package com.hooptap.sdkbrandclub.Models;
 
 import com.hooptap.a.client.Response;
 import com.hooptap.a.mime.TypedInput;
@@ -12,6 +12,10 @@ public class ResponseError {
     private String reason;
     private TypedInput body;
     private String url;
+
+    public ResponseError(){
+
+    }
 
     public ResponseError(Response response) {
         this.status = response.getStatus();

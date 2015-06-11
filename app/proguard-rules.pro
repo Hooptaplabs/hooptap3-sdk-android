@@ -14,10 +14,10 @@
 # class:
 
 
-#-keep public class com.hooptap.sdkgameroom.Api.Hooptap{ *; }
-#-keep public class com.hooptap.sdkgameroom.Api.HooptapApi{ *; }
-#-keep public class com.hooptap.sdkgameroom.Customs.HooptapGame{ *; }
-#-keep public class com.hooptap.sdkgameroom.Interfaces.*
+#-keep public class Hooptap{ *; }
+#-keep public class HooptapApi{ *; }
+#-keep public class com.hooptap.sdkbrandclub.Customs.HooptapGame{ *; }
+#-keep public class com.hooptap.sdkbrandclub.Interfaces.*
 
 #-dontwarn com.squareup.okhttp.**
 #-keep class com.squareup.okhttp.** { *; }
@@ -42,23 +42,23 @@
 #-renamesourcefileattribute SourceFile
 -keepattributes Exceptions,InnerClasses,Signature,Deprecated,SourceFile,LineNumberTable,*Annotation*,EnclosingMethod
 
-#-keep class com.hooptap.sdkgameroom.Api.Hooptap { *; }
-#-keep class com.hooptap.sdkgameroom.Api.HooptapApi { *; }
--keep public class com.hooptap.sdkgameroom.Api.* {
+#-keep class Hooptap { *; }
+#-keep class HooptapApi { *; }
+-keep public class com.hooptap.sdkbrandclub.Api.* {
     public *;
 }
 
--keep public class com.hooptap.sdkgameroom.Api.HooptapApi {
+-keep public class com.hooptap.sdkbrandclub.Api.HooptapApi {
     public *;
 }
--keep public class com.hooptap.sdkgameroom.Customs.* {
+-keep public class com.hooptap.sdkbrandclub.Customs.* {
     public *;
 }
 
--keep public class com.hooptap.sdkgameroom.Interfaces.HooptapJSInterface {
+-keep public class com.hooptap.sdkbrandclub.Interfaces.HooptapJSInterface {
     public *;
 }
--keep public class com.hooptap.sdkgameroom.Interfaces.HooptapCallback {
+-keep public class com.hooptap.sdkbrandclub.Interfaces.HooptapCallback {
     public *;
 }
 

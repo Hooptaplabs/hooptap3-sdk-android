@@ -1,4 +1,4 @@
-package com.hooptap.sdkgameroom.Models;
+package com.hooptap.sdkbrandclub.Models;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -8,7 +8,7 @@ import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
-import com.hooptap.sdkgameroom.Interfaces.HooptapJSInterface;
+import com.hooptap.sdkbrandclub.Interfaces.HooptapJSInterface;
 
 import org.json.JSONObject;
 

@@ -1,6 +1,6 @@
-package com.hooptap.sdkgameroom.Interfaces;
+package com.hooptap.sdkbrandclub.Interfaces;
 
-import com.hooptap.sdkgameroom.Models.ResponseError;
+import com.hooptap.sdkbrandclub.Models.ResponseError;
 
 /**
  * Interfaz general que utilizaremos para las peticiones que realizamos a la API

@@ -1,6 +1,6 @@
-package com.hooptap.sdkgameroom.Engine;
+package com.hooptap.sdkbrandclub.Engine;
 
-import com.hooptap.sdkgameroom.Models.HooptapItem;
+import com.hooptap.sdkbrandclub.Models.HooptapItem;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -33,7 +33,7 @@ public class ItemParse  {
                     //llamara primero al padre, el cual seteara los parametros genericos, luego
                     //el constructor del hijo seteara los parametros de su propia clase -> Magia Potagia fuck the police
                     Class<HooptapItem> cls;
-                    cls = (Class<HooptapItem>) Class.forName("com.hooptap.sdkgameroom.Models.Hooptap" + type);
+                    cls = (Class<HooptapItem>) Class.forName("com.hooptap.sdkbrandclub.Models.Hooptap" + type);
                     HooptapItem cl = cls.getDeclaredConstructor(String.class).newInstance(json1.toString());
                     arrayItems.add(cl);
                 }

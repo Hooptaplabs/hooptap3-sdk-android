@@ -1,4 +1,4 @@
-package com.hooptap.sdkgameroom.Models;
+package com.hooptap.sdkbrandclub.Models;
 
 /**
  * Created by carloscarrasco on 9/12/14.

@@ -1,8 +1,8 @@
-package com.hooptap.sdkgameroom.Interfaces;
+package com.hooptap.sdkbrandclub.Interfaces;
 
 import android.content.Context;
 
-import com.hooptap.sdkgameroom.Models.HooptapItem;
+import com.hooptap.sdkbrandclub.Models.HooptapItem;
 
 /**
  * Created by carloscarrasco on 9/12/14.
