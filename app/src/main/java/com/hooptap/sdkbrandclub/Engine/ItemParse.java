@@ -22,7 +22,11 @@ public class ItemParse  {
             for (int i = 0; i < jsonItems.length(); i++) {
                 JSONObject json1 = jsonItems.getJSONObject(i);
 
-                type = json1.getString("itemType");
+                if (!json1.isNull("itemType")){
+                    type = json1.getString("itemType");
+                }else{
+                    type = "Link";
+                }
                 if (!type.contains("AdBanner")){
                     //El itemQuiz es lo mismo que el itemGame, por lo que si me llega ese tipo, lo cambiarea Game y arreando
                     if (type.contains("Quiz"))

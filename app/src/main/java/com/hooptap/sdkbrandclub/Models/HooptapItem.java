@@ -1,5 +1,10 @@
 package com.hooptap.sdkbrandclub.Models;
 
+import android.os.Parcel;
+
+
+import com.hooptap.sdkbrandclub.Interfaces.AsymmetricItem;
+
 import org.json.JSONObject;
 
 import java.io.Serializable;
@@ -8,7 +13,7 @@ import java.io.Serializable;
 /**
  * Created by carloscarrasco on 9/12/14.
  */
-public class HooptapItem implements Serializable {
+public class HooptapItem implements Serializable, AsymmetricItem {
 
     public String id;
     public String type;
@@ -17,6 +22,8 @@ public class HooptapItem implements Serializable {
     public String description;
     public String url;
     public String extra_data;
+    public int columnSpan = 1;
+    public boolean locked;
 
     public HooptapItem(String jsonObj) {
         try{
@@ -29,7 +36,7 @@ public class HooptapItem implements Serializable {
                 else
                     this.type = json.getString("itemType");
             else
-                this.type = "Folder";
+                this.type = "Link";
             if (!json.isNull("name"))
                 this.name = json.getString("name");
             if (!json.isNull("image"))
@@ -38,8 +45,22 @@ public class HooptapItem implements Serializable {
                 this.url = json.getString("url_detail");
             if (!json.isNull("desc"))
                 this.description = json.getString("desc");
+            if(!json.isNull("locked"))
+                this.locked = json.getBoolean("locked");
             if (!json.isNull("extra_data")) {
                 this.extra_data = json.getString("extra_data");
+                try {
+                    JSONObject json1 = new JSONObject(this.extra_data);
+                    if(!json1.isNull("grid_size")) {
+                        this.columnSpan = json1.getInt("grid_size");
+                    }
+                } catch (Exception var4) {
+                    var4.printStackTrace();
+                }
+
+                if(this.columnSpan == 2 && !json.isNull("image2")) {
+                    this.image = json.getString("image2");
+                }
             }
 
         }catch (Exception e){e.printStackTrace();}
@@ -99,5 +120,27 @@ public class HooptapItem implements Serializable {
 
     public void setExtra_data(String extra_data) {
         this.extra_data = extra_data;
+    }
+
+    public void setColumnSpan(int columnSpam) {
+        this.columnSpan = columnSpam;
+    }
+
+    @Override
+    public int getColumnSpan() {
+        return columnSpan;
+    }
+
+    @Override
+    public int getRowSpan() {
+        return 1;
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
     }
 }

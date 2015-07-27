@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.hooptap.a.RequestInterceptor;
 import com.hooptap.a.RestAdapter;
@@ -99,14 +100,14 @@ public class Hooptap {
                 //client.interceptors().add(new HooptapInterceptor(context));
                 client.setHostnameVerifier(org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 
-                try {
+                /*try {
                     ApplicationInfo ai = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
                     Bundle bundle = ai.metaData;
                     editor.putString("ht_api_key", bundle.getString("com.hooptap.Apikey"));
                     editor.apply();
                 } catch (Exception e) {
                     e.printStackTrace();
-                }
+                }*/
 
 
                 if (htEnableDebug != null) {
@@ -126,7 +127,7 @@ public class Hooptap {
                                 //request.addHeader("access_token", settings.getString("ht_token", ""));
                                 request.addHeader("disp_platform", "android");
                                 request.addHeader("authorization", "Bearer "+settings.getString("ht_token", ""));
-
+                                Log.e("APIIII",settings.getString("ht_api_key", ""));
                                 request.addHeader("api_key", settings.getString("ht_api_key", ""));
                             }
                         })

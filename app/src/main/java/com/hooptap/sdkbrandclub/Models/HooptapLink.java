@@ -21,14 +21,14 @@ public class HooptapLink extends HooptapItem {
             JSONObject json = new JSONObject(jsonObj);
             if (!json.isNull("subject_type"))
                 nType = json.getString("subject_type");
-            if (!json.isNull("text"))
-                text = json.getString("text");
+            if (!json.isNull("message"))
+                text = json.getString("message");
             if (!json.isNull("unread"))
                 unread = json.getBoolean("unread");
             if (!json.isNull("subject"))
                 subject = json.getJSONObject("subject").toString();
-            if (!json.isNull("created"))
-                created = json.getString("created");
+            if (!json.isNull("creation_date"))
+                created = json.getString("creation_date");
         }catch (Exception e){e.printStackTrace();}
     }
 

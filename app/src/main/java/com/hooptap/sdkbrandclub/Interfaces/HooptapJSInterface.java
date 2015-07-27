@@ -16,7 +16,6 @@ public interface HooptapJSInterface {
      */
     void gameDidStart();
 
-
 }
 
 
