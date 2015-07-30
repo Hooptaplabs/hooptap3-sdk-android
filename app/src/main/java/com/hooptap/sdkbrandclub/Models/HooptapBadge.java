@@ -7,7 +7,7 @@ import org.json.JSONObject;
 /**
  * Created by carloscarrasco on 9/12/14.
  */
-public class HooptapBadge extends HooptapItem {
+public class HooptapBadge extends HooptapReward {
 
     private int progress;
     private String image_on;

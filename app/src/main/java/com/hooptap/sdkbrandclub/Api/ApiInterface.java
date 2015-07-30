@@ -40,9 +40,6 @@ public interface ApiInterface {
     @PUT(api + "user/me/updateProfileImage")
     void uploadImageProfile(@Part("file") TypedFile file, Callback<Response> callback);
 
-    @GET(brandclub + "{path}/Game/{item_id}")
-    void getListGame(@Path("path") String path, @Path("item_id") String item_id, Callback<Response> cb);
-
     @FormUrlEncoded
     @POST(brandclub + "{path}/game_played/{item_id}")
     void play(@Path("path") String path, @Path("item_id") String item_id, @Field("score") String puntuation,
@@ -50,11 +47,6 @@ public interface ApiInterface {
 
     @GET(brandclub + "product/{path}/config")
     void getConfig(@Path("path") String path, Callback<Response> cb);
-
-    @FormUrlEncoded
-    @POST(brandclub + "{path}/reward/{item_id}/redeem")
-    void redem(@Path("path") String path, @Path("item_id") String item_id, @Field("name") String name,
-               @Field("email") String email, Callback<Response> cb);
 
     @FormUrlEncoded
     @POST(brandclub + "{path}/user")

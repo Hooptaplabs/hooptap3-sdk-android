@@ -32,6 +32,7 @@ public class ItemParse  {
                     if (type.contains("Quiz"))
                         type = "Game";
 
+                    type = type.substring(0, 1).toUpperCase() + type.substring(1);
                     //Instancio el item segun el tipo, y busco el constructor que necesita un
                     //string(getDeclaredConstructor(String.class)), el constructor del hijo
                     //llamara primero al padre, el cual seteara los parametros genericos, luego

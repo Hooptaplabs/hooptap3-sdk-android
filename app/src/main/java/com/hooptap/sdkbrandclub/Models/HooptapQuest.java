@@ -33,8 +33,12 @@ public class HooptapQuest extends HooptapItem {
                 for (int i = 0; i < rewardsArray.length(); i++) {
 
                     String typeReward = "Reward";
-                    if (!rewardsArray.getJSONObject(i).isNull("itemType"))
+                    if (!rewardsArray.getJSONObject(i).isNull("itemType")) {
                         typeReward = rewardsArray.getJSONObject(i).getString("itemType");
+                    }else if(!rewardsArray.getJSONObject(i).isNull("type")){
+                        typeReward = rewardsArray.getJSONObject(i).getString("type");
+                        typeReward = typeReward.substring(0, 1).toUpperCase() + typeReward.substring(1);
+                    }
 
                     try {
                         Class<HooptapItem> cls;

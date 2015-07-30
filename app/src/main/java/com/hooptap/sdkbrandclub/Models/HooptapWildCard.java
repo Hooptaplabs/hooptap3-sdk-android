@@ -16,7 +16,7 @@ public class HooptapWildCard extends HooptapItem {
     private String end_msgOK;
     private boolean find_all;
     private String instructions;
-    private String instructions_image;
+    private String instructions_image = "";
 
     public HooptapWildCard(String jsonObj) {
         super(jsonObj);
@@ -24,12 +24,12 @@ public class HooptapWildCard extends HooptapItem {
             JSONObject json = new JSONObject(jsonObj);
             if (!json.isNull("sub_type"))
                 subType = json.getString("sub_type");
-            Log.e("TAGS",json.getString("tags"));
+            Log.e("TAGS", json.getString("tags"));
             if (!json.isNull("tags"))
                 tags = json.getString("tags");
             if (!json.isNull("end_msgOK"))
                 end_msgOK = json.getString("end_msgOK");
-            if (!json.isNull("context_info")){
+            if (!json.isNull("context_info")) {
                 JSONObject json_context_info = json.getJSONObject("context_info");
                 if (!json_context_info.isNull("imgs_info"))
                     imgs_info = json_context_info.getString("imgs_info");

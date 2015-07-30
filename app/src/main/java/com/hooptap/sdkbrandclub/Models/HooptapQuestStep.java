@@ -14,7 +14,7 @@ public class HooptapQuestStep {
     private String link_type;
     private String link_value;
     private String image;
-    private ArrayList<HooptapReward> rewards = new ArrayList<>();
+    //private ArrayList<HooptapReward> rewards = new ArrayList<>();
 
     public HooptapQuestStep(String jsonObj) {
         try {
@@ -29,12 +29,12 @@ public class HooptapQuestStep {
                 this.link_value = json.getString("link_value");
             if (!json.isNull("image"))
                 this.image = json.getString("image");
-            if (!json.isNull("rewards")) {
+            /*if (!json.isNull("rewards")) {
                 JSONArray rewardsArray = json.getJSONArray("rewards");
                 for (int i = 0; i < rewardsArray.length(); i++) {
                     rewards.add(new HooptapReward(rewardsArray.getJSONObject(i).toString()));
                 }
-            }
+            }*/
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -79,13 +79,5 @@ public class HooptapQuestStep {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public ArrayList<HooptapReward> getRewards() {
-        return rewards;
-    }
-
-    public void setRewards(ArrayList<HooptapReward> rewards) {
-        this.rewards = rewards;
     }
 }

@@ -24,6 +24,7 @@ public class HooptapItem implements Serializable, AsymmetricItem {
     public String extra_data;
     public int columnSpan = 1;
     public boolean locked;
+    public String locked_msg;
 
     public HooptapItem(String jsonObj) {
         try{
@@ -47,6 +48,12 @@ public class HooptapItem implements Serializable, AsymmetricItem {
                 this.description = json.getString("desc");
             if(!json.isNull("locked"))
                 this.locked = json.getBoolean("locked");
+            if (!json.isNull("lock")){
+                JSONObject js = json.getJSONObject("lock");
+                if (!js.isNull("desc")){
+                    this.locked_msg = js.getString("desc");
+                }
+            }
             if (!json.isNull("extra_data")) {
                 this.extra_data = json.getString("extra_data");
                 try {
@@ -142,5 +149,13 @@ public class HooptapItem implements Serializable, AsymmetricItem {
 
     public void setLocked(boolean locked) {
         this.locked = locked;
+    }
+
+    public String getLocked_msg() {
+        return locked_msg;
+    }
+
+    public void setLocked_msg(String locked_msg) {
+        this.locked_msg = locked_msg;
     }
 }

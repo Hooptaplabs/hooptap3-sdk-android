@@ -5,7 +5,7 @@ import org.json.JSONObject;
 /**
  * Created by carloscarrasco on 26/5/15.
  */
-public class HooptapLevel extends HooptapItem{
+public class HooptapLevel extends HooptapReward{
     private int number;
 
     public HooptapLevel(String jsonObj) {
