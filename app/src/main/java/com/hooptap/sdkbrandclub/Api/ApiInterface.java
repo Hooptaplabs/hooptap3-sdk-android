@@ -107,7 +107,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(api_new + "error_report/{user_id}")
-    void reportError(@Field("report_text") String report_text, @Path("user_id") String user_id, @Field("platform_info") String platform_info, Callback<Response> cb);
+    void reportError(@Path("user_id") String user_id, @Field("report_text") String report_text,  @Field("platform_info") String platform_info, Callback<Response> cb);
 
     @GET(api_new + "stringGroup/brandclub_{lenguage}")
     Response getStrings(@Path("lenguage") String lenguage);
