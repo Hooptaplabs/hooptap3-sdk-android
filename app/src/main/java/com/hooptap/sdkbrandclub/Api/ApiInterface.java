@@ -8,6 +8,7 @@ import com.hooptap.a.http.Field;
 import com.hooptap.a.http.FormUrlEncoded;
 import com.hooptap.a.http.GET;
 import com.hooptap.a.http.Multipart;
+import com.hooptap.a.http.PATCH;
 import com.hooptap.a.http.POST;
 import com.hooptap.a.http.PUT;
 import com.hooptap.a.http.Part;
@@ -25,7 +26,7 @@ public interface ApiInterface {
     //String api_new = "//api.dev.hooptap.com/api/v1.1.0/";
     //String brandclub = "//api.dev.brandclubcorner.com/api/v1.0/";
 
-
+// http://api.hooptap.com:8080/api/v1.0//pushNotifications/send/toAll
     // Produccion
     String api = "//api.hooptap.com:8080/api/v1.0/";
     String api_new = "//api.hooptap.com:8080/api/v1.1.0/";
@@ -41,8 +42,8 @@ public interface ApiInterface {
     void uploadImageProfile(@Part("file") TypedFile file, Callback<Response> callback);
 
     @FormUrlEncoded
-    @POST(brandclub + "{path}/game_played/{item_id}")
-    void play(@Path("path") String path, @Path("item_id") String item_id, @Field("score") String puntuation,
+    @POST(brandclub + "{path}/game_played/{item_id}/user/{user_id}")
+    void play(@Path("path") String path, @Path("item_id") String item_id, @Field("score") String puntuation,@Path("user_id") String user_id,
               Callback<Response> cb);
 
     @GET(brandclub + "product/{path}/config")
@@ -182,5 +183,20 @@ public interface ApiInterface {
 
     @BODY_DELETE(api_new + "friend/{user_id}/{friend_id}")
     void friendDelete(@Path("user_id") String user_id, @Path("friend_id") String friend_id, Callback<Response> cb);
+
+    @FormUrlEncoded
+    @POST(api+"user/{user_id}/pushNotification/subscribe")
+    void registerC2DM(@Path("user_id") String user_id, @Field("platform") String platform,
+                      @Field("deviceToken") String deviceToken, Callback<Response> callback);
+
+    @GET(api+"user/{user_id}/notification")
+    void notificationsPage(@Path("user_id") String var1, @Query("page") int var2, @Query("limit") int var3, Callback<Response> var4);
+
+    @PATCH(api+"user/{user_id}/notification/{id_notificacion}")
+    void readNotification(@Path("user_id") String var1, @Path("id_notificacion") String var2, Callback<Response> var3);
+
+
+    @GET(api+"user/{user_id}/notification/count")
+    void countNotification(@Path("user_id") String var1, Callback<Response> var2);
 
 }

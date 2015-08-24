@@ -4,6 +4,8 @@ import android.os.Parcel;
 
 import org.json.JSONObject;
 
+import java.lang.String;
+
 /**
  * Created by carloscarrasco on 9/12/14.
  */
@@ -14,6 +16,7 @@ public class HooptapLink extends HooptapItem {
     private  boolean unread;
     private  String subject;
     private String created;
+    private String textInfo;
 
     public HooptapLink(String jsonObj) {
         super(jsonObj);
@@ -21,8 +24,11 @@ public class HooptapLink extends HooptapItem {
             JSONObject json = new JSONObject(jsonObj);
             if (!json.isNull("subject_type"))
                 nType = json.getString("subject_type");
+            if (!json.isNull("text"))
+                textInfo = json.getString("text");
             if (!json.isNull("message"))
                 text = json.getString("message");
+
             if (!json.isNull("unread"))
                 unread = json.getBoolean("unread");
             if (!json.isNull("subject"))
@@ -30,6 +36,14 @@ public class HooptapLink extends HooptapItem {
             if (!json.isNull("creation_date"))
                 created = json.getString("creation_date");
         }catch (Exception e){e.printStackTrace();}
+    }
+
+    public String getTextInfo() {
+        return textInfo;
+    }
+
+    public void setTextInfo(String textInfo) {
+        this.textInfo = textInfo;
     }
 
     public String getCreated() {

@@ -98,7 +98,7 @@ public abstract class HooptapApi {
                             final HooptapCallback<HashMap<String, Object>> callback) {
 
         Hooptap.getClient().
-                play(path, itemId, puntuation, new Callback<Response>() {
+                play(path, itemId, puntuation,"me", new Callback<Response>() {
                     public ArrayList<HooptapItem> arrayItems;
 
                     @Override
@@ -119,7 +119,7 @@ public abstract class HooptapApi {
                                 hasmap.put("reward", arrayItems);
                             }
 
-                            if (!jsonStatus.isNull("quest")){
+                            if (!jsonStatus.isNull("quest")) {
                                 JSONObject jsonQuest = jsonStatus.getJSONObject("quest");
                                 jsonQuest.put("itemType", "Quest");
                                 hasmap.put("quest", jsonQuest);
@@ -173,7 +173,7 @@ public abstract class HooptapApi {
                                 hasmap.put("reward", arrayItems);
                             }
 
-                            if (!jsonStatus.isNull("quest")){
+                            if (!jsonStatus.isNull("quest")) {
                                 JSONObject jsonQuest = jsonStatus.getJSONObject("quest");
                                 jsonQuest.put("itemType", "Quest");
                                 hasmap.put("quest", jsonQuest);
@@ -632,7 +632,7 @@ public abstract class HooptapApi {
                                 hasmap.put("reward", arrayItems);
                             }
 
-                            if (!jsonStatus.isNull("quest")){
+                            if (!jsonStatus.isNull("quest")) {
                                 JSONObject jsonQuest = jsonStatus.getJSONObject("quest");
                                 jsonQuest.put("itemType", "Quest");
                                 hasmap.put("quest", jsonQuest);
@@ -1429,5 +1429,148 @@ public abstract class HooptapApi {
                 });
 
     }
+    public static void registrarC2DM(final String user_id, final String deviceToken, final HooptapCallback<JSONObject> callback) {
+
+        Hooptap.getClient().
+                registerC2DM(user_id, "android", deviceToken, new Callback<Response>() {
+
+                    @Override
+                    public void success(Response result, Response response) {
+                        try {
+
+                            JSONObject json = generateJsonToResponse(response);
+                            JSONObject jsonItems = json.getJSONObject("response");
+                            callback.onSuccess(jsonItems);
+
+                        } catch (Exception e) {
+                            callback.onError(generateError(response));
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError retrofitError) {
+                        if (retry < 1) {
+                            retry++;
+                            registrarC2DM(user_id, deviceToken, callback);
+                        } else
+                            callback.onError(generateError(retrofitError.getResponse()));
+                    }
+                });
+
+    }
+    public static void getNotifications(final int  page, final int limit, final HooptapCallback<ArrayList<HooptapItem>> callback) {
+
+        Hooptap.getClient().notificationsPage("me", page, limit, new Callback<Response>() {
+            private ArrayList<HooptapItem> arrayItems = new ArrayList<HooptapItem>();
+
+            @Override
+            public void success(Response result, Response response) {
+                try {
+
+
+                    JSONObject json = generateJsonToResponse(response);
+                    JSONObject jsonItemsR = json.getJSONObject("response");
+                    JSONArray jsonItems = jsonItemsR.getJSONArray("items");
+                    arrayItems = new ItemParse().convertJson(jsonItems);
+                    callback.onSuccess(arrayItems);
+
+                } catch (Exception e) {
+                    callback.onError(generateError(response));
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                if (retry < 1) {
+                    retry++;
+                    getNotifications(page, limit, callback);
+                } else
+                    callback.onError(generateError(retrofitError.getResponse()));
+            }
+        });
+
+    }
+    public static void activeNotifications(final String id_item,  final HooptapCallback<JSONObject> callback) {
+
+        Hooptap.getClient().
+                readNotification("me", id_item, new Callback<Response>() {
+
+                    @Override
+                    public void success(Response result, Response response) {
+                        try {
+
+                            JSONObject json = generateJsonToResponse(response);
+                            JSONObject jsonItems = json.getJSONObject("response");
+                            callback.onSuccess(jsonItems);
+
+                        } catch (Exception e) {
+                            callback.onError(generateError(response));
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError retrofitError) {
+                        if (retry < 1) {
+                            retry++;
+                            activeNotifications(id_item, callback);
+                        } else
+                            callback.onError(generateError(retrofitError.getResponse()));
+                    }
+                });
+
+    }
+
+    public static void getCountNotification(final HooptapCallback<JSONObject> callback) {
+
+        Hooptap.getClient().
+                countNotification("me", new Callback<Response>() {
+
+                    @Override
+                    public void success(Response result, Response response) {
+                        try {
+
+                            JSONObject json = generateJsonToResponse(response);
+                            JSONObject jsonItems = json.getJSONObject("response");
+                            Log.e("numeroNotifi","valor de respuest."+response);
+                            callback.onSuccess(jsonItems);
+
+                        } catch (Exception e) {
+                            callback.onError(generateError(response));
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError retrofitError) {
+                        if (retry < 1) {
+                            retry++;
+                            getCountNotification( callback);
+                        } else
+                            callback.onError(generateError(retrofitError.getResponse()));
+                    }
+                });
+
+    }
+    public static void getCountNotificationNew(final Callback callback){
+        Hooptap.getClient().countNotification("me", new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                callback.success(response,response2);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                if (retry < 1) {
+                    retry++;
+                    getCountNotificationNew(callback);
+                }
+
+            }
+        });
+    }
+
 }
 
