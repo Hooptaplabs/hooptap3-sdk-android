@@ -3,12 +3,13 @@ package com.hooptap.sdkbrandclub.Models;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by carloscarrasco on 13/7/15.
  */
-public class HooptapQuestUserStatus {
+public class HooptapQuestUserStatus implements Serializable {
     private HooptapQuestStep step;
     private boolean started;
     private boolean active;

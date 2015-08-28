@@ -1429,7 +1429,7 @@ public abstract class HooptapApi {
                 });
 
     }
-    public static void registrarC2DM(final String user_id, final String deviceToken, final HooptapCallback<JSONObject> callback) {
+    public static void registrarC2DM(final String user_id, final String deviceToken, final HooptapCallback<Boolean> callback) {
 
         Hooptap.getClient().
                 registerC2DM(user_id, "android", deviceToken, new Callback<Response>() {
@@ -1439,8 +1439,7 @@ public abstract class HooptapApi {
                         try {
 
                             JSONObject json = generateJsonToResponse(response);
-                            JSONObject jsonItems = json.getJSONObject("response");
-                            callback.onSuccess(jsonItems);
+                            callback.onSuccess(json.getBoolean("subscribed"));
 
                         } catch (Exception e) {
                             callback.onError(generateError(response));
