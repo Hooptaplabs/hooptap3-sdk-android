@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.Integer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.net.URLEncoder;
@@ -98,7 +99,7 @@ public abstract class HooptapApi {
                             final HooptapCallback<HashMap<String, Object>> callback) {
 
         Hooptap.getClient().
-                play(path, itemId, puntuation,"me", new Callback<Response>() {
+                play(path, itemId, puntuation, "me", new Callback<Response>() {
                     public ArrayList<HooptapItem> arrayItems;
 
                     @Override
@@ -1429,6 +1430,7 @@ public abstract class HooptapApi {
                 });
 
     }
+
     public static void registrarC2DM(final String user_id, final String deviceToken, final HooptapCallback<Boolean> callback) {
 
         Hooptap.getClient().
@@ -1522,7 +1524,7 @@ public abstract class HooptapApi {
 
     }
 
-    public static void getCountNotification(final HooptapCallback<JSONObject> callback) {
+    public static void getCountNotification(final HooptapCallback<Integer> callback) {
 
         Hooptap.getClient().
                 countNotification("me", new Callback<Response>() {
@@ -1532,9 +1534,9 @@ public abstract class HooptapApi {
                         try {
 
                             JSONObject json = generateJsonToResponse(response);
-                            JSONObject jsonItems = json.getJSONObject("response");
-                            Log.e("numeroNotifi","valor de respuest."+response);
-                            callback.onSuccess(jsonItems);
+                            Integer notificationCount = json.getInt("response");
+
+                            callback.onSuccess(notificationCount);
 
                         } catch (Exception e) {
                             callback.onError(generateError(response));
@@ -1546,30 +1548,14 @@ public abstract class HooptapApi {
                     public void failure(RetrofitError retrofitError) {
                         if (retry < 1) {
                             retry++;
-                            getCountNotification( callback);
+                            getCountNotification(callback);
                         } else
                             callback.onError(generateError(retrofitError.getResponse()));
                     }
                 });
 
     }
-    public static void getCountNotificationNew(final Callback callback){
-        Hooptap.getClient().countNotification("me", new Callback<Response>() {
-            @Override
-            public void success(Response response, Response response2) {
-                callback.success(response,response2);
-            }
 
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                if (retry < 1) {
-                    retry++;
-                    getCountNotificationNew(callback);
-                }
-
-            }
-        });
-    }
 
 }
 
