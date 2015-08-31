@@ -26,7 +26,7 @@ public interface ApiInterface {
     //String api_new = "//api.dev.hooptap.com/api/v1.1.0/";
     //String brandclub = "//api.dev.brandclubcorner.com/api/v1.0/";
 
-// http://api.hooptap.com:8080/api/v1.0//pushNotifications/send/toAll
+
     // Produccion
     String api = "//api.hooptap.com:8080/api/v1.0/";
     String api_new = "//api.hooptap.com:8080/api/v1.1.0/";
@@ -90,8 +90,8 @@ public interface ApiInterface {
     void newDetail(@Path("path") String path, @Path("news_id") String news_id, Callback<Response> cb);
 
 
-    @GET(brandclub + "{path}/home")
-    void home(@Path("path") String path, Callback<Response> cb);
+    @GET(brandclub + "{path}/home/{user_id}")
+    void home(@Path("path") String path,@Path("user_id") String user_id, Callback<Response> cb);
 
     @FormUrlEncoded
     @POST(brandclub + "{path}/socialregister")

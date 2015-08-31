@@ -23,6 +23,7 @@ import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -34,6 +35,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.net.URLEncoder;
 import java.io.UnsupportedEncodingException;
+import java.util.Iterator;
+import java.util.Objects;
 
 /**
  * API principal para realizar las peticiones
@@ -854,9 +857,9 @@ public abstract class HooptapApi {
     }
 
     public static void getHome(final String path, final String user_id, final HooptapCallback<ArrayList<HooptapItem>> callback) {
-
+        Log.e("usuarioid",user_id);
         Hooptap.getClient().
-                home(path, new Callback<Response>() {
+                home(path,user_id, new Callback<Response>() {
                     private ArrayList<HooptapItem> arrayItems = new ArrayList<HooptapItem>();
 
                     @Override
@@ -866,14 +869,17 @@ public abstract class HooptapApi {
                             JSONObject json = generateJsonToResponse(response);
                             JSONObject genericJson = json.getJSONObject("response");
 
-                            JSONArray jsonGoods = genericJson.getJSONArray("goods");
-                            JSONArray jsonGames = genericJson.getJSONArray("games");
 
-                            ArrayList<HooptapItem> arrayGoods = new ItemParse().convertJson(jsonGoods);
-                            ArrayList<HooptapItem> arrayGames = new ItemParse().convertJson(jsonGames);
+                            Iterator iterator = genericJson.keys();
+                            while(iterator.hasNext()){
+                                String key = (String)iterator.next();
+                                Object prueba=new JSONTokener(genericJson.getString(key)).nextValue();
+                                if(prueba instanceof JSONArray){
+                                    JSONArray datos = genericJson.getJSONArray(key);
+                                    arrayItems.addAll(new ItemParse().convertJson(datos));
+                                }
 
-                            arrayItems.addAll(arrayGames);
-                            arrayItems.addAll(arrayGoods);
+                            }
 
                             callback.onSuccess(arrayItems);
 
