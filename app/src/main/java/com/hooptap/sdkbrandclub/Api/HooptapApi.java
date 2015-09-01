@@ -583,10 +583,10 @@ public abstract class HooptapApi {
                 });
     }
 
-    public static void getMarketPlace(final HooptapCallback<JSONObject> callback) {
+    public static void getMarketPlace(final String path, final String user_id, final HooptapCallback<JSONObject> callback) {
 
         Hooptap.getClient().
-                marketPlace(new Callback<Response>() {
+                marketPlace(path, user_id, new Callback<Response>() {
 
                     @Override
                     public void success(Response result, Response response) {
@@ -605,7 +605,7 @@ public abstract class HooptapApi {
                     public void failure(RetrofitError retrofitError) {
                         if (retry < 1) {
                             retry++;
-                            getMarketPlace(callback);
+                            getMarketPlace(path, user_id, callback);
                         } else
                             callback.onError(generateError(retrofitError.getResponse()));
                     }
@@ -1556,6 +1556,37 @@ public abstract class HooptapApi {
 
     }
 
+    public static void getShops(final String path, final HooptapCallback<JSONObject> callback) {
+
+        Hooptap.getClient().
+                tiendas(path, new Callback<Response>() {
+
+                    @Override
+                    public void success(Response result, Response response) {
+                        try {
+
+                            JSONObject json = generateJsonToResponse(response);
+                            JSONObject jsonItems = json.getJSONObject("response");
+
+                            callback.onSuccess(jsonItems);
+
+                        } catch (Exception e) {
+                            callback.onError(generateError(response));
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError retrofitError) {
+                        if (retry < 1) {
+                            retry++;
+                            getShops(path, callback);
+                        } else
+                            callback.onError(generateError(retrofitError.getResponse()));
+                    }
+                });
+
+    }
 
 }
 
