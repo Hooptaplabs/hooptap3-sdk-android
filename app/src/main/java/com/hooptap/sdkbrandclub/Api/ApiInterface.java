@@ -200,7 +200,7 @@ public interface ApiInterface {
     @GET(api+"user/{user_id}/notification/count")
     void countNotification(@Path("user_id") String var1, Callback<Response> var2);
 
-    @GET(brandclub_new + "{path}/shop")
+    @GET(brandclub_new + "{path}/marketplace/shop")
     void tiendas(@Path("path") String path, Callback<Response> var2);
 
 }
