@@ -857,7 +857,7 @@ public abstract class HooptapApi {
     }
 
     public static void getHome(final String path, final String user_id, final HooptapCallback<ArrayList<HooptapItem>> callback) {
-        Log.e("usuarioid",user_id);
+        
         Hooptap.getClient().
                 home(path,user_id, new Callback<Response>() {
                     private ArrayList<HooptapItem> arrayItems = new ArrayList<HooptapItem>();
