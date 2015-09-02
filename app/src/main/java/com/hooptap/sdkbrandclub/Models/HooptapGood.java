@@ -13,6 +13,7 @@ public class HooptapGood extends HooptapItem  {
     private String code;
     private String price;
     private String id_compra;
+    private boolean shop_redeem;
 
     public HooptapGood(String jsonObj) {
         super(jsonObj);
@@ -26,10 +27,11 @@ public class HooptapGood extends HooptapItem  {
                 this.code = json.getString("code");
             if (!json.isNull("id_compra"))
                 this.id_compra = json.getString("id_compra");
+            if (!json.isNull("shop_redeem"))
+                this.shop_redeem = json.getBoolean("shop_redeem");
 
         }catch (Exception e){e.printStackTrace();}
     }
-
 
     public String getCode() {
         return code;
@@ -47,7 +49,6 @@ public class HooptapGood extends HooptapItem  {
         this.code_type = code_type;
     }
 
-
     public String getPrice() {
         return price;
     }
@@ -64,5 +65,11 @@ public class HooptapGood extends HooptapItem  {
         this.id_compra = id_compra;
     }
 
+    public boolean isShop_redeem() {
+        return shop_redeem;
+    }
 
+    public void setShop_redeem(boolean shop_redeem) {
+        this.shop_redeem = shop_redeem;
+    }
 }

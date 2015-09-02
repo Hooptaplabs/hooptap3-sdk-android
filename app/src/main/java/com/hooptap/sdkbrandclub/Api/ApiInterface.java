@@ -22,15 +22,16 @@ import java.util.Map;
 public interface ApiInterface {
 
     //Desarrollo
-    //String api = "//api.dev.hooptap.com/api/v1.0/";
-    //String api_new = "//api.dev.hooptap.com/api/v1.1.0/";
-    //String brandclub = "//api.dev.brandclubcorner.com/api/v1.0/";
+    String api = "//api.dev.hooptap.com/api/v1.0/";
+    String api_new = "//api.dev.hooptap.com/api/v1.1.0/";
+    String brandclub = "//api.dev.brandclubcorner.com/api/v1.0/";
+    String brandclub_new = "//api.dev.brandclubcorner.com/api/v1.1.0/";
 
-
+    // http://api.hooptap.com:8080/api/v1.0//pushNotifications/send/toAll
     // Produccion
-    String api = "//api.hooptap.com:8080/api/v1.0/";
+    /*String api = "//api.hooptap.com:8080/api/v1.0/";
     String api_new = "//api.hooptap.com:8080/api/v1.1.0/";
-    String brandclub = "//api.brandclubcorner.com:8080/api/v1.0/";
+    String brandclub = "//api.brandclubcorner.com:8080/api/v1.0/";*/
 
 
     @FormUrlEncoded
@@ -90,8 +91,8 @@ public interface ApiInterface {
     void newDetail(@Path("path") String path, @Path("news_id") String news_id, Callback<Response> cb);
 
 
-    @GET(brandclub + "{path}/home/{user_id}")
-    void home(@Path("path") String path,@Path("user_id") String user_id, Callback<Response> cb);
+    @GET(brandclub + "{path}/home")
+    void home(@Path("path") String path, Callback<Response> cb);
 
     @FormUrlEncoded
     @POST(brandclub + "{path}/socialregister")
@@ -122,8 +123,8 @@ public interface ApiInterface {
     @GET(api_new + "marketplace/good/{item_id}")
     void detailGood(@Path("item_id") String item_id, Callback<Response> cb);
 
-    @GET(api_new + "marketplace/good")
-    void marketPlace(Callback<Response> cb);
+    @GET(brandclub + "{path}/marketplace/user/{user_id}")
+    void marketPlace(@Path("path") String path, @Path("user_id") String user_id, Callback<Response> cb);
 
     @FormUrlEncoded
     @POST(api_new + "engine/action/do/{action}/{user_id}")
@@ -198,5 +199,8 @@ public interface ApiInterface {
 
     @GET(api+"user/{user_id}/notification/count")
     void countNotification(@Path("user_id") String var1, Callback<Response> var2);
+
+    @GET(brandclub_new + "{path}/marketplace/shop")
+    void tiendas(@Path("path") String path, Callback<Response> var2);
 
 }
