@@ -91,8 +91,8 @@ public interface ApiInterface {
     void newDetail(@Path("path") String path, @Path("news_id") String news_id, Callback<Response> cb);
 
 
-    @GET(brandclub + "{path}/home")
-    void home(@Path("path") String path, Callback<Response> cb);
+    @GET(brandclub + "{path}/home/{user_id}")
+    void home(@Path("path") String path,@Path("user_id") String user_id, Callback<Response> cb);
 
     @FormUrlEncoded
     @POST(brandclub + "{path}/socialregister")
