@@ -43,7 +43,7 @@ public interface ApiInterface {
     void uploadImageProfile(@Part("file") TypedFile file, Callback<Response> callback);
 
     @FormUrlEncoded
-    @POST(brandclub + "{path}/game_played/{item_id}/user/{user_id}")
+    @POST(brandclub_new + "{path}/game_played/{item_id}/user/{user_id}")
     void play(@Path("path") String path, @Path("item_id") String item_id, @Field("score") String puntuation,@Path("user_id") String user_id,
               Callback<Response> cb);
 
@@ -75,6 +75,11 @@ public interface ApiInterface {
     void login(@Path("path") String path, @Field("email") String email, @Field("password") String password,
                Callback<Response> cb);
 
+    @FormUrlEncoded
+    @POST("//{url_login}")
+    void loginExternal(@Path(value="url_login", encode=false) String url_login, @Field("user_login") String user_login, @Field("password") String password,
+               Callback<Response> cb);
+
     @GET(brandclub + "{path}/user/{user_id}/badges")
     void badges(@Path("path") String path, @Path("user_id") String user_id, Callback<Response> cb);
 
@@ -101,7 +106,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(brandclub + "{path}/marketplace/purchase/{item_id}/user/{user_id}")
-    void buyGood(@Path("path") String path, @Path("item_id") String item_id, @Path("user_id") String user_id, @Field("price_id") String price_id, Callback<Response> cb);
+    void buyGood(@Path("path") String path, @Path("item_id") String item_id, @Path("user_id") String user_id, @Field("price_id") String price_id, @Field("shop_id") String shop_id,Callback<Response> cb);
 
     //Esta esta en el brand porque me hicieron una pasarelas por el tema de mandar "guest"
     @GET(brandclub + "{path}/user/{user_id}/friend/available")

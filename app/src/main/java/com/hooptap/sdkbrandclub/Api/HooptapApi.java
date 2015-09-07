@@ -3,6 +3,7 @@ package com.hooptap.sdkbrandclub.Api;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.TextView;
@@ -401,6 +402,27 @@ public abstract class HooptapApi {
 
     }
 
+    public static void loginExternal(final String url, final String username, final String password, final HooptapCallback<JSONObject> callback) {
+        Hooptap.getClient().
+                loginExternal(url, username, password, new Callback<Response>() {
+                    @Override
+                    public void success(Response response, Response response2) {
+                        try {
+                            JSONObject json = generateJsonToResponse(response);
+                            JSONObject jsonStatus = json.getJSONObject("response");
+                            callback.onSuccess(jsonStatus);
+                        } catch (Exception e) {
+                            callback.onError(new ResponseError(response));
+                        }
+                    }
+
+                    @Override
+                    public void failure(final RetrofitError retrofitError) {
+                        callback.onError(generateError(retrofitError.getResponse()));
+                    }
+                });
+    }
+
     public static void socialRegister(final String path, final String social_network, final String social_params, final HooptapCallback<JSONArray> callback) {
         Hooptap.getClient().
                 socialregister(path, social_network, social_params, new Callback<Response>() {
@@ -615,10 +637,10 @@ public abstract class HooptapApi {
                 });
     }
 
-    public static void buyGood(final String path, final String item_id, final String user_id, final String price_id, final HooptapCallback<HashMap<String, Object>> callback) {
+    public static void buyGood(final String path, final String item_id, final String user_id, final String price_id, final String shop_id, final HooptapCallback<HashMap<String, Object>> callback) {
 
         Hooptap.getClient().
-                buyGood(path, item_id, user_id, price_id, new Callback<Response>() {
+                buyGood(path, item_id, user_id, price_id, shop_id,new Callback<Response>() {
                     @Override
                     public void success(Response result, Response response) {
                         try {
@@ -647,21 +669,13 @@ public abstract class HooptapApi {
                             callback.onError(new ResponseError(response));
                             e.printStackTrace();
                         }
-                        /*try {
-                            JSONObject json = generateJsonToResponse(response);
-                            JSONObject genericJson = json.getJSONObject("response");
-                            callback.onSuccess(genericJson);
-                        } catch (Exception e) {
-                            callback.onError(generateError(response));
-                            e.printStackTrace();
-                        }*/
                     }
 
                     @Override
                     public void failure(RetrofitError retrofitError) {
                         if (retry < 1) {
                             retry++;
-                            buyGood(path, item_id, user_id, price_id, callback);
+                            buyGood(path, item_id, user_id, price_id, shop_id, callback);
                         } else
                             callback.onError(generateError(retrofitError.getResponse()));
                     }
