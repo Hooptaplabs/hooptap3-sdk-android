@@ -869,12 +869,15 @@ public abstract class HooptapApi {
                             JSONObject json = generateJsonToResponse(response);
                             JSONObject genericJson = json.getJSONObject("response");
 
-
+                            //Creamos un iterador que va a coger las key del json
                             Iterator iterator = genericJson.keys();
                             while(iterator.hasNext()){
+                                //obtenemos la key
                                 String key = (String)iterator.next();
+                                //Instanciamos un objeto para luego añadir a arrayItems si el valor es un array
                                 Object prueba=new JSONTokener(genericJson.getString(key)).nextValue();
                                 if(prueba instanceof JSONArray){
+                                    //Obtenemos el array y añadimos al contenedor de todos
                                     JSONArray datos = genericJson.getJSONArray(key);
                                     arrayItems.addAll(new ItemParse().convertJson(datos));
                                 }
