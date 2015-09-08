@@ -22,16 +22,17 @@ import java.util.Map;
 public interface ApiInterface {
 
     //Desarrollo
-    String api = "//api.dev.hooptap.com/api/v1.0/";
+    /*String api = "//api.dev.hooptap.com/api/v1.0/";
     String api_new = "//api.dev.hooptap.com/api/v1.1.0/";
     String brandclub = "//api.dev.brandclubcorner.com/api/v1.0/";
-    String brandclub_new = "//api.dev.brandclubcorner.com/api/v1.1.0/";
+    String brandclub_new = "//api.dev.brandclubcorner.com/api/v1.1.0/";*/
 
     // http://api.hooptap.com:8080/api/v1.0//pushNotifications/send/toAll
     // Produccion
-    /*String api = "//api.hooptap.com:8080/api/v1.0/";
+    String api = "//api.hooptap.com:8080/api/v1.0/";
     String api_new = "//api.hooptap.com:8080/api/v1.1.0/";
-    String brandclub = "//api.brandclubcorner.com:8080/api/v1.0/";*/
+    String brandclub = "//api.brandclubcorner.com:8080/api/v1.0/";
+    String brandclub_new = "//api.brandclubcorner.com:8080/api/v1.1.0/";
 
 
     @FormUrlEncoded
@@ -63,7 +64,7 @@ public interface ApiInterface {
     void registerGuest(@Path("path") String path, @Path("user_id") String user_id, @Field("register_fields") String register_fields, Callback<Response> cb);
 
 
-    @GET(brandclub + "{path}/user/{user_id}/profile")
+    @GET(brandclub_new + "{path}/user/{user_id}/profile")
     void perfil(@Path("path") String path, @Path("user_id") String user_id, Callback<Response> cb);
 
     @FormUrlEncoded

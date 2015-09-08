@@ -127,7 +127,6 @@ public class Hooptap {
                                 //request.addHeader("access_token", settings.getString("ht_token", ""));
                                 request.addHeader("disp_platform", "android");
                                 request.addHeader("authorization", "Bearer "+settings.getString("ht_token", ""));
-                                Log.e("APIIII",settings.getString("ht_api_key", ""));
                                 request.addHeader("api_key", settings.getString("ht_api_key", ""));
                             }
                         })

@@ -100,10 +100,10 @@ public abstract class HooptapApi {
     }
 
     public static void play(final String path, final String itemId, final String puntuation,
-                            final HooptapCallback<HashMap<String, Object>> callback) {
+                            final String user_id, final HooptapCallback<HashMap<String, Object>> callback) {
 
         Hooptap.getClient().
-                play(path, itemId, puntuation, "me", new Callback<Response>() {
+                play(path, itemId, puntuation, user_id, new Callback<Response>() {
                     public ArrayList<HooptapItem> arrayItems;
 
                     @Override
@@ -142,7 +142,7 @@ public abstract class HooptapApi {
 
                         if (retry < 1) {
                             retry++;
-                            play(path, itemId, puntuation, callback);
+                            play(user_id, path, itemId, puntuation, callback);
                         } else
                             callback.onError(generateError(retrofitError.getResponse()));
 
@@ -1483,9 +1483,9 @@ public abstract class HooptapApi {
                 });
 
     }
-    public static void getNotifications(final int  page, final int limit, final HooptapCallback<ArrayList<HooptapItem>> callback) {
+    public static void getNotifications(final String user_id, final int  page, final int limit, final HooptapCallback<ArrayList<HooptapItem>> callback) {
 
-        Hooptap.getClient().notificationsPage("me", page, limit, new Callback<Response>() {
+        Hooptap.getClient().notificationsPage(user_id, page, limit, new Callback<Response>() {
             private ArrayList<HooptapItem> arrayItems = new ArrayList<HooptapItem>();
 
             @Override
@@ -1509,17 +1509,17 @@ public abstract class HooptapApi {
             public void failure(RetrofitError retrofitError) {
                 if (retry < 1) {
                     retry++;
-                    getNotifications(page, limit, callback);
+                    getNotifications(user_id, page, limit, callback);
                 } else
                     callback.onError(generateError(retrofitError.getResponse()));
             }
         });
 
     }
-    public static void activeNotifications(final String id_item,  final HooptapCallback<JSONObject> callback) {
+    public static void activeNotifications(final String user_id, final String id_item,  final HooptapCallback<JSONObject> callback) {
 
         Hooptap.getClient().
-                readNotification("me", id_item, new Callback<Response>() {
+                readNotification(user_id, id_item, new Callback<Response>() {
 
                     @Override
                     public void success(Response result, Response response) {
@@ -1539,7 +1539,7 @@ public abstract class HooptapApi {
                     public void failure(RetrofitError retrofitError) {
                         if (retry < 1) {
                             retry++;
-                            activeNotifications(id_item, callback);
+                            activeNotifications(user_id, id_item, callback);
                         } else
                             callback.onError(generateError(retrofitError.getResponse()));
                     }
@@ -1547,10 +1547,10 @@ public abstract class HooptapApi {
 
     }
 
-    public static void getCountNotification(final HooptapCallback<Integer> callback) {
+    public static void getCountNotification(final String user_id, final HooptapCallback<Integer> callback) {
 
         Hooptap.getClient().
-                countNotification("me", new Callback<Response>() {
+                countNotification(user_id, new Callback<Response>() {
 
                     @Override
                     public void success(Response result, Response response) {
@@ -1571,7 +1571,7 @@ public abstract class HooptapApi {
                     public void failure(RetrofitError retrofitError) {
                         if (retry < 1) {
                             retry++;
-                            getCountNotification(callback);
+                            getCountNotification(user_id, callback);
                         } else
                             callback.onError(generateError(retrofitError.getResponse()));
                     }
