@@ -117,7 +117,7 @@ public interface ApiInterface {
     @POST(api_new + "error_report/{user_id}")
     void reportError(@Path("user_id") String user_id, @Field("report_text") String report_text,  @Field("platform_info") String platform_info, Callback<Response> cb);
 
-    @GET(api_new + "stringGroup/brandclub_{lenguage}")
+    @GET(api_new + "string/{lenguage}")
     Response getStrings(@Path("lenguage") String lenguage);
 
     @BODY_DELETE(api_new + "marketplace/purchase/{item_id}/user/{user_id}")
