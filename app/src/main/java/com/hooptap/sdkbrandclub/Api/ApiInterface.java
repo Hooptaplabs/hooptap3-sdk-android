@@ -40,8 +40,8 @@ public interface ApiInterface {
     Response getToken(@Field("api_key") String api_key);
 
     @Multipart
-    @PUT(api + "user/me/updateProfileImage")
-    void uploadImageProfile(@Part("file") TypedFile file, Callback<Response> callback);
+    @PUT(api_new + "user/{user_id}/updateProfileImage")
+    void uploadImageProfile(@Path("user_id") String user_id, @Part("file") TypedFile file, Callback<Response> callback);
 
     @FormUrlEncoded
     @POST(brandclub_new + "{path}/game_played/{item_id}/user/{user_id}")
@@ -190,6 +190,9 @@ public interface ApiInterface {
 
     @BODY_DELETE(api_new + "friend/{user_id}/{friend_id}")
     void friendDelete(@Path("user_id") String user_id, @Path("friend_id") String friend_id, Callback<Response> cb);
+
+    @BODY_DELETE(api_new + "reward/{reward_id}/user/{user_id}")
+    void getNumberPoint(@Path("reward_id") String reward_id, @Path("user_id") String user_id, Callback<Response> cb);
 
     @FormUrlEncoded
     @POST(api+"user/{user_id}/pushNotification/subscribe")

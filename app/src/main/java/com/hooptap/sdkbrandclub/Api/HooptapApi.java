@@ -449,7 +449,7 @@ public abstract class HooptapApi {
 
     }
 
-    public static void uploadPhotoProfile(final Bitmap bitmap, final HooptapCallback<JSONObject> callback) {
+    public static void uploadPhotoProfile(final String user_id, final Bitmap bitmap, final HooptapCallback<JSONObject> callback) {
 
         File imageFileFolder = new File(Environment.getExternalStorageDirectory(), "/BrandClub/image/");
         if (!imageFileFolder.exists()) {
@@ -480,7 +480,7 @@ public abstract class HooptapApi {
         TypedFile image = new TypedFile("image/jpeg", imageFileName);
 
 
-        Hooptap.getClient().uploadImageProfile(image, new Callback<Response>() {
+        Hooptap.getClient().uploadImageProfile(user_id, image, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 try {
@@ -496,7 +496,7 @@ public abstract class HooptapApi {
             public void failure(RetrofitError error) {
                 if (retry < 1) {
                     retry++;
-                    uploadPhotoProfile(bitmap, callback);
+                    uploadPhotoProfile(user_id, bitmap, callback);
                 } else
                     callback.onError(generateError(error.getResponse()));
             }
@@ -1447,6 +1447,37 @@ public abstract class HooptapApi {
                         if (retry < 1) {
                             retry++;
                             deleteFriend(user_id, friend_id, callback);
+                        } else
+                            callback.onError(generateError(retrofitError.getResponse()));
+                    }
+                });
+
+    }
+
+    public static void getMyPointsById(final String reward_id, final String user_id, final HooptapCallback<Integer> callback) {
+
+        Hooptap.getClient().
+                getNumberPoint(reward_id, user_id, new Callback<Response>() {
+
+                    @Override
+                    public void success(Response result, Response response) {
+                        try {
+
+                            JSONObject json = generateJsonToResponse(response);
+                            JSONObject jsonItems = json.getJSONObject("response");
+                            callback.onSuccess(jsonItems.getInt("quantity"));
+
+                        } catch (Exception e) {
+                            callback.onError(generateError(response));
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError retrofitError) {
+                        if (retry < 1) {
+                            retry++;
+                            getMyPointsById(reward_id, user_id, callback);
                         } else
                             callback.onError(generateError(retrofitError.getResponse()));
                     }
