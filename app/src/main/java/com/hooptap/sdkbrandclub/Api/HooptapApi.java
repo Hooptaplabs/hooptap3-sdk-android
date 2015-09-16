@@ -564,10 +564,10 @@ public abstract class HooptapApi {
 
     }
 
-    public static void getMyMarketPlace(final String user_id, final int page, final int limit, final HooptapCallback<ArrayList<HooptapItem>> callback) {
+    public static void getMyMarketPlace(final String path, final String user_id, final int page, final int limit, final HooptapCallback<ArrayList<HooptapItem>> callback) {
 
         Hooptap.getClient().
-                marketPlaceMine(user_id, page, limit, new Callback<Response>() {
+                marketPlaceMine(path, user_id, page, limit, new Callback<Response>() {
                     private ArrayList<HooptapItem> arrayItems = new ArrayList<>();
 
                     @Override
@@ -579,11 +579,13 @@ public abstract class HooptapApi {
                             JSONArray jsonItems = genericJson.getJSONArray("items");
                             JSONArray newJsonItems = new JSONArray();
 
-                            //Esto es una pequeño fix que debemos hacer porque el good que llega no es el mismo
+                            //Esto es una pequeño fix que debemos hacer porque el good que llega no es el mismo,
+                            //ya que code y shop llegan fuera de good
                             for (int i = 0; i < jsonItems.length(); i++) {
                                 JSONObject js = (JSONObject) jsonItems.get(i);
                                 JSONObject jo = (JSONObject) js.get("good");
                                 jo.put("code", js.get("code"));
+                                jo.put("shop", js.get("shop"));
                                 jo.put("id_compra", js.get("_id"));
                                 newJsonItems.put(jo);
                             }
@@ -601,7 +603,7 @@ public abstract class HooptapApi {
                     public void failure(RetrofitError retrofitError) {
                         if (retry < 1) {
                             retry++;
-                            getMyMarketPlace(user_id, page, limit, callback);
+                            getMyMarketPlace(path, user_id, page, limit, callback);
                         } else
                             callback.onError(generateError(retrofitError.getResponse()));
                     }

@@ -15,6 +15,7 @@ public class HooptapGood extends HooptapItem  {
     private String id_compra;
     private boolean shop_redeem;
     private String terms_conditions;
+    private String shop;
 
     public HooptapGood(String jsonObj) {
         super(jsonObj);
@@ -32,6 +33,8 @@ public class HooptapGood extends HooptapItem  {
                 this.shop_redeem = json.getBoolean("shop_redeem");
             if (!json.isNull("terms_conditions"))
                 this.terms_conditions = json.getString("terms_conditions");
+            if (!json.isNull("shop"))
+                this.shop = json.getString("shop");
 
         }catch (Exception e){e.printStackTrace();}
     }
@@ -81,5 +84,13 @@ public class HooptapGood extends HooptapItem  {
 
     public void setTerms_conditions(String terms_conditions) {
         this.terms_conditions = terms_conditions;
+    }
+
+    public String getShop() {
+        return shop;
+    }
+
+    public void setShop(String shop) {
+        this.shop = shop;
     }
 }

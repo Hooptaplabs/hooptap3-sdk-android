@@ -123,8 +123,8 @@ public interface ApiInterface {
     @BODY_DELETE(api_new + "marketplace/purchase/{item_id}/user/{user_id}")
     void deleteGood(@Path("user_id") String user_id, @Path("item_id") String item_id, Callback<Response> cb);
 
-    @GET(api_new + "marketplace/user/{user_id}/purchase")
-    void marketPlaceMine(@Path("user_id") String user_id, @Query("page_number") int num_page, @Query("page_size") int num_limit, Callback<Response> cb);
+    @GET(brandclub + "{path}/marketplace/user/{user_id}/purchase")
+    void marketPlaceMine(@Path("path") String path, @Path("user_id") String user_id, @Query("page_number") int num_page, @Query("page_size") int num_limit, Callback<Response> cb);
 
     @GET(api_new + "marketplace/good/{item_id}")
     void detailGood(@Path("item_id") String item_id, Callback<Response> cb);
@@ -191,11 +191,11 @@ public interface ApiInterface {
     @BODY_DELETE(api_new + "friend/{user_id}/{friend_id}")
     void friendDelete(@Path("user_id") String user_id, @Path("friend_id") String friend_id, Callback<Response> cb);
 
-    @BODY_DELETE(api_new + "reward/{reward_id}/user/{user_id}")
+    @GET(api_new + "reward/{reward_id}/user/{user_id}")
     void getNumberPoint(@Path("reward_id") String reward_id, @Path("user_id") String user_id, Callback<Response> cb);
 
     @FormUrlEncoded
-    @POST(api+"user/{user_id}/pushNotification/subscribe")
+    @POST(api_new+"user/{user_id}/pushNotification/subscribe")
     void registerC2DM(@Path("user_id") String user_id, @Field("platform") String platform,
                       @Field("deviceToken") String deviceToken, Callback<Response> callback);
 
