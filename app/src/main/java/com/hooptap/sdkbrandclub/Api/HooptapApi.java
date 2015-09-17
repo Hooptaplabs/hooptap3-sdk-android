@@ -871,9 +871,8 @@ public abstract class HooptapApi {
                     @Override
                     public void success(Response result, Response response) {
                         try {
-
-                            JSONObject json = generateJsonToResponse(response);
-                            JSONObject genericJson = json.getJSONObject("response");
+                            org.codehaus.jettison.json.JSONObject json = new org.codehaus.jettison.json.JSONObject(new String(((TypedByteArray) response.getBody()).getBytes()));
+                            org.codehaus.jettison.json.JSONObject genericJson = json.getJSONObject("response");
 
                             //Creamos un iterador que va a coger las key del json
                             Iterator iterator = genericJson.keys();
