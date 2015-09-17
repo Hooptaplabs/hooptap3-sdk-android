@@ -2,15 +2,21 @@ package com.hooptap.sdkbrandclub.Engine;
 
 import com.hooptap.sdkbrandclub.Models.HooptapItem;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+
+
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONObject;
+
 
 import java.util.ArrayList;
 
 /**
- * Created by carloscarrasco on 9/12/14.
+ * Esta clase esta porque JSON  ordenaba el contenido,solo se utiliza en la home porque viene contenido
+ * variariado
+ * "jettison"
+ *
  */
-public class ItemParse  {
+public class ItemParseLibrary {
 
     private ArrayList<HooptapItem> arrayItems = new ArrayList<>();
     private String type;
