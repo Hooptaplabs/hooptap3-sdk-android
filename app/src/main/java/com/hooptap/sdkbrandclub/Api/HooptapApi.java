@@ -1,26 +1,22 @@
 package com.hooptap.sdkbrandclub.Api;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.hooptap.a.Callback;
 import com.hooptap.a.RetrofitError;
 import com.hooptap.a.client.Response;
+import com.hooptap.a.mime.TypedByteArray;
 import com.hooptap.a.mime.TypedFile;
 import com.hooptap.a.mime.TypedInput;
 import com.hooptap.sdkbrandclub.Engine.ItemParse;
-import com.hooptap.sdkbrandclub.Models.HooptapFriend;
+import com.hooptap.sdkbrandclub.Engine.ItemParseLibrary;
 import com.hooptap.sdkbrandclub.Models.HooptapQuest;
-import com.hooptap.sdkbrandclub.Models.HooptapQuestStep;
 import com.hooptap.sdkbrandclub.Models.ResponseError;
-import com.hooptap.sdkbrandclub.Models.HooptapGameStatus;
 import com.hooptap.sdkbrandclub.Models.HooptapItem;
 import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
+
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -34,10 +30,8 @@ import java.io.InputStreamReader;
 import java.lang.Integer;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.net.URLEncoder;
-import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
-import java.util.Objects;
+
 
 /**
  * API principal para realizar las peticiones
@@ -61,6 +55,33 @@ public abstract class HooptapApi {
         }
 
         return new JSONObject(out.toString());
+    }
+
+    public static JSONObject generatePrueba(Response response) throws Exception {
+        TypedInput body = response.getBody();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(body.in()));
+        StringBuilder out = new StringBuilder();
+        String newLine = System.getProperty("line.separator");
+        String line;
+        while ((line = reader.readLine()) != null) {
+            out.append(line);
+            out.append(newLine);
+        }
+        org.codehaus.jettison.json.JSONObject objeto = new org.codehaus.jettison.json.JSONObject(out.toString());
+        Log.e("resultado", objeto.names() + "--" + objeto);
+
+        JSONObject resultado = new JSONObject();
+        Iterator iterator = objeto.keys();
+        while (iterator.hasNext()) {
+            //obtenemos la key
+            String key = (String) iterator.next();
+            //Instanciamos un objeto para luego añadir a arrayItems si el valor es un array
+            Object valor = objeto.get(key);
+            resultado.put(key, valor);
+
+        }
+
+        return resultado;
     }
 
     public static String getToken(final String apikey) {
@@ -642,7 +663,7 @@ public abstract class HooptapApi {
     public static void buyGood(final String path, final String item_id, final String user_id, final String price_id, final String shop_id, final HooptapCallback<HashMap<String, Object>> callback) {
 
         Hooptap.getClient().
-                buyGood(path, item_id, user_id, price_id, shop_id,new Callback<Response>() {
+                buyGood(path, item_id, user_id, price_id, shop_id, new Callback<Response>() {
                     @Override
                     public void success(Response result, Response response) {
                         try {
@@ -872,30 +893,35 @@ public abstract class HooptapApi {
 
     }
 
+    /***
+     * Este metodo tiene la particularidad de que utiliza una libreria JETTISON, para que la home muestre el contenido
+     * como nos lo envian desde el servidor
+     */
+
     public static void getHome(final String path, final String user_id, final HooptapCallback<ArrayList<HooptapItem>> callback) {
-        
+
         Hooptap.getClient().
-                home(path,user_id, new Callback<Response>() {
+                home(path, user_id, new Callback<Response>() {
                     private ArrayList<HooptapItem> arrayItems = new ArrayList<HooptapItem>();
 
                     @Override
                     public void success(Response result, Response response) {
                         try {
 
-                            JSONObject json = generateJsonToResponse(response);
-                            JSONObject genericJson = json.getJSONObject("response");
+                            org.codehaus.jettison.json.JSONObject json = new org.codehaus.jettison.json.JSONObject(new String(((TypedByteArray) response.getBody()).getBytes()));
+                            org.codehaus.jettison.json.JSONObject genericJson = json.getJSONObject("response");
 
                             //Creamos un iterador que va a coger las key del json
                             Iterator iterator = genericJson.keys();
-                            while(iterator.hasNext()){
+                            while (iterator.hasNext()) {
                                 //obtenemos la key
-                                String key = (String)iterator.next();
+                                String key = (String) iterator.next();
                                 //Instanciamos un objeto para luego añadir a arrayItems si el valor es un array
-                                Object prueba=new JSONTokener(genericJson.getString(key)).nextValue();
-                                if(prueba instanceof JSONArray){
+                                Object prueba = new JSONTokener(genericJson.getString(key)).nextValue();
+                                if (prueba instanceof JSONArray) {
                                     //Obtenemos el array y añadimos al contenedor de todos
-                                    JSONArray datos = genericJson.getJSONArray(key);
-                                    arrayItems.addAll(new ItemParse().convertJson(datos));
+                                    org.codehaus.jettison.json.JSONArray datos = genericJson.getJSONArray(key);
+                                    arrayItems.addAll(new ItemParseLibrary().convertJson(datos));
                                 }
 
                             }
@@ -1516,7 +1542,8 @@ public abstract class HooptapApi {
                 });
 
     }
-    public static void getNotifications(final String user_id, final int  page, final int limit, final HooptapCallback<ArrayList<HooptapItem>> callback) {
+
+    public static void getNotifications(final String user_id, final int page, final int limit, final HooptapCallback<ArrayList<HooptapItem>> callback) {
 
         Hooptap.getClient().notificationsPage(user_id, page, limit, new Callback<Response>() {
             private ArrayList<HooptapItem> arrayItems = new ArrayList<HooptapItem>();
@@ -1549,7 +1576,8 @@ public abstract class HooptapApi {
         });
 
     }
-    public static void activeNotifications(final String user_id, final String id_item,  final HooptapCallback<JSONObject> callback) {
+
+    public static void activeNotifications(final String user_id, final String id_item, final HooptapCallback<JSONObject> callback) {
 
         Hooptap.getClient().
                 readNotification(user_id, id_item, new Callback<Response>() {
