@@ -57,33 +57,6 @@ public abstract class HooptapApi {
         return new JSONObject(out.toString());
     }
 
-    public static JSONObject generatePrueba(Response response) throws Exception {
-        TypedInput body = response.getBody();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(body.in()));
-        StringBuilder out = new StringBuilder();
-        String newLine = System.getProperty("line.separator");
-        String line;
-        while ((line = reader.readLine()) != null) {
-            out.append(line);
-            out.append(newLine);
-        }
-        org.codehaus.jettison.json.JSONObject objeto = new org.codehaus.jettison.json.JSONObject(out.toString());
-        Log.e("resultado", objeto.names() + "--" + objeto);
-
-        JSONObject resultado = new JSONObject();
-        Iterator iterator = objeto.keys();
-        while (iterator.hasNext()) {
-            //obtenemos la key
-            String key = (String) iterator.next();
-            //Instanciamos un objeto para luego añadir a arrayItems si el valor es un array
-            Object valor = objeto.get(key);
-            resultado.put(key, valor);
-
-        }
-
-        return resultado;
-    }
-
     public static String getToken(final String apikey) {
         Response response = Hooptap.getClient().getToken(apikey);
         try {
