@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.hooptap.a.Callback;
 import com.hooptap.a.RetrofitError;
 import com.hooptap.a.client.Response;
+import com.hooptap.a.mime.TypedByteArray;
 import com.hooptap.a.mime.TypedFile;
 import com.hooptap.a.mime.TypedInput;
 import com.hooptap.sdkbrandclub.Engine.ItemParse;
@@ -50,17 +51,8 @@ public abstract class HooptapApi {
 
 
     public static JSONObject generateJsonToResponse(Response response) throws Exception {
-        TypedInput body = response.getBody();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(body.in()));
-        StringBuilder out = new StringBuilder();
-        String newLine = System.getProperty("line.separator");
-        String line;
-        while ((line = reader.readLine()) != null) {
-            out.append(line);
-            out.append(newLine);
-        }
-
-        return new JSONObject(out.toString());
+        String s = new String(((TypedByteArray) response.getBody()).getBytes());
+        return new JSONObject(s);
     }
 
     public static String getToken(final String apikey) {
@@ -610,10 +602,10 @@ public abstract class HooptapApi {
                 });
     }
 
-    public static void getMarketPlace(final String path, final String user_id, final HooptapCallback<JSONObject> callback) {
+    public static void getMarketPlace(final String path, final String user_id, final int page, final int limit, final HooptapCallback<JSONObject> callback) {
 
         Hooptap.getClient().
-                marketPlace(path, user_id, new Callback<Response>() {
+                marketPlace(path, user_id, page, limit, new Callback<Response>() {
 
                     @Override
                     public void success(Response result, Response response) {
@@ -632,7 +624,7 @@ public abstract class HooptapApi {
                     public void failure(RetrofitError retrofitError) {
                         if (retry < 1) {
                             retry++;
-                            getMarketPlace(path, user_id, callback);
+                            getMarketPlace(path, user_id, page, limit, callback);
                         } else
                             callback.onError(generateError(retrofitError.getResponse()));
                     }
@@ -881,7 +873,6 @@ public abstract class HooptapApi {
                     @Override
                     public void success(Response result, Response response) {
                         try {
-
                             JSONObject json = generateJsonToResponse(response);
                             JSONObject genericJson = json.getJSONObject("response");
 

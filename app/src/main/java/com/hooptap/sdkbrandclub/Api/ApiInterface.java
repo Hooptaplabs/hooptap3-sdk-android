@@ -130,7 +130,7 @@ public interface ApiInterface {
     void detailGood(@Path("item_id") String item_id, Callback<Response> cb);
 
     @GET(brandclub + "{path}/marketplace/user/{user_id}")
-    void marketPlace(@Path("path") String path, @Path("user_id") String user_id, Callback<Response> cb);
+    void marketPlace(@Path("path") String path, @Path("user_id") String user_id, @Query("page_number") int num_page, @Query("page_size") int num_limit, Callback<Response> cb);
 
     @FormUrlEncoded
     @POST(api_new + "engine/action/do/{action}/{user_id}")
