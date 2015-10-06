@@ -5,6 +5,7 @@ import com.hooptap.a.Callback;
 import com.hooptap.a.client.Response;
 import com.hooptap.a.http.Body;
 import com.hooptap.a.http.Field;
+import com.hooptap.a.http.FieldMap;
 import com.hooptap.a.http.FormUrlEncoded;
 import com.hooptap.a.http.GET;
 import com.hooptap.a.http.Multipart;
@@ -78,7 +79,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("//{url_login}")
-    void loginExternal(@Path(value="url_login", encode=false) String url_login, @Field("user_login") String user_login, @Field("password") String password,
+    void loginExternal(@Path(value="url_login", encode=false) String url_login, @FieldMap Map<String, String> user_login, @FieldMap Map<String, String> password,
                Callback<Response> cb);
 
     @GET(brandclub + "{path}/user/{user_id}/badges")

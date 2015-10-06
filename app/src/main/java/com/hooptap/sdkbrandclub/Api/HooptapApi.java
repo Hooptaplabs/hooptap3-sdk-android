@@ -31,6 +31,7 @@ import java.lang.Integer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 
 /**
@@ -387,7 +388,7 @@ public abstract class HooptapApi {
 
     }
 
-    public static void loginExternal(final String url, final String username, final String password, final HooptapCallback<JSONObject> callback) {
+    public static void loginExternal(final String url, final Map<String, String> username, final Map<String, String> password, final HooptapCallback<JSONObject> callback) {
         Hooptap.getClient().
                 loginExternal(url, username, password, new Callback<Response>() {
                     @Override
