@@ -699,10 +699,10 @@ public abstract class HooptapApi {
 
     }
 
-    public static void detailGood(final String item_id, final HooptapCallback<JSONObject> callback) {
+    public static void detailGood(final String item_id, final String user_id, final HooptapCallback<JSONObject> callback) {
 
         Hooptap.getClient().
-                detailGood(item_id, new Callback<Response>() {
+                detailGood(item_id, user_id, new Callback<Response>() {
                     @Override
                     public void success(Response result, Response response) {
                         try {
@@ -719,7 +719,7 @@ public abstract class HooptapApi {
                     public void failure(RetrofitError retrofitError) {
                         if (retry < 1) {
                             retry++;
-                            detailGood(item_id, callback);
+                            detailGood(item_id, user_id, callback);
                         } else
                             callback.onError(generateError(retrofitError.getResponse()));
                     }

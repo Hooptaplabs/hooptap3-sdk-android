@@ -7,6 +7,7 @@ import org.json.JSONObject;
  */
 public class HooptapWeb extends HooptapItem {
 
+    private String orientation;
     private String url_web;
 
     public HooptapWeb(String jsonObj) {
@@ -15,6 +16,8 @@ public class HooptapWeb extends HooptapItem {
             JSONObject json = new JSONObject(jsonObj);
             if (!json.isNull("url"))
                 this.url_web = json.getString("url");
+            if (!json.isNull("orientation"))
+                this.orientation = json.getString("orientation");
 
         }catch (Exception e){}
     }
@@ -25,5 +28,13 @@ public class HooptapWeb extends HooptapItem {
 
     public void setUrl_web(String url_web) {
         this.url_web = url_web;
+    }
+
+    public String getOrientation() {
+        return orientation;
+    }
+
+    public void setOrientation(String orientation) {
+        this.orientation = orientation;
     }
 }

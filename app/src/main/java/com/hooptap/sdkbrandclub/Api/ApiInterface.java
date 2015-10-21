@@ -127,8 +127,8 @@ public interface ApiInterface {
     @GET(brandclub + "{path}/marketplace/user/{user_id}/purchase")
     void marketPlaceMine(@Path("path") String path, @Path("user_id") String user_id, @Query("page_number") int num_page, @Query("page_size") int num_limit, Callback<Response> cb);
 
-    @GET(api_new + "marketplace/good/{item_id}")
-    void detailGood(@Path("item_id") String item_id, Callback<Response> cb);
+    @GET(api_new + "marketplace/good/{item_id}/user/{user_id}")
+    void detailGood(@Path("item_id") String item_id, @Path("user_id") String user_id, Callback<Response> cb);
 
     @GET(brandclub + "{path}/marketplace/user/{user_id}")
     void marketPlace(@Path("path") String path, @Path("user_id") String user_id, @Query("page_number") int num_page, @Query("page_size") int num_limit, Callback<Response> cb);
@@ -200,7 +200,7 @@ public interface ApiInterface {
     void registerC2DM(@Path("user_id") String user_id, @Field("platform") String platform,
                       @Field("deviceToken") String deviceToken, Callback<Response> callback);
 
-    @GET(api+"user/{user_id}/notification")
+    @GET(api_new+"user/{user_id}/notification")
     void notificationsPage(@Path("user_id") String var1, @Query("page") int var2, @Query("limit") int var3, Callback<Response> var4);
 
     @PATCH(api+"user/{user_id}/notification/{id_notificacion}")
