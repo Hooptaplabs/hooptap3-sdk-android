@@ -12,13 +12,18 @@ import com.hooptap.a.mime.TypedFile;
 import com.hooptap.a.mime.TypedInput;
 import com.hooptap.sdkbrandclub.Engine.ItemParse;
 import com.hooptap.sdkbrandclub.Engine.ItemParseLibrary;
+import com.hooptap.sdkbrandclub.Interfaces.CallbackPrueba;
 import com.hooptap.sdkbrandclub.Models.HooptapQuest;
+import com.hooptap.sdkbrandclub.Models.HooptapText;
 import com.hooptap.sdkbrandclub.Models.ResponseError;
 import com.hooptap.sdkbrandclub.Models.HooptapItem;
 import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
+import com.hooptap.sdkbrandclub.Utilities.HooptapException;
+import com.hooptap.sdkbrandclub.Utilities.Result;
 
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -42,6 +47,7 @@ import java.util.Map;
 public abstract class HooptapApi {
     //Primer commit Development
     private static int retry = 0;
+
 
 
     public static JSONObject generateJsonToResponse(Response response) throws Exception {
@@ -1603,6 +1609,9 @@ public abstract class HooptapApi {
                 });
 
     }
+    /***
+     * PRUEBAS
+     */
 
     public static void getShops(final String path, final HooptapCallback<JSONObject> callback) {
 
@@ -1635,6 +1644,105 @@ public abstract class HooptapApi {
                 });
 
     }
+    public static void getNotificationsPrueba(final String user_id, final int page, final int limit, final HooptapCallback<ArrayList<HooptapItem>> callback) {
+        Hooptap.getClient().notificationsPagePrueba(user_id, page, limit, new CallbackPrueba<JSONObject>() {
+            private ArrayList<HooptapItem> arrayItems = new ArrayList<HooptapItem>();
+
+            @Override
+            public void success(Result<JSONObject> result) {
+                try {
+                    arrayItems = new ItemParse().convertJson(result.data.getJSONArray("items"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                callback.onSuccess(arrayItems);
+            }
+
+            @Override
+            public void failure(HooptapException exception) {
+                Log.e("pruebaRetrofit", exception.getMessage());
+            }
+        });
+
+    }
+    public static void getNewsPrueba(final String path, final HooptapCallback<ArrayList<HooptapItem>> callback) {
+
+        Hooptap.getClient().
+                newsPrueba(path, new CallbackPrueba<JSONObject>() {
+                    private ArrayList<HooptapItem> arrayItems = new ArrayList<HooptapItem>();
+
+                    @Override
+                    public void success(Result<JSONObject> result) {
+                        try {
+
+                            Log.e("pruebaaaa", result.data + "");
+                            Log.e("pruebaaaa2", result.response + "");
+                            JSONObject jsonGeneric = (JSONObject) result.data.get("response");
+                            JSONArray jsonItems = jsonGeneric.getJSONArray("items");
+
+                            arrayItems = new ItemParse().convertJson(jsonItems);
+                            callback.onSuccess(arrayItems);
+
+                        } catch (Exception e) {
+                            callback.onError(generateError(result.response));
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void failure(HooptapException exception) {
+                        //callback.onError(generateError(exception));
+                        Log.e("callbackRetrofit", exception.getMessage());
+                    }
+                });
+
+
+    }
+    public static void getNewsPrueba2(final String path, final HooptapCallback<ArrayList<HooptapItem>> callback) {
+        Log.e("prueba10","Llego al metodo");
+
+        Hooptap.getClient().newsPrueba2(path, new Callback<ArrayList<HooptapItem>>() {
+                @Override
+                public void success(ArrayList<HooptapItem> hooptapItems, Response response) {
+                    Log.e("prueba8",hooptapItems.get(0).name);
+                    Log.e("prueba9", new String(((TypedByteArray) response.getBody()).getBytes()) + "aaaaaa");
+                    callback.onSuccess(hooptapItems);
+                }
+
+                @Override
+                public void failure(RetrofitError retrofitError) {
+                    Log.e("pruebaerror",retrofitError.getMessage());
+                }
+            });
+       /* Hooptap.getClient().
+                newsPrueba2(path, new Callback<JSONObject>() {
+                    private ArrayList<HooptapItem> arrayItems;
+
+                    @Override
+                    public void success(JSONObject jsonObject, Response response) {
+                        JSONArray jsonItems = null;
+                        try {
+                            Log.e("prueba6", jsonObject + "");
+                            Log.e("prueba7", new String(((TypedByteArray) response.getBody()).getBytes()) + "aaaaaa");
+                            jsonItems = jsonObject.getJSONArray("items");
+                            arrayItems = new ItemParse().convertJson(jsonItems);
+                            callback.onSuccess(arrayItems);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError retrofitError) {
+
+                    }
+                });
+*/
+    }
+
+
 
 }
 

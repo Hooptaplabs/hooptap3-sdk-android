@@ -17,7 +17,13 @@ import com.hooptap.a.http.Path;
 import com.hooptap.a.http.Query;
 import com.hooptap.a.http.QueryMap;
 import com.hooptap.a.mime.TypedFile;
+import com.hooptap.sdkbrandclub.Interfaces.CallbackPrueba;
+import com.hooptap.sdkbrandclub.Models.HooptapItem;
+import com.hooptap.sdkbrandclub.Models.HooptapText;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Map;
 
 public interface ApiInterface {
@@ -213,4 +219,11 @@ public interface ApiInterface {
     @GET(brandclub_new + "{path}/marketplace/shop")
     void tiendas(@Path("path") String path, Callback<Response> var2);
 
+    @GET(api_new+"user/{user_id}/notification")
+    void notificationsPagePrueba(@Path("user_id") String var1, @Query("page") int var2, @Query("limit") int var3, CallbackPrueba<JSONObject> var4);
+
+    @GET(brandclub + "{path}/news")
+    void newsPrueba(@Path("path") String path, CallbackPrueba<JSONObject>cb);
+    @GET(brandclub + "{path}/news")
+    void newsPrueba2(@Path("path") String path, Callback<ArrayList<HooptapItem>> cb);
 }

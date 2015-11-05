@@ -10,7 +10,30 @@ import android.util.Log;
 import com.hooptap.a.RequestInterceptor;
 import com.hooptap.a.RestAdapter;
 import com.hooptap.a.client.OkClient;
+import com.hooptap.a.converter.GsonConverter;
 import com.hooptap.b.OkHttpClient;
+import com.hooptap.d.Gson;
+import com.hooptap.d.GsonBuilder;
+import com.hooptap.sdkbrandclub.Models.HooptapBadge;
+import com.hooptap.sdkbrandclub.Models.HooptapFolder;
+import com.hooptap.sdkbrandclub.Models.HooptapFriend;
+import com.hooptap.sdkbrandclub.Models.HooptapGame;
+import com.hooptap.sdkbrandclub.Models.HooptapGameStatus;
+import com.hooptap.sdkbrandclub.Models.HooptapGood;
+import com.hooptap.sdkbrandclub.Models.HooptapItem;
+import com.hooptap.sdkbrandclub.Models.HooptapLevel;
+import com.hooptap.sdkbrandclub.Models.HooptapLink;
+import com.hooptap.sdkbrandclub.Models.HooptapPoint;
+import com.hooptap.sdkbrandclub.Models.HooptapQuest;
+import com.hooptap.sdkbrandclub.Models.HooptapQuestStep;
+import com.hooptap.sdkbrandclub.Models.HooptapQuestUserStatus;
+import com.hooptap.sdkbrandclub.Models.HooptapReward;
+import com.hooptap.sdkbrandclub.Models.HooptapText;
+import com.hooptap.sdkbrandclub.Models.HooptapWeb;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Clase principal que crea e inicializa el objeto Hooptap, el cual será el encargado de realizar las peticiones a nuestras APIs.
@@ -119,17 +142,37 @@ public class Hooptap {
                 }else{
                     debugVariable = RestAdapter.LogLevel.NONE;
                 }
+                /*Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(HooptapItem.class, new ConverterJSON<HooptapItem>())
+                        .registerTypeAdapter(HooptapItem.class, new ConverterJSON<ArrayList<HooptapItem>>())
+                        .registerTypeAdapter(HooptapBadge.class, new ConverterJSON<HooptapBadge>())
+                        .registerTypeAdapter(HooptapFolder.class, new ConverterJSON<HooptapFolder>())
+                        .registerTypeAdapter(HooptapFriend.class, new ConverterJSON<HooptapFriend>())
+                        .registerTypeAdapter(HooptapGame.class, new ConverterJSON<HooptapGame>())
+                        .registerTypeAdapter(HooptapGameStatus.class, new ConverterJSON<HooptapGameStatus>())
+                        .registerTypeAdapter(HooptapGood.class, new ConverterJSON<HooptapGood>())
+                        .registerTypeAdapter(HooptapLevel.class, new ConverterJSON<HooptapLevel>())
+                        .registerTypeAdapter(HooptapLink.class, new ConverterJSON<HooptapLink>())
+                        .registerTypeAdapter(HooptapPoint.class, new ConverterJSON<HooptapPoint>())
+                        .registerTypeAdapter(HooptapQuest.class, new ConverterJSON<HooptapQuest>())
+                        .registerTypeAdapter(HooptapQuestStep.class, new ConverterJSON<HooptapQuestStep>())
+                        .registerTypeAdapter(HooptapQuestUserStatus.class, new ConverterJSON<HooptapQuestUserStatus>())
+                        .registerTypeAdapter(HooptapReward.class, new ConverterJSON<HooptapReward>())
+                        .registerTypeAdapter(HooptapText.class, new ConverterJSON<HooptapText>())
+                        .registerTypeAdapter(HooptapWeb.class, new ConverterJSON<HooptapWeb>())
 
+                        .create();*/
                 restAdapter = new RestAdapter.Builder()
                         .setRequestInterceptor(new RequestInterceptor() {
                             @Override
                             public void intercept(RequestFacade request) {
                                 //request.addHeader("access_token", settings.getString("ht_token", ""));
                                 request.addHeader("disp_platform", "android");
-                                request.addHeader("authorization", "Bearer "+settings.getString("ht_token", ""));
+                                request.addHeader("authorization", "Bearer " + settings.getString("ht_token", ""));
                                 request.addHeader("api_key", settings.getString("ht_api_key", ""));
                             }
                         })
+                        //.setConverter(new GsonConverter(gson))
                         .setLogLevel(debugVariable)
                         .setEndpoint("http:/")
                         .setClient(new OkClient(client))
