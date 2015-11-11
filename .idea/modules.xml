@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/LibraryBranclub.iml" filepath="$PROJECT_DIR$/LibraryBranclub.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Hooptap-SDKGameRoom-Android.iml" filepath="$PROJECT_DIR$/Hooptap-SDKGameRoom-Android.iml" />
       <module fileurl="file://$PROJECT_DIR$/SDKGameRoom.iml" filepath="$PROJECT_DIR$/SDKGameRoom.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

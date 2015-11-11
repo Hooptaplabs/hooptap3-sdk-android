@@ -85,7 +85,7 @@ public class Hooptap {
      */
     public static class Builder {
 
-        private Boolean htEnableDebug;
+        public static Boolean htEnableDebug;
 
         public Builder(Context cont) {
             context = cont;
@@ -135,6 +135,7 @@ public class Hooptap {
 
                 if (htEnableDebug != null) {
                     if (htEnableDebug) {
+
                         debugVariable = RestAdapter.LogLevel.FULL;
                     } else {
                         debugVariable = RestAdapter.LogLevel.NONE;
