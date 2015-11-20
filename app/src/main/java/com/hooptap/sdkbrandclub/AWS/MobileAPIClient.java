@@ -21,14 +21,30 @@ import com.amazonaws.mobileconnectors.apigateway.annotation.Operation;
 import com.amazonaws.mobileconnectors.apigateway.annotation.Service;
 import com.hooptap.a.Callback;
 import com.hooptap.a.client.Response;
+import com.hooptap.sdkbrandclub.AWS.model.Folder;
 import com.hooptap.sdkbrandclub.AWS.model.Item;
+
+import org.json.JSONObject;
 
 import java.util.List;
 
 @Service(endpoint = "https://25unt9h64h.execute-api.us-west-2.amazonaws.com/dev")
 public interface MobileAPIClient {
-    
     /**
+            *
+            *
+            * @return Folder
+    */
+    @Operation(path = "/folders", method = "GET")
+    Folder foldersGet();
+
+    @Operation(path = "/folders", method = "GET")
+    List<Folder> foldersGetJSon();
+
+    @Operation(path = "/foldersa", method = "GET")
+    List<Item> folders();
+    /**
+     *
      * 
      * 
      * @return Item
