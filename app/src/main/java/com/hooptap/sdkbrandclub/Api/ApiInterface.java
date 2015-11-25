@@ -17,7 +17,7 @@ import com.hooptap.a.http.Path;
 import com.hooptap.a.http.Query;
 import com.hooptap.a.http.QueryMap;
 import com.hooptap.a.mime.TypedFile;
-import com.hooptap.sdkbrandclub.AWS.model.Item;
+
 import com.hooptap.sdkbrandclub.Interfaces.CallbackPrueba;
 import com.hooptap.sdkbrandclub.Models.HooptapItem;
 import com.hooptap.sdkbrandclub.Models.HooptapText;
@@ -229,6 +229,5 @@ public interface ApiInterface {
     @GET(brandclub + "{path}/news")
     void newsPrueba2(@Path("path") String path, Callback<ArrayList<HooptapItem>> cb);
 
-    @GET("/25unt9h64h.execute-api.us-west-2.amazonaws.com/dev/items")
-    void  itemsGet(Callback<ArrayList<Item>> cb);
+
 }
