@@ -5,11 +5,12 @@ import android.content.SharedPreferences;
 import android.os.StrictMode;
 
 import com.amazonaws.mobileconnectors.apigateway.ApiClientFactory;
-import com.hooptap.SDK.MobileAPIClient;
+
 import com.hooptap.a.RequestInterceptor;
 import com.hooptap.a.RestAdapter;
 import com.hooptap.a.client.OkClient;
 import com.hooptap.b.OkHttpClient;
+import com.hooptap.brandclub.HooptapAPIvClient;
 import com.hooptap.sdkbrandclub.Api.ApiInterface;
 
 /**
@@ -21,16 +22,16 @@ import com.hooptap.sdkbrandclub.Api.ApiInterface;
  */
 
 public class HooptapAWS {
-    private static MobileAPIClient sClientService;
+    private static HooptapAPIvClient sClientService;
     private static RestAdapter restAdapter;
     private static OkHttpClient client;
     private static SharedPreferences settings;
     private static RestAdapter.LogLevel debugVariable;
-    private static MobileAPIClient hoptapClient;
+    private static HooptapAPIvClient hoptapClient;
     private static Context context;
     private static SharedPreferences.Editor editor;
 
-    private HooptapAWS(MobileAPIClient sClientService) {
+    private HooptapAWS(HooptapAPIvClient sClientService) {
         this.hoptapClient = sClientService;
     }
 
@@ -38,7 +39,7 @@ public class HooptapAWS {
      *
      * @return El objeto Hooptap para poder utilizarlo posteriormente
      */
-    public static MobileAPIClient getClient(){
+    public static HooptapAPIvClient getClient(){
         return hoptapClient;
     }
 
@@ -56,7 +57,9 @@ public class HooptapAWS {
         editor.apply();
     }
 
-
+    public static String getApiKey(){
+        return "46576686f6f707461702e627";
+    }
     /**
      * Constructor generico en el cual podremos configurar ciertos parametros
      */
@@ -100,9 +103,11 @@ public class HooptapAWS {
 
                 StrictMode.setThreadPolicy(policy);
                 apiClientFactory = new ApiClientFactory();
-                apiClientFactory.apiKey(settings.getString("ht_api_key", ""));
+                apiClientFactory.apiKey("46576686f6f707461702e627");
 
-                sClientService = apiClientFactory.build(MobileAPIClient.class);
+                //apiClientFactory.apiKey(settings.getString("ht_api_key", ""));
+
+                sClientService = apiClientFactory.build(HooptapAPIvClient.class);
             }
 
             return new HooptapAWS(sClientService);
