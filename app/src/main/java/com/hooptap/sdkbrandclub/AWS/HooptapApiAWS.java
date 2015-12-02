@@ -11,6 +11,7 @@ import com.hooptap.brandclub.model.InputLoginModel;
 import com.hooptap.brandclub.model.UserModel;
 import com.hooptap.d.Gson;
 import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
+import com.hooptap.sdkbrandclub.Models.ResponseError;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,12 +40,9 @@ public abstract class HooptapApiAWS {
     }
     public static void registerUser(JSONObject info_User,HooptapCallback<JSONObject>cb){
 
-      //Log.e("registrar",value);
-        //Toca tratar el error
         try {
             UserModel modelo=g.fromJson(info_User + "", UserModel.class);
             String value=g.toJson(HooptapAWS.getClient().userPost("46576686f6f707461702e627", modelo));
-
             JSONObject objeto=new JSONObject(value);
             Log.e("registrar",value);
             cb.onSuccess(objeto.getJSONObject("response"));
@@ -52,28 +50,28 @@ public abstract class HooptapApiAWS {
             e.printStackTrace();
         }catch (ApiClientException ae){
             Log.e("registrar",ae.getErrorMessage());
-            Log.e("registrar", g.toJson(ae.getErrorMessage()));
-
+            cb.onError(getError(ae));
         }
 
-        /*catch (Exception e)
-        {
-            //cb.onError();
-            String object=g.toJson(e.getMessage());
-            Log.e("registrarObj",object);
-            try {
-                JSONObject jsonObject=new JSONObject(object);
-                Log.e("registrarObj",jsonObject+"");
 
-            } catch (JSONException e1) {
-                e1.printStackTrace();
-            }
-            Log.e("registrar",e.getMessage());
-            Log.e("registrar",e.toString());
-        }*/
+    }
 
-       /* JSONObject object=getObjectParse(HooptapAWS.getClient().userPost("46576686f6f707461702e627", modelo));
-        cb.onSuccess(object);*/
+    private static ResponseError getError(ApiClientException ae) {
+        String con="error:";
+        ResponseError responseError = new ResponseError();
+        JSONObject error;
+        int a=ae.getErrorMessage().indexOf(con);
+        try {
+            error =new JSONObject(ae.getErrorMessage().substring(a + con.length()));
+            responseError.setReason(error.getString("message"));
+            responseError.setStatus(error.getInt("httpErrorCode"));
+            return   responseError;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            responseError.setReason("Se ha producido un error en vuestra llamada");
+            return responseError ;
+        }
+
     }
 
 
