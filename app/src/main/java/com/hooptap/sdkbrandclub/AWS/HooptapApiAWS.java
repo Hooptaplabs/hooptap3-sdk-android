@@ -102,9 +102,9 @@ public abstract class HooptapApiAWS {
     public static void doAction(String user_id, HooptapCallback<JSONObject> cb ){
 
         InputActionDoneModel accion= new InputActionDoneModel();
-        accion.setTargetId("android");
-        accion.setInteractionData("{\"a\":\"b\"}");
-        JSONObject object=getObjectParse(HooptapAWS.getClient().userUserIdActionActionNamePost(HooptapAWS.getApiKey(),user_id,"Play",accion));
+        accion.setTargetId("facebook");
+        accion.setInteractionData("{\"social_network\":\"facebook\",\"Badge\":\"5576bd06d97c19a7424a73ce\"}");
+        JSONObject object=getObjectParse(HooptapAWS.getClient().userUserIdActionActionNamePost(HooptapAWS.getApiKey(),user_id,"ShareDetail",accion));
         cb.onSuccess(object);
         //HooptapAWS.getClient().userUserIdRewardRewardIdGet()//Get user reward
         //HooptapAWS.getClient().userUserIdImagePut() //Cambiar imagen de usuario
