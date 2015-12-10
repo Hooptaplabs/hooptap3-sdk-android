@@ -71,7 +71,7 @@ android.libraryVariants.all { variant ->
         variantTask.configuration = variantConfiguration
         variantTask.repositories.mavenInstaller {
             pom.groupId = "com.hooptap.sdkbrandclub"
-            pom.artifactId = "AWSBrand"
+            pom.artifactId = "HooptapBrandClubSDKAWS"
             pom.version = "1.0.0" //Give a different version for each variant
             pom.packaging = "aar"
         }

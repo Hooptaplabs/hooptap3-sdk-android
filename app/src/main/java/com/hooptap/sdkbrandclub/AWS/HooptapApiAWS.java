@@ -25,31 +25,33 @@ import org.json.JSONObject;
 public abstract class HooptapApiAWS {
     //Primer metodo Prueba
     static Gson g = new Gson();
-    public static void getUsers(String size_page, String page_number,String filtro, HooptapCallback<JSONObject> cb){
 
-        HooptapAWS.getClient().userGet(size_page,HooptapAWS.getApiKey(),page_number,filtro);
-        Log.e("getUser", HooptapAWS.getClient().userGet(size_page,HooptapAWS.getApiKey(),page_number,filtro)+"");
+    public static void getUsers(String size_page, String page_number, String filtro, HooptapCallback<JSONObject> cb) {
 
-        String value=g.toJson(HooptapAWS.getClient().userGet(size_page,HooptapAWS.getApiKey(),page_number,filtro));
+        HooptapAWS.getClient().userGet(size_page, HooptapAWS.getApiKey(), page_number, filtro);
+        Log.e("getUser", HooptapAWS.getClient().userGet(size_page, HooptapAWS.getApiKey(), page_number, filtro) + "");
+
+        String value = g.toJson(HooptapAWS.getClient().userGet(size_page, HooptapAWS.getApiKey(), page_number, filtro));
         try {
-            JSONObject objeto=new JSONObject(value);
+            JSONObject objeto = new JSONObject(value);
             cb.onSuccess(objeto.getJSONObject("response"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-    public static void registerUser(JSONObject info_User,HooptapCallback<JSONObject>cb){
+
+    public static void registerUser(JSONObject info_User, HooptapCallback<JSONObject> cb) {
 
         try {
-            UserModel modelo=g.fromJson(info_User + "", UserModel.class);
-            String value=g.toJson(HooptapAWS.getClient().userPost("46576686f6f707461702e627", modelo));
-            JSONObject objeto=new JSONObject(value);
-            Log.e("registrar",value);
+            UserModel modelo = g.fromJson(info_User + "", UserModel.class);
+            String value = g.toJson(HooptapAWS.getClient().userPost("46576686f6f707461702e627", modelo));
+            JSONObject objeto = new JSONObject(value);
+            Log.e("registrar", value);
             cb.onSuccess(objeto.getJSONObject("response"));
         } catch (JSONException e) {
             e.printStackTrace();
-        }catch (ApiClientException ae){
-            Log.e("registrar",ae.getErrorMessage());
+        } catch (ApiClientException ae) {
+            Log.e("registrar", ae.getErrorMessage());
             cb.onError(getError(ae));
         }
 
@@ -57,40 +59,41 @@ public abstract class HooptapApiAWS {
     }
 
     private static ResponseError getError(ApiClientException ae) {
-        String con="error:";
+        String con = "error:";
         ResponseError responseError = new ResponseError();
         JSONObject error;
-        int a=ae.getErrorMessage().indexOf(con);
+        int a = ae.getErrorMessage().indexOf(con);
         try {
-            error =new JSONObject(ae.getErrorMessage().substring(a + con.length()));
+            error = new JSONObject(ae.getErrorMessage().substring(a + con.length()));
             responseError.setReason(error.getString("message"));
             responseError.setStatus(error.getInt("httpErrorCode"));
-            return   responseError;
+            return responseError;
         } catch (JSONException e) {
             e.printStackTrace();
             responseError.setReason("Se ha producido un error en vuestra llamada");
-            return responseError ;
+            return responseError;
         }
 
     }
 
 
-    public static void getUserId(String user_id,HooptapCallback<JSONObject>cb){
-        JSONObject object=getObjectParse(HooptapAWS.getClient().userUserIdGet("46576686f6f707461702e627", user_id));
+    public static void getUserId(String user_id, HooptapCallback<JSONObject> cb) {
+        JSONObject object = getObjectParse(HooptapAWS.getClient().userUserIdGet("46576686f6f707461702e627", user_id));
 
         cb.onSuccess(object);
     }
-    public static void login(String email, String password , HooptapCallback<JSONObject>cb){
 
-        InputLoginModel info=new InputLoginModel();
+    public static void login(String email, String password, HooptapCallback<JSONObject> cb) {
+
+        InputLoginModel info = new InputLoginModel();
         info.setEmail(email);
         info.setPassword(password);
-        JSONObject object=getObjectParse(HooptapAWS.getClient().userLoginPost(HooptapAWS.getApiKey(), info));
+        JSONObject object = getObjectParse(HooptapAWS.getClient().userLoginPost(HooptapAWS.getApiKey(), info));
         cb.onSuccess(object);
     }
 
     private static JSONObject getObjectParse(Object o) {
-        String value=g.toJson(o);
+        String value = g.toJson(o);
         try {
             return new JSONObject(value);
         } catch (JSONException e) {
@@ -99,28 +102,58 @@ public abstract class HooptapApiAWS {
         }
     }
 
-    public static void doAction(String user_id, HooptapCallback<JSONObject> cb ){
+    public static void doAction(String user_id, String target_id, String interaction_data, String accion, HooptapCallback<JSONObject> cb) {
 
-        InputActionDoneModel accion= new InputActionDoneModel();
-        accion.setTargetId("facebook");
-        accion.setInteractionData("{\"social_network\":\"facebook\",\"Badge\":\"5576bd06d97c19a7424a73ce\"}");
-        JSONObject object=getObjectParse(HooptapAWS.getClient().userUserIdActionActionNamePost(HooptapAWS.getApiKey(),user_id,"ShareDetail",accion));
+      /*  InputActionDoneModel accion= new InputActionDoneModel();
+        accion.setTargetId("ios");
+        accion.setInteractionData("{\"a\":\"b\"}");*/
+       /* HooptapAccion accion1=new HooptapAccion();
+        accion1.setTarget_id("android");
+        accion1.setInteraction_data("{\"a\":\"b\"}");*/
+        HooptapAccion accion1 = new HooptapAccion();
+        accion1.setTarget_id(target_id);
+        accion1.setInteraction_data(interaction_data);
+        JSONObject object = getObjectParse(HooptapAWS.getClient().userUserIdActionActionNamePost(HooptapAWS.getApiKey(), user_id, accion, accion1));
+
+        ///JSONObject object=getObjectParse(HooptapAWS.getClient().userUserIdActionActionNamePost(HooptapAWS.getApiKey(),"56547e18c2cd6614312467a5","ShareDetail",accion1));
         cb.onSuccess(object);
         //HooptapAWS.getClient().userUserIdRewardRewardIdGet()//Get user reward
         //HooptapAWS.getClient().userUserIdImagePut() //Cambiar imagen de usuario
         //HooptapAWS.getClient().userUserIdDelete() //borrar usuario
         //HooptapAWS.getClient().userUserIdActionActionNamePost("46576686f6f707461702e627","56547e18c2cd6614312467a5","Play")
     }
-    public static void getRewardsUser(String user_id,HooptapCallback<JSONObject>cb)
-    {
-        JSONObject object=getObjectParse(HooptapAWS.getClient().userUserIdRewardCountGet(HooptapAWS.getApiKey(),user_id));
+
+    public static void getRewardsUser(String user_id, HooptapCallback<JSONObject> cb) {
+        JSONObject object = getObjectParse(HooptapAWS.getClient().userUserIdRewardCountGet(HooptapAWS.getApiKey(), user_id));
         cb.onSuccess(object);
     }
 
-    public static void changeImage(String user_id,HooptapCallback<JSONObject>cb){
-        JSONObject object=getObjectParse(HooptapAWS.getClient().userUserIdImagePut(HooptapAWS.getApiKey(), user_id));
+    public static void changeImage(String user_id, HooptapCallback<JSONObject> cb) {
+        JSONObject object = getObjectParse(HooptapAWS.getClient().userUserIdImagePut(HooptapAWS.getApiKey(), user_id));
         cb.onSuccess(object);
     }
 
+    public static void getActividadReciente(final String lenguage, final String user_id, final int page, final int limit, HooptapCallback<JSONObject> cb) {
+        try {
+            JSONObject object = getObjectParse(HooptapAWS.getClient().userUserIdFeedLangGet(lenguage, user_id, limit + "", HooptapAWS.getApiKey(), page + "", ""));
+            Log.e("actividad_reciente", object+"");
+
+            cb.onSuccess(object);
+        } catch (ApiClientException ae) {
+            Log.e("actividad_Error", ae.getErrorMessage());
+            cb.onError(getError(ae));
+        }
+    }
+    public static void getMyMarketPlace( final String user_id, final int page, final int limit, final HooptapCallback<JSONObject> cb) {
+        try {
+            JSONObject object = getObjectParse(HooptapAWS.getClient().userUserIdMarketplaceGoodGet( user_id, limit + "", HooptapAWS.getApiKey(), page + "", ""));
+            Log.e("actividad_reciente", object+"");
+
+            cb.onSuccess(object);
+        } catch (ApiClientException ae) {
+            Log.e("actividad_Error", ae.getErrorMessage());
+            cb.onError(getError(ae));
+        }
+    }
 }
 

@@ -10,6 +10,7 @@ import com.hooptap.a.RequestInterceptor;
 import com.hooptap.a.RestAdapter;
 import com.hooptap.a.client.OkClient;
 import com.hooptap.b.OkHttpClient;
+
 import com.hooptap.brandclub.HooptapAPIvClient;
 import com.hooptap.sdkbrandclub.Api.ApiInterface;
 
@@ -56,7 +57,7 @@ public class HooptapAWS {
         editor.putString("ht_api_key", apiKey);
         editor.apply();
     }
-
+    //46576686f6f707461702e627
     public static String getApiKey(){
         return "46576686f6f707461702e627";
     }
