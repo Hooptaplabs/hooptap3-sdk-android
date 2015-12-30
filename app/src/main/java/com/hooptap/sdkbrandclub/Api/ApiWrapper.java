@@ -12,7 +12,7 @@ import com.hooptap.sdkbrandclub.Models.RegisterModel;
  *
  * @author Hooptap Team
  */
-public class ApiAWS {
+public class ApiWrapper {
 
     private static Object reciever;
 

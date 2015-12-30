@@ -22,7 +22,7 @@ import com.hooptap.brandclub.HooptapAPIvClient;
 public class Hooptap {
     private static HooptapAPIvClient sClientService;
     private static SharedPreferences settings;
-    private static Context context;
+    public static Context context;
     private static SharedPreferences.Editor editor;
 
     /**

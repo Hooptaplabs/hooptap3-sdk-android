@@ -7,8 +7,9 @@ import com.hooptap.d.Gson;
 import com.hooptap.sdkbrandclub.Api.Hooptap;
 import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
 import com.hooptap.sdkbrandclub.Models.ResponseError;
-import com.hooptap.sdkbrandclub.Api.ApiAWS;
+import com.hooptap.sdkbrandclub.Api.ApiWrapper;
 import com.hooptap.sdkbrandclub.Utilities.Log;
+import com.hooptap.sdkbrandclub.Utilities.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,8 +25,9 @@ public class Command {
     private static Object receiver;               // the "encapsulated" object
     private Method action;                 // the "pre-registered" request
     private Object[] args;                   // the "pre-registered" arg list
-    Method[] declaredMethods = ApiAWS.class.getDeclaredMethods();
+    Method[] declaredMethods = ApiWrapper.class.getDeclaredMethods();
     HooptapCallback<JSONObject> cb;
+    boolean stateValues=false;
 
     public Command(Object obj, String methodName, Object[] arguments, HooptapCallback<JSONObject> cb) {
         if (Hooptap.getApiKey() != null) {
@@ -45,6 +47,13 @@ public class Command {
             Log.e("HooptapDebug", "Method: " + methodName);
             try {
                 action = cls.getMethod(methodName, argTypes);
+                if(Utils.isEmpty(arguments[0])){
+                    Log.e("HooptapDebug: Error", "La peticion \""+methodName+"\" no se ha podido realizar porque los parametros obligatorios son null");
+                    //Utils.dialogInfo(Hooptap.context);
+                    stateValues=true;
+                    //throw new RuntimeException(new Exception("La peticion no se ha podido realizar porque no tienes los parametros obligatorios"));
+
+                }
             } catch (NoSuchMethodException e) {
                 System.out.println(e);
             }
@@ -56,22 +65,28 @@ public class Command {
     }
 
     public Object execute() {
-
-        try {
-            Object objeto = action.invoke(receiver, args);
-            Log.e("HooptapDebug", "Response: " + getObjectParse(objeto));
-            cb.onSuccess(getObjectParse(objeto));
-            return objeto;
-        } catch (ApiClientException e) {
-            Log.e("HooptapDebug", "Error: Se ha producido un error en la peticion");
-            cb.onError(getError(e));
-        } catch (IllegalAccessException e) {
-            Log.e("HooptapDebug", "Error: Se ha producido un error en la peticion");
-            cb.onError(getError((ApiClientException) e.getCause()));
-        } catch (InvocationTargetException e) {
-            Log.e("HooptapDebug", "Error: Se ha producido un error en la peticion");
-            cb.onError(getError((ApiClientException) e.getCause()));
+        if(!stateValues){
+            try {
+                Object objeto = action.invoke(receiver, args);
+                Log.e("HooptapDebug", "Response: " + getObjectParse(objeto));
+                cb.onSuccess(getObjectParse(objeto));
+                return objeto;
+            } catch (ApiClientException e) {
+                Log.e("HooptapDebug", "Error: Se ha producido un error en la peticion");
+                cb.onError(getError(e));
+            } catch (IllegalAccessException e) {
+                Log.e("HooptapDebug", "Error: Se ha producido un error en la peticion");
+                cb.onError(getError((ApiClientException) e.getCause()));
+            } catch (InvocationTargetException e) {
+                Log.e("HooptapDebug", "Error: Se ha producido un error en la peticion");
+               Log.e("eroor", e.getCause().getMessage() + "---");
+                if(e.getCause() instanceof ApiClientException)
+                    cb.onError(getError((ApiClientException) e.getCause()));
+            }catch (ClassCastException e){
+                Log.e("eroor",e.getCause().getMessage()+"---"+e.getMessage());
+            }
         }
+
         return null;
     }
 
