@@ -1,20 +1,19 @@
 package com.hooptap.sdkbrandclub.Api;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.amazonaws.mobileconnectors.apigateway.ApiClientException;
 import com.hooptap.brandclub.model.InputLoginModel;
 import com.hooptap.d.Gson;
-import com.hooptap.sdkbrandclub.Engine.Command;
-import com.hooptap.sdkbrandclub.Models.HooptapAccion;
 import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
+import com.hooptap.sdkbrandclub.Models.HooptapAccion;
 import com.hooptap.sdkbrandclub.Models.RegisterModel;
 import com.hooptap.sdkbrandclub.Models.ResponseError;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 
@@ -23,30 +22,11 @@ import java.lang.reflect.Method;
  *
  * @author Hooptap Team
  */
-public abstract class HooptapApi {
+public abstract class HooptapApiAWS {
     //Primer metodo Prueba
     static Gson g = new Gson();
     private static Object reciever;
-    static ApiAWS cliente=new ApiAWS() ;
-    public static void getLevels( String userId, HooptapCallback<JSONObject> cb) {
 
-        Object[] datos=new Object[1];
-        datos[0]=userId;
-
-        /*if(Utils.isEmpty(datos)){
-
-        }*/
-        new Command(cliente, "getLevels", datos,cb).execute();
-        /*try {
-            JSONObject object = getObjectParse(Hooptap.getClient().userUserIdLevelGet(Hooptap.getApiKey(), userId));
-            Log.e("getLevels", object + "");
-
-            cb.onSuccess(object);
-        } catch (ApiClientException ae) {
-            Log.e("getLevels", ae.getErrorMessage());
-            cb.onError(getError(ae));
-        }*/
-    }
     public static void getUsers(String size_page, String page_number, String filtro, HooptapCallback<JSONObject> cb) {
         try {
             JSONObject object = getObjectParse(Hooptap.getClient().userGet(size_page, Hooptap.getApiKey(), page_number, filtro));
@@ -63,6 +43,7 @@ public abstract class HooptapApi {
     public static void registerUser(RegisterModel info_User, HooptapCallback<JSONObject> cb) {
 
         try {
+            Object registro=info_User;
             JSONObject object = getObjectParse(Hooptap.getClient().userPost(Hooptap.getApiKey(), info_User));
             Log.e("getUserId", object + "");
         } catch (ApiClientException ae) {
@@ -259,8 +240,22 @@ public abstract class HooptapApi {
 
 
 
+    public static void getLevels(@NonNull String userId, HooptapCallback<JSONObject> cb) {
 
+        try {
+            JSONObject object = getObjectParse(Hooptap.getClient().userUserIdLevelGet(Hooptap.getApiKey(), userId));
+            Log.e("getLevels", object + "");
 
+            cb.onSuccess(object);
+        } catch (ApiClientException ae) {
+            Log.e("getLevels", ae.getErrorMessage());
+            cb.onError(getError(ae));
+        }
+    }
+    public static Object getLevelsReturn(@NonNull String userId, HooptapCallback<JSONObject> cb) {
+
+        return Hooptap.getClient().userUserIdLevelGet(Hooptap.getApiKey(), userId);
+    }
     public static void getNotifications(final String user_id, final int page, final int limit, final HooptapCallback<JSONObject> cb) {
         try {
             JSONObject object = getObjectParse(Hooptap.getClient().userUserIdNotificationGet(user_id, page + "", Hooptap.getApiKey(), limit + "", ""));
@@ -349,17 +344,15 @@ public abstract class HooptapApi {
         }*/
 
         // get the "Method" data structure with the correct name and signature
-        Method[] declaredMethods = HooptapApi.class.getDeclaredMethods();
+        Class clase= Hooptap.getClient().getClass();
+        Method[] declaredMethods = clase.getDeclaredMethods();
         Class[] parameterTypes = new Class[2];
       /*  parameterTypes[0] = String.class;
         parameterTypes[1]=HooptapCallback.class;*/
         for (Method declaredMethod : declaredMethods) {
             Log.e("metodo",declaredMethod.getName());
-            if(declaredMethod.getName().equals("getLevels")){
-
-                int i=0;
+            if(declaredMethod.getName().equals("userUserIdLevelGet")){
                 parameterTypes= declaredMethod.getParameterTypes();
-
                 break;
             }
 
@@ -371,18 +364,24 @@ public abstract class HooptapApi {
         Method metodo= null;
         try {
 
-            metodo = HooptapApi.class.getMethod("getLevels",parameterTypes);
+            metodo = clase.getMethod("userUserIdLevelGet", parameterTypes);
             Log.e("infor",metodo.getName());
             Object[] datos = new Object[2];
             datos[0]=userId;
-            datos[1]=cb;
-            Object info=metodo.invoke(reciever, datos);
+            datos[1]= Hooptap.getApiKey();
+            metodo.invoke(Hooptap.getClient(), datos);
 
-        } catch (NoSuchMethodException e) {
+        }catch (ApiClientException e){
+            Log.e("tipo",e.getErrorMessage());
+        }
+        catch (NoSuchMethodException e) {
             e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        }  catch (IllegalAccessException e) {
             e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        }
+         catch (Exception e) {
+
+            // generic exception handling
             e.printStackTrace();
         }
         //cambio(metodo,userId,cb);

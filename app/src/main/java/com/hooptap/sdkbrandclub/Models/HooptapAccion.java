@@ -1,4 +1,4 @@
-package com.hooptap.sdkbrandclub.AWS;
+package com.hooptap.sdkbrandclub.Models;
 
 import com.hooptap.brandclub.model.InputActionDoneModel;
 

@@ -1,7 +1,9 @@
 package com.hooptap.sdkbrandclub.Models;
 
-import com.hooptap.a.client.Response;
-import com.hooptap.a.mime.TypedInput;
+
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by carloscarrasco on 5/5/15.
@@ -10,19 +12,25 @@ public class ResponseError {
 
     private int status;
     private String reason;
-    private TypedInput body;
-    private String url;
+    private String timestamp;
 
-    public ResponseError(){
+    public ResponseError() {
 
     }
 
-    public ResponseError(Response response) {
-        this.status = response.getStatus();
-        this.reason = response.getReason();
-        this.body = response.getBody();
-        this.url = response.getUrl();
+    public ResponseError(JSONObject response) {
+
+        try {
+            this.status = response.getInt("httpErrorCode");
+            this.reason = response.getString("message");
+            this.timestamp = response.getString("timestamp");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
+
 
     public int getStatus() {
         return status;
@@ -40,19 +48,13 @@ public class ResponseError {
         this.reason = reason;
     }
 
-    public TypedInput getBody() {
-        return body;
+    public String getTimestamp() {
+        return timestamp;
     }
 
-    public void setBody(TypedInput body) {
-        this.body = body;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 }
+
+
