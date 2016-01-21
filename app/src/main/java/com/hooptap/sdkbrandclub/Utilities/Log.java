@@ -27,7 +27,7 @@ public class Log {
         if (Hooptap.Builder.htEnableDebug) {
             android.util.Log.e(tag, String.format(msgFormat, args));
         }
-        splitAndLog(tag,msgFormat);
+
     }
     /**
      * Divides a string into chunks of a given character size.
