@@ -2,6 +2,8 @@ package com.hooptap.sdkbrandclub.Models;
 
 
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,7 +21,6 @@ public class ResponseError {
     }
 
     public ResponseError(JSONObject response) {
-
         try {
             this.status = response.getInt("httpErrorCode");
             this.reason = response.getString("message");
@@ -30,7 +31,6 @@ public class ResponseError {
         }
 
     }
-
 
     public int getStatus() {
         return status;

@@ -3,13 +3,16 @@ package com.hooptap.sdkbrandclub.Api;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.StrictMode;
+import android.util.Log;
 
 import com.amazonaws.mobileconnectors.apigateway.ApiClientFactory;
 
-import com.hooptap.a.RestAdapter;
-import com.hooptap.b.OkHttpClient;
 
 import com.hooptap.brandclub.HooptapAPIvClient;
+import com.hooptap.sdkbrandclub.Utilities.Utils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Clase principal que crea e inicializa el objeto Hooptap, el cual será el encargado de realizar las peticiones a nuestras APIs.
@@ -45,6 +48,26 @@ public class Hooptap {
     }
 
     /**
+     * Metodo que asigna un token al objeto Hooptap para permitir el acceso a la API
+     *
+     * @param token necesario para poder realizar las peticiones e identificar al usuario
+     */
+    public static void setToken(Object token) {
+        JSONObject jsonObject = Utils.getObjectParse(token);
+        try {
+            JSONObject info=jsonObject.getJSONObject("response");
+            if (!info.isNull("access_token")) {
+                String infoToken=info.getString("access_token");
+                editor.putString("ht_token", "Bearer " + infoToken);
+                editor.apply();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
      * Metodo que asigna el Api Key al objeto Hooptap para permitir el acceso a la API
      *
      * @param apiKey necesario para poder realizar las peticiones e identificar al cliente
@@ -58,10 +81,11 @@ public class Hooptap {
      * @return El token almacenado para poder utilizarlo posteriormente
      */
     public static String getToken() {
-        return "Bearer "+settings.getString("ht_token", "");
+        return settings.getString("ht_token", "");
     }
 
     //46576686f6f707461702e627
+
     /**
      * @return El Api Key  para poder utilizarlo posteriormente
      */
@@ -69,6 +93,14 @@ public class Hooptap {
         return "46576686f6f707461702e627";
     }
 
+    public static int getTypeClass() {
+        return settings.getInt("type_class", 0);
+    }
+
+    public static void setTypeClass(int apiKey) {
+        editor.putInt("type_class", apiKey);
+        editor.apply();
+    }
 
     /**
      * Constructor generico en el cual podremos configurar ciertos parametros
@@ -77,6 +109,7 @@ public class Hooptap {
 
         public static Boolean htEnableDebug;
         private ApiClientFactory apiClientFactory;
+
 
         public Builder(Context cont) {
             context = cont;
@@ -105,6 +138,12 @@ public class Hooptap {
             return this;
         }
 
+        public Hooptap.Builder setTypeClass(int typeClass) {
+            editor.putInt("type_class", typeClass);
+            editor.apply();
+            return this;
+        }
+
         /**
          * Constructor que crea el objeto con los parametros asignados por los metodos anteriores
          *
@@ -116,6 +155,7 @@ public class Hooptap {
                 //apiClientFactory.apiKey(settings.getString("ht_api_key", ""));
                 sClientService = apiClientFactory.build(HooptapAPIvClient.class);
             }
+
             return new Hooptap();
         }
     }

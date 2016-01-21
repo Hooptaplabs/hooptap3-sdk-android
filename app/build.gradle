@@ -72,7 +72,7 @@ android.libraryVariants.all { variant ->
         variantTask.repositories.mavenInstaller {
             pom.groupId = "com.hooptap.sdkbrandclub"
             pom.artifactId = "HooptapBrandClubSDKAWS"
-            pom.version = "1.0.0" //Give a different version for each variant
+            pom.version = "1.0.1" //Give a different version for each variant
             pom.packaging = "aar"
         }
 
@@ -84,14 +84,10 @@ android.libraryVariants.all { variant ->
 
 dependencies {
     //compile 'com.android.support:appcompat-v7:21.0.3'
-    compile files('libs/com.hooptap.a.jar')
-    compile files('libs/com.hooptap.b.jar')
-    compile files('libs/com.hooptap.c.jar')
-    compile files('libs/com.hooptap.d.jar')
-    compile files('libs/jettison-1.3.7.jar')
+    compile files('libs/gson-2.2.4.jar')
     compile files('libs/AWSdk-1.0.0.jar')
-    compile files('libs/aws-android-sdk-apigateway-core-2.2.9.jar')
-    compile files('libs/aws-android-sdk-core-2.2.9.jar')
+    compile files('libs/aws-android-sdk-apigateway-core-2.2.10.jar')
+    compile files('libs/aws-android-sdk-core-2.2.10.jar')
     compile 'com.google.android.gms:play-services-location:7.5.0'
 
 }

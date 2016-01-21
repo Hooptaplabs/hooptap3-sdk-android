@@ -1,10 +1,21 @@
 package com.hooptap.sdkbrandclub.Api;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import com.hooptap.brandclub.model.FileModel;
+import com.hooptap.brandclub.model.InputActionDoneModel;
 import com.hooptap.brandclub.model.InputLoginModel;
+import com.hooptap.brandclub.model.InputRenewTokenModel;
 import com.hooptap.sdkbrandclub.Models.HooptapAccion;
+import com.hooptap.sdkbrandclub.Models.Options;
 import com.hooptap.sdkbrandclub.Models.RegisterModel;
+import com.hooptap.sdkbrandclub.Utilities.Utils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 
 /**
@@ -14,92 +25,131 @@ import com.hooptap.sdkbrandclub.Models.RegisterModel;
  */
 public class ApiWrapper {
 
-    private static Object reciever;
 
-    public Object getUsers(String size_page, String page_number, String filtro) {
-        return Hooptap.getClient().userGet(size_page, Hooptap.getApiKey(), page_number, filtro);
+    public Object activeNotifications(String user_id, String notification_id) {
+        return Hooptap.getClient().userUserIdNotificationNotificationIdGet(Hooptap.getApiKey(), user_id, notification_id, Hooptap.getToken());
+    }
+
+    public Object buyGood(String user_id, String good_id) {
+        return Hooptap.getClient().userUserIdMarketplaceGoodGoodIdPost(Hooptap.getApiKey(), user_id + "", good_id, Hooptap.getToken());
+    }
+
+    public Object changeImage(String user_id) {
+        return Hooptap.getClient().userUserIdImagePut(Hooptap.getApiKey(), user_id, Hooptap.getToken());
+    }
+
+    public Object doAction(String user_id, HooptapAccion interaction_data, String accion) {
+        return Hooptap.getClient().userUserIdActionActionNamePost(user_id, accion, Hooptap.getApiKey(), Hooptap.getToken(), interaction_data);
+    }
+
+    public Object getBadges(String user_id, Options options) {
+        return Hooptap.getClient().userUserIdBadgesGet(Hooptap.getApiKey(), user_id, Hooptap.getToken());
+    }
+
+    public Object getItemDetail(String user_id, String item_id) {
+        return Hooptap.getClient().userUserIdItemItemIdGet(user_id, Hooptap.getApiKey(), item_id, Hooptap.getToken());
+    }
+
+    public Object getItems(String user_id,Options options) {
+        return Hooptap.getClient().userUserIdItemGet(Hooptap.getApiKey(), user_id, Hooptap.getToken());
+    }
+
+    public Object getLevelReward(String user_id, String reward_id) {
+        return Hooptap.getClient().userUserIdRewardRewardIdLevelGet(reward_id, user_id, Hooptap.getToken());
+    }
+
+    public Object getLevels(@NonNull String userId,Options options) {
+        return Hooptap.getClient().userUserIdLevelGet(Hooptap.getApiKey(), userId, Hooptap.getToken());
+    }
+
+    public Object getMarketPlace(String user_id,Options options) {
+        return Hooptap.getClient().userUserIdMarketplaceGoodGet(user_id, options.getPageSize() + "", Hooptap.getApiKey(), options.getPageNumber() + "", "", Hooptap.getToken());
+    }
+
+    public Object getGoods(String user_id, Options options) {
+        return Hooptap.getClient().userUserIdMarketplacePurchaseGet(user_id, options.getPageSize() + "", Hooptap.getApiKey(), options.getPageNumber() + "", "", Hooptap.getToken());
+    }
+
+    public Object getPoints(String user_id) {
+        return Hooptap.getClient().userUserIdPointsGet(Hooptap.getToken(), Hooptap.getApiKey(), user_id);
+    }
+
+    public Object getNotifications(String user_id, Options options) {
+        return Hooptap.getClient().userUserIdNotificationGet(user_id, options.getPageSize() + "", Hooptap.getApiKey(), options.getPageNumber() + "", "", "");
+    }
+
+    public Object getRanking(String user_id, Options options, String filter) {
+        return Hooptap.getClient().userUserIdRankingGet(user_id, options.getPageSize() + "", Hooptap.getApiKey(), options.getPageNumber() + "", filter + "", Hooptap.getToken());
+    }
+
+    public Object getUserFeed(String user_id,Options options) {
+
+        return Hooptap.getClient().userUserIdFeedGet(Hooptap.getApiKey(), user_id, Hooptap.getToken());
+    }
+
+    public Object getRewardsCount(String user_id) {
+        return Hooptap.getClient().userUserIdRewardCountGet(Hooptap.getApiKey(), user_id, Hooptap.getToken());
+    }
+
+    public Object login(InputLoginModel info) {
+        Object data = Hooptap.getClient().userLoginPost(Hooptap.getApiKey(), info);
+        Log.e("datos", Utils.getObjectParse(data) + "");
+        Hooptap.setToken(data);
+        return Hooptap.getClient().userLoginPost(Hooptap.getApiKey(), info);
+    }
+
+    public Object getUrlGame(String user_id, String game_id) {
+        JSONObject response = Utils.getObjectParse(Hooptap.getClient().userUserIdItemItemIdGet(user_id, Hooptap.getApiKey(), game_id, Hooptap.getToken()));
+        try {
+            Log.e("url",response+"");
+            JSONObject url = new JSONObject();
+            //assert response != null;
+            JSONObject data = response.getJSONObject("response");
+            Log.e("url1",data+"");
+
+            if (!data.isNull("url_game")) {
+                url.put("url", data.getString("url_game"));
+                Log.e("url2", url + "");
+
+                return Utils.getObjectJson(url);
+            } else {
+                url.put("url", "");
+                return Utils.getObjectJson(url);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Object getUsers(Options options) {
+        return Hooptap.getClient().userGet(options.getPageSize()+"", Hooptap.getApiKey(), options.getPageNumber()+"", "", Hooptap.getToken());
+    }
+
+    public Object getProfile(String user_id) {
+        return Hooptap.getClient().userUserIdGet(Hooptap.getApiKey(), user_id, Hooptap.getToken());
     }
 
     public Object registerUser(RegisterModel info_User) {
         return Hooptap.getClient().userPost(Hooptap.getApiKey(), info_User);
     }
 
-
-    public Object getUserId(String user_id) {
-        return Hooptap.getClient().userUserIdGet(Hooptap.getApiKey(), user_id);
-    }
-
-    public Object login(InputLoginModel info) {
-        return Hooptap.getClient().userLoginPost(Hooptap.getApiKey(), info);
-    }
-
-
-    public Object doAction(String user_id, HooptapAccion interaction_data, String accion) {
-        return Hooptap.getClient().userUserIdActionActionNamePost(Hooptap.getApiKey(), user_id, accion, interaction_data);
-    }
-
-    public Object getRewardsUser(String user_id) {
-        return Hooptap.getClient().userUserIdRewardCountGet(Hooptap.getApiKey(), user_id);
-    }
-
-    public Object changeImage(String user_id) {
-        return Hooptap.getClient().userUserIdImagePut(Hooptap.getApiKey(), user_id);
-    }
-
-
-    public Object getRecentActivity(String user_id) {
-        return Hooptap.getClient().userUserIdFeedGet(Hooptap.getApiKey(), user_id);
-    }
-
-    public Object getMarketPlace(String user_id, int page, int limit) {
-        return Hooptap.getClient().userUserIdMarketplaceGoodGet(user_id, limit + "", Hooptap.getApiKey(), page + "", "");
-
-    }
-
-    public Object getMyMarketPlace(String user_id, int page, int limit) {
-        return Hooptap.getClient().userUserIdMarketplacePurchaseGet(user_id, limit + "", Hooptap.getApiKey(), page + "", "");
-    }
-
-    public Object getMyPointsById(String user_id) {
-        return Hooptap.getClient().userUserIdPointsGet(Hooptap.getToken(), Hooptap.getApiKey(), user_id);
-    }
-
-
-    public Object getLevelReward(String user_id, String reward_id) {
-        return Hooptap.getClient().userUserIdRewardRewardIdLevelGet(reward_id, user_id);
-    }
-
-
-    public Object getLevels(@NonNull String userId) {
-        return Hooptap.getClient().userUserIdLevelGet(Hooptap.getApiKey(), userId);
-    }
-
-    public Object getNotifications(String user_id, int page, int limit) {
-        return Hooptap.getClient().userUserIdNotificationGet(user_id, page + "", Hooptap.getApiKey(), limit + "", "");
-
-    }
-
-    public Object activeNotifications(String user_id, String notification_id) {
-        return Hooptap.getClient().userUserIdNotificationNotificationIdGet(Hooptap.getApiKey(), user_id, notification_id);
-    }
-
     public Object registrarC2DM(String user_id) {
 
-        return Hooptap.getClient().userUserIdPushNotificationSubscriptionPost(Hooptap.getApiKey(), user_id);
+        return Hooptap.getClient().userUserIdPushNotificationSubscriptionPost(Hooptap.getApiKey(), user_id, Hooptap.getToken());
     }
 
-    public Object getBadges(String user_id) {
-        return Hooptap.getClient().userUserIdBadgesGet(Hooptap.getApiKey(), user_id);
+    public Object renewToken(String user_id, String oldToken) {
+        InputRenewTokenModel renewTokenModel = new InputRenewTokenModel();
+        renewTokenModel.setToken(oldToken);
+        Object nuevoToken = Hooptap.getClient().userUserIdTokenPut(Hooptap.getApiKey(), user_id, oldToken, renewTokenModel);
+        Hooptap.setToken(nuevoToken);
+        return nuevoToken;
     }
 
-    public Object getRanking(String user_id, int page, int limit, String filter) {
-        return Hooptap.getClient().userUserIdRankingGet(user_id, limit + "", Hooptap.getApiKey(), page + "", filter + "");
+    public Object uploadImage(FileModel fileModel){
+        return Hooptap.getClient().fileBase64Post(Hooptap.getApiKey(),fileModel);
     }
-
-    public Object buyGood(String user_id, String good_id) {
-        return Hooptap.getClient().userUserIdMarketplaceGoodGoodIdPost(Hooptap.getApiKey(), user_id + "", good_id);
-    }
-
    /* public void getLevel(String userId, HooptapCallback<JSONObject> cb) {
 
         *//*try {

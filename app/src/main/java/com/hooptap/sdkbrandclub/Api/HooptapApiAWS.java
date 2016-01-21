@@ -1,11 +1,12 @@
+/*
 package com.hooptap.sdkbrandclub.Api;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.amazonaws.mobileconnectors.apigateway.ApiClientException;
+import com.google.gson.Gson;
 import com.hooptap.brandclub.model.InputLoginModel;
-import com.hooptap.d.Gson;
 import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
 import com.hooptap.sdkbrandclub.Models.HooptapAccion;
 import com.hooptap.sdkbrandclub.Models.RegisterModel;
@@ -17,11 +18,13 @@ import org.json.JSONObject;
 import java.lang.reflect.Method;
 
 
+*/
 /**
  * API principal para realizar las peticiones
  *
  * @author Hooptap Team
- */
+ *//*
+
 public abstract class HooptapApiAWS {
     //Primer metodo Prueba
     static Gson g = new Gson();
@@ -120,12 +123,16 @@ public abstract class HooptapApiAWS {
 
     public static void doAction(String user_id, String target_id, String interaction_data, String accion, HooptapCallback<JSONObject> cb) {
 
-      /*  InputActionDoneModel accion= new InputActionDoneModel();
+      */
+/*  InputActionDoneModel accion= new InputActionDoneModel();
         accion.setTargetId("ios");
-        accion.setInteractionData("{\"a\":\"b\"}");*/
-       /* HooptapAccion accion1=new HooptapAccion();
+        accion.setInteractionData("{\"a\":\"b\"}");*//*
+
+       */
+/* HooptapAccion accion1=new HooptapAccion();
         accion1.setTarget_id("android");
-        accion1.setInteraction_data("{\"a\":\"b\"}");*/
+        accion1.setInteraction_data("{\"a\":\"b\"}");*//*
+
         HooptapAccion accion1 = new HooptapAccion();
         accion1.setTarget_id(target_id);
         accion1.setInteraction_data(interaction_data);
@@ -164,7 +171,8 @@ public abstract class HooptapApiAWS {
         cb.onSuccess(object);
     }
 
-    /*public static void getActividadReciente(final String lenguage, final String user_id, final int page, final int limit, HooptapCallback<JSONObject> cb) {
+    */
+/*public static void getActividadReciente(final String lenguage, final String user_id, final int page, final int limit, HooptapCallback<JSONObject> cb) {
         try {
             JSONObject object = getObjectParse(Hooptap.getClient().userUserIdFeedLangGet(lenguage, user_id, limit + "", Hooptap.getApiKey(), page + "", ""));
             Log.e("actividad_reciente", object + "");
@@ -174,7 +182,8 @@ public abstract class HooptapApiAWS {
             Log.e("actividad_Error", ae.getErrorMessage());
             cb.onError(getError(ae));
         }
-    }*/
+    }*//*
+
     public static void getRecentActivity(final String user_id, HooptapCallback<JSONObject> cb) throws ApiClientException {
         try {
             JSONObject object = getObjectParse(Hooptap.getClient().userUserIdFeedGet(Hooptap.getApiKey(), user_id));
@@ -333,7 +342,8 @@ public abstract class HooptapApiAWS {
 
     public static void getLevel(String userId, HooptapCallback<JSONObject> cb) {
 
-        /*try {
+        */
+/*try {
             JSONObject object = getObjectParse(Hooptap.getClient().userUserIdLevelGet(Hooptap.getApiKey(), userId));
             Log.e("getLevels", object + "");
 
@@ -341,14 +351,17 @@ public abstract class HooptapApiAWS {
         } catch (ApiClientException ae) {
             Log.e("getLevels", ae.getErrorMessage());
             cb.onError(getError(ae));
-        }*/
+        }*//*
+
 
         // get the "Method" data structure with the correct name and signature
         Class clase= Hooptap.getClient().getClass();
         Method[] declaredMethods = clase.getDeclaredMethods();
         Class[] parameterTypes = new Class[2];
-      /*  parameterTypes[0] = String.class;
-        parameterTypes[1]=HooptapCallback.class;*/
+      */
+/*  parameterTypes[0] = String.class;
+        parameterTypes[1]=HooptapCallback.class;*//*
+
         for (Method declaredMethod : declaredMethods) {
             Log.e("metodo",declaredMethod.getName());
             if(declaredMethod.getName().equals("userUserIdLevelGet")){
@@ -396,7 +409,8 @@ public abstract class HooptapApiAWS {
     }
 
 
-   /* public static void  call( Activity activity, final String user_id, final HooptapCallback<JSONObject> cb) {
+   */
+/* public static void  call( Activity activity, final String user_id, final HooptapCallback<JSONObject> cb) {
       new Handler().post(new Runnable() {
 
             @Override
@@ -489,5 +503,6 @@ public abstract class HooptapApiAWS {
     public interface AsyncResponse{
         void processFinish(Object object);
         void processCancel(Object object);
-    }*/
-}
+    }*//*
+
+}*/
