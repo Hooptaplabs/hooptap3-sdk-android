@@ -70,9 +70,9 @@ android.libraryVariants.all { variant ->
         def Upload variantTask = project.tasks.create("${variant.name}Install", Upload)
         variantTask.configuration = variantConfiguration
         variantTask.repositories.mavenInstaller {
-            pom.groupId = "com.hooptap.sdkbrandclub"
-            pom.artifactId = "HooptapBrandClubSDKAWS"
-            pom.version = "1.0.1" //Give a different version for each variant
+            pom.groupId = "com.hooptap.awssdk"
+            pom.artifactId = "HooptapAwsSDK"
+            pom.version = "1.0.0" //Give a different version for each variant
             pom.packaging = "aar"
         }
 
@@ -84,10 +84,11 @@ android.libraryVariants.all { variant ->
 
 dependencies {
     //compile 'com.android.support:appcompat-v7:21.0.3'
-    compile files('libs/gson-2.2.4.jar')
-    compile files('libs/AWSdk-1.0.0.jar')
-    compile files('libs/aws-android-sdk-apigateway-core-2.2.10.jar')
-    compile files('libs/aws-android-sdk-core-2.2.10.jar')
+    //compile files('libs/gson-2.2.4.jar')
+    //compile files('libs/AWSdk-1.0.0.jar')
+    //compile files('libs/aws-android-sdk-apigateway-core-2.2.10.jar')
+    //compile files('libs/aws-android-sdk-core-2.2.10.jar')
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.google.android.gms:play-services-location:7.5.0'
 
 }

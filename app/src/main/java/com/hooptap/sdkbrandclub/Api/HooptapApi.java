@@ -3,19 +3,26 @@ package com.hooptap.sdkbrandclub.Api;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.hooptap.brandclub.HooptapApivClient;
 import com.hooptap.brandclub.model.FileModel;
 import com.hooptap.brandclub.model.InputLoginModel;
 import com.hooptap.sdkbrandclub.CONSTANTS;
 import com.hooptap.sdkbrandclub.Engine.Command;
+import com.hooptap.sdkbrandclub.Interfaces.HooptapCallbackRetry;
 import com.hooptap.sdkbrandclub.Models.HooptapAccion;
 import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
 import com.hooptap.sdkbrandclub.Models.Options;
 import com.hooptap.sdkbrandclub.Models.RegisterModel;
+import com.hooptap.sdkbrandclub.Models.ResponseError;
 import com.hooptap.sdkbrandclub.Utilities.Utils;
+
+import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-
+import java.util.LinkedHashMap;
+import java.util.Objects;
 
 
 /**
@@ -26,289 +33,497 @@ import java.lang.reflect.Type;
 public abstract class HooptapApi {
 
 
-    static ApiWrapper cliente = new ApiWrapper();
-    static Command<JSONObject> command;
-
-    /*public static void changeImage(String user_id, HooptapCallback<JSONObject> cb) {
-        JSONObject object = getObjectParse(Hooptap.getClient().userUserIdImagePut(Hooptap.getApiKey(), user_id));
-        cb.onSuccess(object);
-    }*/
-
     /**
-     *          Activar Notificaciones
-     * @param user_id           Identificador del usuario
-     * @param notification_id   Identificador de notificaciones
-     * @param cb                Callback que recibira la informacion de la peticion
-     * */
-    public static void activeNotifications(String user_id, String notification_id,HooptapCallback<JSONObject> cb) {
-        Object[] datos = new Object[3];
-        datos[0] = user_id;
-        datos[1] = notification_id;
+     * Activar Notificaciones
+     *
+     * @param user_id         Identificador del usuario
+     * @param notification_id Identificador de notificaciones
+     * @param cb              Callback que recibira la informacion de la peticion
+     */
+    public static void activeNotifications(final String user_id, final String notification_id, final HooptapCallback<JSONObject> cb) {
 
+        Hooptap.getClient().userUserIdNotificationNotificationIdGet(Hooptap.getApiKey(), user_id, notification_id, Hooptap.getToken());
 
-        new Command(cliente, "activeNotifications", datos, cb).execute();
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("user_id", user_id);
+        data.put("notification_id", notification_id);
+        data.put("token", Hooptap.getToken());
+
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                activeNotifications(user_id, notification_id, cb);
+            }
+        };
+
+        new Command("userUserIdNotificationNotificationIdGet", data, cb, cbRetry).executeMethod();
+
     }
 
 
-
     /**
-     *                  ACCIONES
-     * @param user_id           Identificador del usuario
-     * @param interaction_data  Informacion de la accion
-     * @param accion            Nombre de la accion
-     * @param cb                Callback que recibira la informacion de la peticion
-     * */
-    public static void doAction(String user_id, String interaction_data, String accion, HooptapCallback<JSONObject> cb) {
+     * ACCIONES
+     *
+     * @param user_id          Identificador del usuario
+     * @param interaction_data Informacion de la accion
+     * @param accion           Nombre de la accion
+     * @param cb               Callback que recibira la informacion de la peticion
+     */
+    public static void doAction(final String user_id, final String interaction_data, final String accion, final HooptapCallback<JSONObject> cb) {
 
-        HooptapAccion interaction=new HooptapAccion();
+        HooptapAccion interaction = new HooptapAccion();
         interaction.setActionData(interaction_data);
 
-        Object[] datos = new Object[3];
-        datos[0] = user_id;
-        datos[1] = interaction;
-        datos[2] = accion;
-        new Command(cliente, "doAction", datos, cb).execute();
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("user_id", user_id);
+        data.put("accion", accion);
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("token", Hooptap.getToken());
+        data.put("interaction_data", interaction);
 
-    }
-
-    /**
-     *              Buy Good
-     * @param user_id   Identificador del usuario
-     * @param good_id   Identificador de good
-     * @param cb        Callback que recibira la informacion de la peticion
-     * */
-    public static void buyGood(String user_id, String good_id, HooptapCallback<JSONObject> cb) {
-        Object[] datos = new Object[2];
-        datos[0] = user_id;
-        datos[1] = good_id;
-        new Command(cliente, "buyGood", datos, cb).execute();
-    }
-
-    /**
-     *              BADGES
-     * @param user_id   Identificador del usuario
-     * @param options   Opciones de configuracion
-     * @param cb        Callback que recibira la informacion de la peticion
-     * */
-    public static void getBadges(String user_id,Options options, HooptapCallback<JSONObject> cb) {
-        Object[] datos = new Object[2];
-        datos[0] = user_id;
-        datos[1] = options;
-        new Command(cliente, "getBadges", datos, cb).execute();
-    }
-
-    /**
-     *              PROFILE USER
-     * @param user_id   Identificador del usuario
-     * @param cb        Callback que recibira la informacion de la peticion
-     * */
-    public static void getProfile(String user_id, HooptapCallback<JSONObject> cb) {
-        Object[] datos = new Object[1];
-        datos[0] = user_id;
-        new Command(cliente, "getProfile", datos, cb).execute();
-    }
-
-    /**
-     *              ITEM DETAIL
-     * @param user_id   Identificador del usuario
-     * @param item_id   Identificador del item
-     * @param cb        Callback que recibira la informacion de la peticion
-     * */
-    public static void getItemDetail(String user_id, String item_id, HooptapCallback<JSONObject> cb) {
-        Object[] datos = new Object[2];
-        datos[0] = user_id;
-        datos[1] = item_id;
-        new Command(cliente, "getItemDetail", datos, cb).execute();
-    }
-
-    /**
-     *              ITEMS
-     * @param user_id   Identificador del usuario
-     * @param options   Opciones de configuracion
-     * @param cb        Callback que recibira la informacion de la peticion
-     * */
-    public static void getItems(String user_id,Options options, HooptapCallback<JSONObject> cb) {
-        Object[] datos = new Object[2];
-        datos[0] = user_id;
-        datos[1] =options;
-        new Command(cliente, "getItems", datos, cb).execute();
-
-    }
-
-    /**
-     *              LEVELS
-     * @param user_id   Identificador del usuario
-     * @param options   Opciones de configuracion
-     * @param cb        Callback que recibira la informacion de la peticion
-     * */
-    public static void getLevels(String user_id,Options options, HooptapCallback<JSONObject> cb) {
-        Type[] genericInterfaces = cb.getClass().getGenericInterfaces();
-        Type[] genericTypes;
-        for (Type genericInterface : genericInterfaces) {
-            if (genericInterface instanceof ParameterizedType) {
-                genericTypes = ((ParameterizedType) genericInterface).getActualTypeArguments();
-                Log.e("Generic type: ", genericTypes[0] + "");
-                for (Type genericType : genericTypes) {
-                    Log.e("Generic type: ", genericType + "");
-                }
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                doAction(user_id, interaction_data, accion, cb);
             }
-        }
-        Log.e("tipo dato", cb.getClass().getName() + "---" + cb.getClass().getCanonicalName() + "---" + cb.getClass().getSimpleName() + "--" + cb.getClass().getGenericSuperclass().getClass() + "--");
-        Object[] datos = new Object[2];
-        datos[0] = user_id;
-        datos[1] = options;
+        };
 
-        new Command<JSONObject>(cliente, "getLevels", datos, cb).execute();
-    }
-
-    /**
-     *              REWARDS
-     * @param user_id       Identificador del usuario
-     * @param reward_id     Identificador del reward
-     * @param cb            Callback que recibira la informacion de la peticion
-     * */
-    public static void getLevelReward(String user_id, String reward_id, HooptapCallback<JSONObject> cb) {
-        Object[] datos = new Object[2];
-        datos[0] = user_id;
-        datos[1] = reward_id;
-
-
-        new Command(cliente, "getLevelReward", datos, cb).execute();
+        new Command("userUserIdActionActionNamePost", data, cb, cbRetry).executeMethod();
 
     }
 
     /**
-     *              MARKETPLACE
+     * Buy Good
+     *
+     * @param user_id Identificador del usuario
+     * @param good_id Identificador de good
+     * @param cb      Callback que recibira la informacion de la peticion
+     */
+    public static void buyGood(final String user_id, final String good_id, final HooptapCallback<JSONObject> cb) {
+
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("user_id", user_id);
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("good_id", good_id);
+        data.put("token", Hooptap.getToken());
+
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                buyGood(user_id, good_id, cb);
+            }
+        };
+
+        new Command("userUserIdMarketplaceGoodGoodIdPost", data, cb, cbRetry).executeMethod();
+    }
+
+    /**
+     * BADGES
+     *
+     * @param user_id Identificador del usuario
+     * @param options Opciones de configuracion
+     * @param cb      Callback que recibira la informacion de la peticion
+     */
+    public static void getBadges(final String user_id, final Options options, final HooptapCallback<JSONObject> cb) {
+
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("user_id", user_id);
+        data.put("token", Hooptap.getToken());
+        //data.put("options", options);
+
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                getBadges(user_id, options, cb);
+            }
+        };
+        new Command("userUserIdBadgesGet", data, cb, cbRetry).executeMethod();
+    }
+
+    /**
+     * PROFILE USER
+     *
+     * @param user_id Identificador del usuario
+     * @param cb      Callback que recibira la informacion de la peticion
+     */
+    public static void getProfile(final String user_id, final HooptapCallback<JSONObject> cb) {
+
+        LinkedHashMap<String, String> data = new LinkedHashMap<>();
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("user_id", user_id);
+        data.put("token", Hooptap.getToken());
+
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                getProfile(user_id, cb);
+            }
+        };
+
+        new Command("userUserIdGet", data, cb, cbRetry).executeMethod();
+    }
+
+    /**
+     * ITEM DETAIL
+     *
+     * @param user_id Identificador del usuario
+     * @param item_id Identificador del item
+     * @param cb      Callback que recibira la informacion de la peticion
+     */
+    public static void getItemDetail(final String user_id, final String item_id, final HooptapCallback<JSONObject> cb) {
+
+        LinkedHashMap<String, String> data = new LinkedHashMap<>();
+        data.put("user_id", user_id);
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("item_id", item_id);
+        data.put("token", Hooptap.getToken());
+
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                getItemDetail(user_id, item_id, cb);
+            }
+        };
+
+        new Command("userUserIdItemItemIdGet", data, cb, cbRetry).executeMethod();
+
+    }
+
+    /**
+     * ITEMS
+     *
+     * @param user_id Identificador del usuario
+     * @param options Opciones de configuracion
+     * @param cb      Callback que recibira la informacion de la peticion
+     */
+    public static void getItems(final String user_id, final Options options, final HooptapCallback<JSONObject> cb) {
+
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("user_id", user_id);
+        data.put("token", Hooptap.getToken());
+        //data.put("options", options);
+
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                getItems(user_id, options, cb);
+            }
+        };
+
+        new Command("userUserIdItemGet", data, cb, cbRetry).executeMethod();
+
+    }
+
+    /**
+     * LEVELS
+     *
+     * @param user_id Identificador del usuario
+     * @param options Opciones de configuracion
+     * @param cb      Callback que recibira la informacion de la peticion
+     */
+    public static void getLevels(final String user_id, final Options options, final HooptapCallback<JSONObject> cb) {
+
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("user_id", user_id);
+        data.put("token", Hooptap.getToken());
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                getItems(user_id, options, cb);
+            }
+        };
+
+        new Command("userUserIdLevelGet", data, cb, cbRetry).executeMethod();
+    }
+
+    /**
+     * REWARDS
+     *
      * @param user_id   Identificador del usuario
-     * @param options   Opciones de configuracion
+     * @param reward_id Identificador del reward
      * @param cb        Callback que recibira la informacion de la peticion
-     * */
-    public static void getMarketPlace(String user_id, Options options, HooptapCallback<JSONObject> cb) {
-        Object[] datos = new Object[2];
-        datos[0] = user_id;
-        datos[1] = options;
+     */
+    public static void getLevelReward(final String user_id, final String reward_id, final HooptapCallback<JSONObject> cb) {
 
-        new Command(cliente, "getMarketPlace", datos, cb).execute();
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("reward_id", reward_id);
+        data.put("user_id", user_id);
+        data.put("token", Hooptap.getToken());
+        data.put("api_key", Hooptap.getApiKey());
+
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                getLevelReward(user_id, reward_id, cb);
+            }
+        };
+
+        new Command("userUserIdRewardRewardIdLevelGet", data, cb, cbRetry).executeMethod();
 
     }
 
     /**
-     *           MY GOODS
-     * @param user_id   Identificador del usuario
-     * @param options   Opciones de configuracion
-     * @param cb        Callback que recibira la informacion de la peticion
-     * */
-    public static void getGoods(String user_id, Options options, HooptapCallback<JSONObject> cb) {
-        Object[] datos = new Object[2];
-        datos[0] = user_id;
-        datos[1] = options;
-        new Command(cliente, "getGoods", datos, cb).execute();
+     * MARKETPLACE
+     *
+     * @param user_id Identificador del usuario
+     * @param options Opciones de configuracion
+     * @param cb      Callback que recibira la informacion de la peticion
+     */
+    public static void getMarketPlace(final String user_id, final Options options, final HooptapCallback<JSONObject> cb) {
+
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("user_id", user_id);
+        data.put("page_size", options.getPageSize()+"");
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("page_number", options.getPageNumber()+"");
+        data.put("filter", "");
+        data.put("token", Hooptap.getToken());
+
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                getMarketPlace(user_id, options, cb);
+            }
+        };
+
+        new Command("userUserIdMarketplaceGoodGet", data, cb, cbRetry).executeMethod();
+
     }
 
     /**
-     *           MY POINTS
-     * @param user_id   Identificador del usuario
-     * @param cb        Callback que recibira la informacion de la peticion
-     * */
-    public static void getPoints(String user_id, HooptapCallback<JSONObject> cb) {
-        Object[] datos = new Object[1];
-        datos[0] = user_id;
-        new Command(cliente, "getPoints", datos, cb).execute();
+     * MY GOODS
+     *
+     * @param user_id Identificador del usuario
+     * @param options Opciones de configuracion
+     * @param cb      Callback que recibira la informacion de la peticion
+     */
+    public static void getGoods(final String user_id, final Options options, final HooptapCallback<JSONObject> cb) {
+
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("user_id", user_id);
+        data.put("page_size", options.getPageSize()+"");
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("page_number", options.getPageNumber()+"");
+        data.put("filter", "");
+        data.put("token", Hooptap.getToken());
+
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                getGoods(user_id, options, cb);
+            }
+        };
+
+        new Command("userUserIdMarketplacePurchaseGet", data, cb, cbRetry).executeMethod();
     }
 
     /**
-     *           MY GOODS
-     * @param user_id   Identificador del usuario
-     * @param options   Opciones de configuracion
-     * @param cb        Callback que recibira la informacion de la peticion
-     * */
-    public static void getNotifications(String user_id, Options options, HooptapCallback<JSONObject> cb) {
-        Object[] datos = new Object[3];
+     * MY POINTS
+     *
+     * @param user_id Identificador del usuario
+     * @param cb      Callback que recibira la informacion de la peticion
+     */
+    public static void getPoints(final String user_id, final HooptapCallback<JSONObject> cb) {
 
-        datos[0] = user_id;
-        datos[1] = options;
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("token", Hooptap.getToken());
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("user_id", user_id);
 
-        new Command(cliente, "getNotifications", datos, cb).execute();
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                getPoints(user_id, cb);
+            }
+        };
+
+        new Command("userUserIdPointsGet", data, cb, cbRetry).executeMethod();
     }
 
     /**
-     *           URL GAME
-     * @param user_id   Identificador del usuario
-     * @param game_id   Identificador del game
-     * @param cb        Callback que recibira la informacion de la peticion
-     * */
-    public static void getUrlGame(String user_id, String game_id, final HooptapCallback<JSONObject> cb) {
-        Object[] datos = new Object[2];
-        datos[0] = user_id;
-        datos[1] = game_id;
-        new Command(cliente, "getUrlGame", datos, cb).execute();
+     * MY GOODS
+     *
+     * @param user_id Identificador del usuario
+     * @param options Opciones de configuracion
+     * @param cb      Callback que recibira la informacion de la peticion
+     */
+    public static void getNotifications(final String user_id, final Options options, final HooptapCallback<JSONObject> cb) {
+
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("user_id", user_id);
+        data.put("page_size", options.getPageSize()+"");
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("page_number", options.getPageNumber()+"");
+        data.put("filter", "");
+        data.put("token", Hooptap.getToken());
+
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                getNotifications(user_id, options, cb);
+            }
+        };
+
+        new Command("userUserIdNotificationGet", data, cb, cbRetry).executeMethod();
     }
 
     /**
-     *           USERS
-     * @param options   Opciones de configuracion
-     * @param cb        Callback que recibira la informacion de la peticion
-     * */
-    public static void getUsers(Options options, HooptapCallback<JSONObject> cb) {
-        Object[] datos = new Object[1];
-        datos[0] = options;
+     * URL GAME
+     *
+     * @param user_id Identificador del usuario
+     * @param game_id Identificador del game
+     * @param cb      Callback que recibira la informacion de la peticion
+     */
+    public static void getUrlGame(final String user_id, final String game_id, final HooptapCallback<JSONObject> cb) {
 
-        new Command(cliente, "getUsers", datos, cb).execute();
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("user_id", user_id);
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("game_id", game_id);
+        data.put("token", Hooptap.getToken());
+
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                getUrlGame(user_id, game_id, cb);
+            }
+        };
+
+        new Command("userUserIdItemItemIdGet", data, cb, cbRetry).executeMethod();
     }
 
     /**
-     *           RANKING
-     * @param user_id   Identificador del usuario
-     * @param options   Opciones de configuracion
-     * @param cb        Callback que recibira la informacion de la peticion
-     * */
-    public static void getRanking(String user_id, Options options, CONSTANTS.RANKING_FILTER ranking_filter, HooptapCallback<JSONObject> cb) {
-        Object[] datos = new Object[3];
-        datos[0] = user_id;
-        datos[1] = options;
-        datos[2] = Utils.getRankingFilter(ranking_filter);
-        new Command(cliente, "getRanking", datos, cb).execute();
+     * USERS
+     *
+     * @param options Opciones de configuracion
+     * @param cb      Callback que recibira la informacion de la peticion
+     */
+    public static void getUsers(final Options options, final HooptapCallback<JSONObject> cb) {
+
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("page_size", options.getPageSize()+"");
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("page_number", options.getPageNumber()+"");
+        data.put("filter", "");
+        data.put("token", Hooptap.getToken());
+
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                getUsers(options, cb);
+            }
+        };
+
+        new Command("userGet", data, cb, cbRetry).executeMethod();
     }
 
     /**
-     *           FEED
-     * @param user_id   Identificador del usuario
-     * @param options   Opciones de configuracion
-     * @param cb        Callback que recibira la informacion de la peticion
-     * */
-    public static void getUserFeed(String user_id,Options options, HooptapCallback<JSONObject> cb) {
-        Object[] datos = new Object[2];
-        datos[0] = user_id;
-        datos[1] = options;
+     * RANKING
+     *
+     * @param user_id Identificador del usuario
+     * @param options Opciones de configuracion
+     * @param cb      Callback que recibira la informacion de la peticion
+     */
+    public static void getRanking(final String user_id, final Options options, final CONSTANTS.RANKING_FILTER ranking_filter, final HooptapCallback<JSONObject> cb) {
 
-        new Command(cliente, "getUserFeed", datos, cb).execute();
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("user_id", user_id);
+        data.put("page_size", options.getPageSize()+"");
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("page_number", options.getPageNumber()+"");
+        data.put("filter", Utils.getRankingFilter(ranking_filter));
+        data.put("token", Hooptap.getToken());
+
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                getRanking(user_id, options, ranking_filter, cb);
+            }
+        };
+
+        new Command("userUserIdRankingGet", data, cb, cbRetry).executeMethod();
+
     }
 
     /**
-     *           REWARD COUNT
-     * @param user_id   Identificador del usuario
-     * @param cb        Callback que recibira la informacion de la peticion
-     * */
-    public static void getRewardsCount(String user_id, HooptapCallback<JSONObject> cb) {
-        Object[] datos = new Object[1];
-        datos[0] = user_id;
-        new Command(cliente, "getRewardsCount", datos, cb).execute();
+     * FEED
+     *
+     * @param user_id Identificador del usuario
+     * @param options Opciones de configuracion
+     * @param cb      Callback que recibira la informacion de la peticion
+     */
+    public static void getUserFeed(final String user_id, final Options options, final HooptapCallback<JSONObject> cb) {
+
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("user_id", user_id);
+        data.put("token", Hooptap.getToken());
+
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                getUserFeed(user_id, options, cb);
+            }
+        };
+
+        new Command("userUserIdFeedGet", data, cb, cbRetry).executeMethod();
+
     }
 
     /**
-     *           FEED
-     * @param email     Email del usuario
-     * @param password  Password del usuario
-     * @param cb        Callback que recibira la informacion de la peticion
-     * */
-    public static void login(String email, String password, HooptapCallback<JSONObject> cb) {
+     * REWARD COUNT
+     *
+     * @param user_id Identificador del usuario
+     * @param cb      Callback que recibira la informacion de la peticion
+     */
+    public static void getRewardsCount(final String user_id, final HooptapCallback<JSONObject> cb) {
+
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("user_id", user_id);
+        data.put("token", Hooptap.getToken());
+
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                getRewardsCount(user_id, cb);
+            }
+        };
+
+        new Command("userUserIdRewardCountGet", data, cb, cbRetry).executeMethod();
+    }
+
+    /**
+     * FEED
+     *
+     * @param email    Email del usuario
+     * @param password Password del usuario
+     * @param cb       Callback que recibira la informacion de la peticion
+     */
+    public static void login(final String email, final String password, final HooptapCallback<JSONObject> cb) {
+
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("api_key", Hooptap.getApiKey());
         InputLoginModel info = new InputLoginModel();
         info.setEmail(email);
         info.setPassword(password);
-        Object[] datos = new Object[1];
-        datos[0] = info;
-        new Command(cliente, "login", datos, cb).execute();
+        data.put("info", info);
+
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                login(email, password, cb);
+            }
+        };
+
+        Object result = new Command("userLoginPost", data, cb, cbRetry).executeMethod();
+        Hooptap.setToken(result);
     }
+
 
     /**
      * Registrar C2DM
@@ -316,7 +531,7 @@ public abstract class HooptapApi {
     public static void registrarC2DM(String user_id, HooptapCallback<JSONObject> cb) {
         Object[] datos = new Object[1];
         datos[0] = user_id;
-        new Command(cliente, "registrarC2DM", datos, cb).execute();
+        new Command( "registrarC2DM", datos, cb).executeMethod();
     }
 */
     /*
@@ -324,27 +539,49 @@ public abstract class HooptapApi {
         Object[] datos = new Object[2];
         datos[0] = user_id;
         datos[1] = oldToken;
-        new Command(cliente, "renewToken", datos, cb).execute();
+        new Command( "renewToken", datos, cb).executeMethod();
     }*/
 
     /**
-     *           REGISTER USER
+     * REGISTER USER
+     *
      * @param info_User Informacion del usuario
      * @param cb        Callback que recibira la informacion de la peticion
-     * */
-    public static void registerUser(RegisterModel info_User, HooptapCallback<JSONObject> cb) {
-        Object[] datos = new Object[1];
-        datos[0] = info_User;
-        new Command(cliente, "registerUser", datos, cb).execute();
+     */
+    public static void registerUser(final RegisterModel info_User, final HooptapCallback<JSONObject> cb) {
+
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("info_user", info_User);
+
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                registerUser(info_User, cb);
+            }
+        };
+
+        new Command("userPost", data, cb, cbRetry).executeMethod();
+
     }
 
-    public static void uploadImage(Bitmap imagen, HooptapCallback<JSONObject>cb){
+    public static void uploadImage(final Bitmap imagen, final HooptapCallback<JSONObject> cb) {
 
-        Object[] datos = new Object[1];
-        FileModel fileModel=new FileModel();
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("api_key", Hooptap.getApiKey());
+        FileModel fileModel = new FileModel();
         fileModel.setFile(Utils.parseImageToString(imagen));
-        datos[0] = fileModel;
-        new Command(cliente, "uploadImage", datos, cb).execute();
+        data.put("fileModel", fileModel);
+
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                uploadImage(imagen, cb);
+            }
+        };
+
+        new Command("fileBase64Post", data, cb, cbRetry).executeMethod();
+
     }
 
 

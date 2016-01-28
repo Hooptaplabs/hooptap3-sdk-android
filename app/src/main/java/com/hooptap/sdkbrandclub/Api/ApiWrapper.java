@@ -55,7 +55,7 @@ public class ApiWrapper {
     }
 
     public Object getLevelReward(String user_id, String reward_id) {
-        return Hooptap.getClient().userUserIdRewardRewardIdLevelGet(reward_id, user_id, Hooptap.getToken());
+        return Hooptap.getClient().userUserIdRewardRewardIdLevelGet(reward_id, user_id, Hooptap.getToken(),"");
     }
 
     public Object getLevels(@NonNull String userId,Options options) {
@@ -127,6 +127,7 @@ public class ApiWrapper {
     }
 
     public Object getProfile(String user_id) {
+        Log.e("DANGERRRRR","ESTO NO DEBE SALIR");
         return Hooptap.getClient().userUserIdGet(Hooptap.getApiKey(), user_id, Hooptap.getToken());
     }
 

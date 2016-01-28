@@ -8,7 +8,7 @@ import android.util.Log;
 import com.amazonaws.mobileconnectors.apigateway.ApiClientFactory;
 
 
-import com.hooptap.brandclub.HooptapAPIvClient;
+import com.hooptap.brandclub.HooptapApivClient;
 import com.hooptap.sdkbrandclub.Utilities.Utils;
 
 import org.json.JSONException;
@@ -23,7 +23,7 @@ import org.json.JSONObject;
  */
 
 public class Hooptap {
-    private static HooptapAPIvClient sClientService;
+    private static HooptapApivClient sClientService;
     private static SharedPreferences settings;
     public static Context context;
     private static SharedPreferences.Editor editor;
@@ -31,7 +31,7 @@ public class Hooptap {
     /**
      * @return El objeto Hooptap para poder utilizarlo posteriormente
      */
-    public static HooptapAPIvClient getClient() {
+    public static HooptapApivClient getClient() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         return sClientService;
@@ -153,7 +153,7 @@ public class Hooptap {
             if (sClientService == null) {
                 apiClientFactory = new ApiClientFactory();
                 //apiClientFactory.apiKey(settings.getString("ht_api_key", ""));
-                sClientService = apiClientFactory.build(HooptapAPIvClient.class);
+                sClientService = apiClientFactory.build(HooptapApivClient.class);
             }
 
             return new Hooptap();
