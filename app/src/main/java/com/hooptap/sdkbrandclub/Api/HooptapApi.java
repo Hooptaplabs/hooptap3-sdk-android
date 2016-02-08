@@ -3,26 +3,23 @@ package com.hooptap.sdkbrandclub.Api;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.hooptap.brandclub.HooptapApivClient;
 import com.hooptap.brandclub.model.FileModel;
 import com.hooptap.brandclub.model.InputLoginModel;
-import com.hooptap.sdkbrandclub.CONSTANTS;
 import com.hooptap.sdkbrandclub.Engine.Command;
+import com.hooptap.sdkbrandclub.Interfaces.AsyncResponse;
+import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
 import com.hooptap.sdkbrandclub.Interfaces.HooptapCallbackRetry;
 import com.hooptap.sdkbrandclub.Models.HooptapAccion;
-import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
 import com.hooptap.sdkbrandclub.Models.Options;
 import com.hooptap.sdkbrandclub.Models.RegisterModel;
-import com.hooptap.sdkbrandclub.Models.ResponseError;
+import com.hooptap.sdkbrandclub.Utilities.ParseActions;
 import com.hooptap.sdkbrandclub.Utilities.Utils;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Objects;
 
 
 /**
@@ -90,6 +87,57 @@ public abstract class HooptapApi {
         };
 
         new Command("userUserIdActionActionNamePost", data, cb, cbRetry).executeMethod();
+
+    }
+
+    public static void getActions(final Options options, final HooptapCallback<ArrayList<String>> cb) {
+
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("page_size", options.getPageSize()+"");
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("page_number", options.getPageNumber() + "");
+        data.put("filter", "");
+        data.put("token", Hooptap.getToken());
+
+        Log.e("APIKEY", Hooptap.getApiKey() + " / " + Hooptap.getToken() + " / " + options.getPageSize() + " / " + options.getPageNumber() + "");
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                getActions(options, cb);
+            }
+        };
+
+        new Command("engineActionGet", data, null, cbRetry).executeMethod(new AsyncResponse() {
+            @Override
+            public void processFinish(Object output) {
+                cb.onSuccess(ParseActions.actions((JSONObject) Utils.getObjectParse(output)));
+            }
+        });
+
+    }
+
+    public static void getMatchingFieldsForAction(final String action, final Options options, final HooptapCallback<HashMap<String, String>> cb) {
+
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("page_size", options.getPageSize()+"");
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("page_number", options.getPageNumber() + "");
+        data.put("filter", "");
+        data.put("token", Hooptap.getToken());
+
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                getMatchingFieldsForAction(action, options, cb);
+            }
+        };
+
+        new Command("engineActionGet", data, null, cbRetry).executeMethod(new AsyncResponse() {
+            @Override
+            public void processFinish(Object output) {
+                cb.onSuccess(ParseActions.matchingFieldsForAction((JSONObject) Utils.getObjectParse(output), action));
+            }
+        });
 
     }
 
@@ -428,14 +476,14 @@ public abstract class HooptapApi {
      * @param options Opciones de configuracion
      * @param cb      Callback que recibira la informacion de la peticion
      */
-    public static void getRanking(final String user_id, final Options options, final CONSTANTS.RANKING_FILTER ranking_filter, final HooptapCallback<JSONObject> cb) {
+    public static void getRanking(final String user_id, final Options options, final String ranking_filter, final HooptapCallback<JSONObject> cb) {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
         data.put("user_id", user_id);
         data.put("page_size", options.getPageSize()+"");
         data.put("api_key", Hooptap.getApiKey());
         data.put("page_number", options.getPageNumber()+"");
-        data.put("filter", Utils.getRankingFilter(ranking_filter));
+        data.put("filter", ranking_filter);
         data.put("token", Hooptap.getToken());
 
         HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
@@ -520,8 +568,13 @@ public abstract class HooptapApi {
             }
         };
 
-        Object result = new Command("userLoginPost", data, cb, cbRetry).executeMethod();
-        Hooptap.setToken(result);
+        new Command("userLoginPost", data, cb, cbRetry).executeMethod(new AsyncResponse() {
+            @Override
+            public void processFinish(Object output) {
+                Utils.setToken(output);
+            }
+        });
+
     }
 
 

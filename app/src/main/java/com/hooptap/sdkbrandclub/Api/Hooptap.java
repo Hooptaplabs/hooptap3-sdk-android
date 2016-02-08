@@ -2,13 +2,11 @@ package com.hooptap.sdkbrandclub.Api;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.StrictMode;
 import android.util.Log;
 
 import com.amazonaws.mobileconnectors.apigateway.ApiClientFactory;
-
-
 import com.hooptap.brandclub.HooptapApivClient;
+import com.hooptap.sdkbrandclub.Utilities.TinyDB;
 import com.hooptap.sdkbrandclub.Utilities.Utils;
 
 import org.json.JSONException;
@@ -24,47 +22,30 @@ import org.json.JSONObject;
 
 public class Hooptap {
     private static HooptapApivClient sClientService;
-    private static SharedPreferences settings;
     public static Context context;
-    private static SharedPreferences.Editor editor;
+    private static Boolean htEnableDebug;
+    private static TinyDB tinydb;
+    public static Boolean mappingResponse;
 
     /**
      * @return El objeto Hooptap para poder utilizarlo posteriormente
      */
     public static HooptapApivClient getClient() {
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
         return sClientService;
     }
 
-    /**
-     * Metodo que asigna un token al objeto Hooptap para permitir el acceso a la API
-     *
-     * @param token necesario para poder realizar las peticiones e identificar al usuario
-     */
-    public static void setToken(String token) {
-        editor.putString("ht_token", token);
-        editor.apply();
+    public static TinyDB getTinyDB() {
+        if (tinydb == null) {
+            tinydb = new TinyDB(context);
+        }
+        return tinydb;
     }
 
     /**
-     * Metodo que asigna un token al objeto Hooptap para permitir el acceso a la API
-     *
-     * @param token necesario para poder realizar las peticiones e identificar al usuario
+     * @return El token almacenado para poder utilizarlo posteriormente
      */
-    public static void setToken(Object token) {
-        JSONObject jsonObject = Utils.getObjectParse(token);
-        try {
-            JSONObject info=jsonObject.getJSONObject("response");
-            if (!info.isNull("access_token")) {
-                String infoToken=info.getString("access_token");
-                editor.putString("ht_token", "Bearer " + infoToken);
-                editor.apply();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+    public static String getToken() {
+        return getTinyDB().getString("ht_token");
     }
 
     /**
@@ -73,33 +54,29 @@ public class Hooptap {
      * @param apiKey necesario para poder realizar las peticiones e identificar al cliente
      */
     public static void setApiKey(String apiKey) {
-        editor.putString("ht_api_key", apiKey);
-        editor.apply();
+        getTinyDB().putString("ht_api_key", apiKey);
     }
-
-    /**
-     * @return El token almacenado para poder utilizarlo posteriormente
-     */
-    public static String getToken() {
-        return settings.getString("ht_token", "");
-    }
-
-    //46576686f6f707461702e627
 
     /**
      * @return El Api Key  para poder utilizarlo posteriormente
      */
     public static String getApiKey() {
-        return "46576686f6f707461702e627";
+        return getTinyDB().getString("ht_api_key");
     }
 
-    public static int getTypeClass() {
-        return settings.getInt("type_class", 0);
+    /**
+     * @return Si el modo debug está habilitado
+     */
+    public static Boolean getEnableDebug() {
+        return htEnableDebug;
     }
 
-    public static void setTypeClass(int apiKey) {
-        editor.putInt("type_class", apiKey);
-        editor.apply();
+    public static Boolean getMappingRespone() {
+        return mappingResponse;
+    }
+
+    public void setMappingResponse(Boolean mapping) {
+        mappingResponse = mapping;
     }
 
     /**
@@ -107,14 +84,11 @@ public class Hooptap {
      */
     public static class Builder {
 
-        public static Boolean htEnableDebug;
-        private ApiClientFactory apiClientFactory;
 
+        private ApiClientFactory apiClientFactory;
 
         public Builder(Context cont) {
             context = cont;
-            settings = context.getSharedPreferences("preferences", 0);
-            editor = settings.edit();
         }
 
         /**
@@ -133,14 +107,12 @@ public class Hooptap {
          * @param apiKey
          */
         public Hooptap.Builder setApiKey(String apiKey) {
-            editor.putString("ht_api_key", apiKey);
-            editor.apply();
+            getTinyDB().putString("ht_api_key", apiKey);
             return this;
         }
 
-        public Hooptap.Builder setTypeClass(int typeClass) {
-            editor.putInt("type_class", typeClass);
-            editor.apply();
+        public Hooptap.Builder setMappingResponse(Boolean mapping) {
+            mappingResponse = mapping;
             return this;
         }
 
@@ -152,7 +124,6 @@ public class Hooptap {
         public Hooptap build() {
             if (sClientService == null) {
                 apiClientFactory = new ApiClientFactory();
-                //apiClientFactory.apiKey(settings.getString("ht_api_key", ""));
                 sClientService = apiClientFactory.build(HooptapApivClient.class);
             }
 

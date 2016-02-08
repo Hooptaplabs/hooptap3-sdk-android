@@ -3,6 +3,7 @@ package com.hooptap.sdkbrandclub.Models;
 /**
  * Created by root on 12/01/16.
  */
+
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
@@ -14,7 +15,6 @@ import android.webkit.WebView;
 import com.hooptap.sdkbrandclub.Interfaces.HooptapJSInterface;
 import com.hooptap.sdkbrandclub.Utilities.LocationManager;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**

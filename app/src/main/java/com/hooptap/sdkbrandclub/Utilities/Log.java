@@ -11,7 +11,7 @@ public class Log {
 
 
     static public void d(String tag, String msgFormat, Object... args) {
-        if (Hooptap.Builder.htEnableDebug) {
+        if (Hooptap.getEnableDebug()) {
             int maxLogSize = 2000;
             /*for(int i = 0; i <= msgFormat.length() / maxLogSize; i++) {
                 int start = i * maxLogSize;
@@ -24,7 +24,7 @@ public class Log {
     }
 
     static public void e(String tag,  String msgFormat, Object... args) {
-        if (Hooptap.Builder.htEnableDebug) {
+        if (Hooptap.getEnableDebug()) {
             android.util.Log.e(tag, String.format(msgFormat, args));
         }
 

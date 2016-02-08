@@ -6,10 +6,6 @@ package com.hooptap.sdkbrandclub.Models;
 public class HooptapLevel extends HooptapItem{
     String primero;
     String segundo;
-    public HooptapLevel(String jsonObj) {
-        super(jsonObj);
-
-    }
 
     public String getPrimero() {
         return primero;
