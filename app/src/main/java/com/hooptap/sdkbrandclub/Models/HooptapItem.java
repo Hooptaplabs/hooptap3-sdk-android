@@ -4,17 +4,18 @@ package com.hooptap.sdkbrandclub.Models;
  * Created by root on 5/01/16.
  */
 public class HooptapItem {
-    private String identificator;
+    private String _id;
     private String name;
-    private String imageURL;
-    private String description;
+    private String image;
+    private String desc;
+    private String itemType;
 
     public String getIdentificator() {
-        return identificator;
+        return _id;
     }
 
     public void setIdentificator(String identificator) {
-        this.identificator = identificator;
+        this._id = identificator;
     }
 
     public String getName() {
@@ -25,19 +26,27 @@ public class HooptapItem {
         this.name = name;
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public String getImage() {
+        return image;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getDescription() {
-        return description;
+        return desc;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.desc = description;
+    }
+
+    public String getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(String itemType) {
+        this.itemType = itemType;
     }
 }

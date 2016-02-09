@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.amazonaws.mobileconnectors.apigateway.ApiClientFactory;
 import com.hooptap.brandclub.HooptapApivClient;
+import com.hooptap.sdkbrandclub.Engine.MapperObjects;
 import com.hooptap.sdkbrandclub.Utilities.TinyDB;
 import com.hooptap.sdkbrandclub.Utilities.Utils;
 
@@ -25,7 +26,6 @@ public class Hooptap {
     public static Context context;
     private static Boolean htEnableDebug;
     private static TinyDB tinydb;
-    public static Boolean mappingResponse;
 
     /**
      * @return El objeto Hooptap para poder utilizarlo posteriormente
@@ -71,14 +71,6 @@ public class Hooptap {
         return htEnableDebug;
     }
 
-    public static Boolean getMappingRespone() {
-        return mappingResponse;
-    }
-
-    public void setMappingResponse(Boolean mapping) {
-        mappingResponse = mapping;
-    }
-
     /**
      * Constructor generico en el cual podremos configurar ciertos parametros
      */
@@ -111,11 +103,6 @@ public class Hooptap {
             return this;
         }
 
-        public Hooptap.Builder setMappingResponse(Boolean mapping) {
-            mappingResponse = mapping;
-            return this;
-        }
-
         /**
          * Constructor que crea el objeto con los parametros asignados por los metodos anteriores
          *
@@ -125,6 +112,8 @@ public class Hooptap {
             if (sClientService == null) {
                 apiClientFactory = new ApiClientFactory();
                 sClientService = apiClientFactory.build(HooptapApivClient.class);
+                //Inicializo el mapeador
+                new MapperObjects();
             }
 
             return new Hooptap();

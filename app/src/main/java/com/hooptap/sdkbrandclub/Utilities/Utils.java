@@ -85,7 +85,7 @@ public class Utils {
      * para que devuelvan los modelos especificos.
      */
     public static <T> T getObjectParse(Object o) {
-        try {
+        /*try {
             //Obtener hashmap con gson
             Type type = new TypeToken<Map<String, String>>(){}.getType();
             Map<String, String> myMap = g.fromJson("{'k1':'apple','k2':'orange'}", type);
@@ -97,7 +97,7 @@ public class Utils {
         } catch (Exception e) {
             e.printStackTrace();
             return  null;
-        }
+        }*/
 
         String value = g.toJson(o);
 

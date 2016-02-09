@@ -8,7 +8,6 @@ import com.amazonaws.mobileconnectors.apigateway.ApiClientException;
 import com.hooptap.brandclub.HooptapApivClient;
 import com.hooptap.brandclub.model.InputRenewTokenModel;
 import com.hooptap.sdkbrandclub.Api.Hooptap;
-import com.hooptap.sdkbrandclub.Interfaces.AsyncResponse;
 import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
 import com.hooptap.sdkbrandclub.Interfaces.HooptapCallbackRetry;
 import com.hooptap.sdkbrandclub.Models.ResponseError;
@@ -31,12 +30,11 @@ public class Command<T> extends AsyncTask {
     private HooptapApivClient client;
     private Method action;
     private Method[] declaredMethods = HooptapApivClient.class.getDeclaredMethods();
-    int attempts = 0;
-    private HooptapCallback<T> cb;
+    private int attempts = 0;
+    private HooptapCallback asyncRespone;
 
-    public Command(String methodName, LinkedHashMap hashmap, HooptapCallback cb, HooptapCallbackRetry cbRetry) {
+    public Command(String methodName, LinkedHashMap hashmap, HooptapCallbackRetry cbRetry) {
         this.hashmap = hashmap;
-        this.cb = cb;
         this.cbRetry = cbRetry;
         client = Hooptap.getClient();
         //Clase donde vamos a buscar nuestros metodos
@@ -59,22 +57,11 @@ public class Command<T> extends AsyncTask {
 
     }
 
-    public void executeMethod(AsyncResponse asyncRespone) {
+    public void executeMethod(HooptapCallback asyncRespone) {
         WrapperTask wrapper = new WrapperTask(asyncRespone);
-        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.HONEYCOMB) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             wrapper.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        }
-        else {
-            wrapper.execute();
-        }
-    }
-
-    public void executeMethod() {
-        WrapperTask wrapper = new WrapperTask(null);
-        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.HONEYCOMB) {
-            wrapper.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        }
-        else {
+        } else {
             wrapper.execute();
         }
     }
@@ -85,11 +72,10 @@ public class Command<T> extends AsyncTask {
     }
 
     private class WrapperTask extends AsyncTask<Void, Void, Object> {
-        private AsyncResponse asyncRespone = null;
         private Object object = null;
 
-        public WrapperTask(AsyncResponse asyncRespone) {
-            this.asyncRespone = asyncRespone;
+        public WrapperTask(HooptapCallback ownCallback) {
+            asyncRespone = ownCallback;
         }
 
         @Override
@@ -99,33 +85,31 @@ public class Command<T> extends AsyncTask {
                 object = action.invoke(client, args);
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.e("doInBackground-ERROR", e.getLocalizedMessage()+" /");
                 if (e.getCause() instanceof ApiClientException) {
                     Log.e("HooptapDebugError", ((ApiClientException) e.getCause()).getErrorMessage());
                     ResponseError error = getError(((ApiClientException) e.getCause()).getErrorMessage());
-                    if (error != null && cb != null) {
-                        cb.onError(getError(((ApiClientException) e.getCause()).getErrorMessage()));
+                    if (error != null) {
+                        asyncRespone.onError(getError(((ApiClientException) e.getCause()).getErrorMessage()));
                     } else {
                         cbRetry.retry();
                     }
                 } else {
                     ResponseError responseError = new ResponseError();
                     responseError.setReason(e.getCause().getLocalizedMessage());
-                    cb.onError(responseError);
-                    //throw new RuntimeException(new Exception("Al ejecutar el metodo me da un error desconocido que no es instancia de ApiClientException: " + e.getClass()));
+                    asyncRespone.onError(responseError);
                 }
             }
-            Log.e("doInBackground", object+" /");
+            Log.e("doInBackground", object + " /");
             return object;
         }
 
         @Override
         protected void onPostExecute(Object result) {
-            //Devolvemos el resultado al usuario
-            if (result != null && cb != null)
-                cb.onSuccess((T) Utils.getObjectParse(result));
-            if (asyncRespone != null)
-                asyncRespone.processFinish(result);
+            //Devolvemos el resultado a nuestra propia callback para tratar la respuesta en cada metodo
+            if (result != null) {
+                asyncRespone.onSuccess(result);
+            }
+
         }
     }
 
@@ -143,8 +127,7 @@ public class Command<T> extends AsyncTask {
             attempts = 0;
             ResponseError responseError = new ResponseError();
             responseError.setReason("No se ha podido renovar token");
-            if (cb != null)
-                cb.onError(responseError);
+            asyncRespone.onError(responseError);
         }
 
     }
