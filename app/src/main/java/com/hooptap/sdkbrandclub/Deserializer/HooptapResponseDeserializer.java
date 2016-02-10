@@ -7,10 +7,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.hooptap.sdkbrandclub.Engine.MapperObjects;
-import com.hooptap.sdkbrandclub.Models.HooptapResponse;
+import com.hooptap.sdkbrandclub.Models.HooptapListResponse;
 import com.hooptap.sdkbrandclub.Utilities.Log;
-
-import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -18,13 +16,20 @@ import java.util.ArrayList;
 /**
  * Created by carloscarrasco on 9/2/16.
  */
-public class HooptapResponseDeserializer<T> implements JsonDeserializer<HooptapResponse> {
+public class HooptapResponseDeserializer<T> implements JsonDeserializer<HooptapListResponse> {
+
+    private String itemSubtype;
+    private String itemType;
+
+    public HooptapResponseDeserializer(String subtype) {
+        this.itemSubtype = subtype;
+    }
 
     @Override
-    public HooptapResponse deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context)
+    public HooptapListResponse deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context)
             throws JsonParseException {
 
-        HooptapResponse htResponse = new HooptapResponse();
+        HooptapListResponse htResponse = new HooptapListResponse();
 
         final JsonObject jsonObject = json.getAsJsonObject();
         //Parseo la parte de paginacion
@@ -41,18 +46,29 @@ public class HooptapResponseDeserializer<T> implements JsonDeserializer<HooptapR
             htResponse.setTotal_pages(total_pages);
             htResponse.setPage_size(page_size);
         }
-
+        Log.e("DESERIALIZER0", jsonObject+" /");
         JsonArray items = jsonObject.getAsJsonArray("items");
+        Log.e("DESERIALIZER", items+" /");
+
         ArrayList<T> itemsArray = new ArrayList<>();
         //Recorro los items, saco su tipo y genero su objeto correspondiente de forma automatica
         for (int i = 0; i < items.size(); i++) {
-            JsonElement js = items.get(i);
-            String itemType = js.getAsJsonObject().get("itemType").getAsString();
+            JsonElement jsonElement = items.get(i);
+            Log.e("ELMENT",jsonElement.getAsJsonObject().toString());
+            if (!jsonElement.getAsJsonObject().get("itemType").isJsonNull()) {
+                itemType = jsonElement.getAsJsonObject().get("itemType").getAsString();
+            }else{
+                itemType = itemSubtype;
+            }
             Class cls = MapperObjects.getClassFromKey(itemType);
-            itemsArray.add((T) context.deserialize(items.get(i), cls));
+            itemsArray.add((T) context.deserialize(jsonElement, cls));
         }
         htResponse.setItemArray(itemsArray);
 
         return htResponse;
     }
+
+//    public void setSubType(String itemSubtype){
+//        subtype = itemSubtype;
+//    }
 }

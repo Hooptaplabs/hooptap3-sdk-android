@@ -1,9 +1,13 @@
 package com.hooptap.sdkbrandclub.Engine;
 
-import com.hooptap.sdkbrandclub.Models.HooptapResponse;
+import com.hooptap.sdkbrandclub.Models.HooptapGame;
+import com.hooptap.sdkbrandclub.Models.HooptapItem;
+import com.hooptap.sdkbrandclub.Models.HooptapRanking;
+import com.hooptap.sdkbrandclub.Models.HooptapListResponse;
 import com.hooptap.sdkbrandclub.Models.HooptapBadge;
 import com.hooptap.sdkbrandclub.Models.HooptapGood;
 import com.hooptap.sdkbrandclub.Models.HooptapUser;
+import com.hooptap.sdkbrandclub.Utilities.Constants;
 
 import java.util.HashMap;
 
@@ -19,17 +23,22 @@ public class MapperObjects {
     }
 
     private void setUpMapper() {
-        addMap("Badge", HooptapBadge.class);
-        addMap("Good", HooptapGood.class);
-        addMap("User", HooptapUser.class);
-        addMap("List", HooptapResponse.class);
+        addMap(Constants.BADGE, HooptapBadge.class);
+        addMap(Constants.GOOD, HooptapGood.class);
+        addMap(Constants.GAME, HooptapGame.class);
+        addMap(Constants.USER, HooptapUser.class);
+        addMap(Constants.RANKING, HooptapRanking.class);
+        addMap(Constants.LIST, HooptapListResponse.class);
     }
 
     private void addMap(String key, Class hooptapClass) {
         mapper.put(key, hooptapClass);
     }
 
-    public static Class getClassFromKey(String key){
-        return mapper.get(key);
+    public static Class getClassFromKey(String key) {
+        if (mapper.containsKey(key))
+            return mapper.get(key);
+        else
+            return HooptapItem.class;
     }
 }

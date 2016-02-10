@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by carloscarrasco on 8/2/16.
  */
-public class HooptapResponse<T> {
+public class HooptapListResponse<T> {
 
     public int current_page;
     public int total_pages;

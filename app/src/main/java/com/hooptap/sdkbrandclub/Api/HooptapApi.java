@@ -10,16 +10,19 @@ import com.hooptap.sdkbrandclub.Engine.Command;
 import com.hooptap.sdkbrandclub.Engine.ParseObjects;
 import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
 import com.hooptap.sdkbrandclub.Interfaces.HooptapCallbackRetry;
-import com.hooptap.sdkbrandclub.Models.HooptapResponse;
+import com.hooptap.sdkbrandclub.Models.HooptapItem;
+import com.hooptap.sdkbrandclub.Models.HooptapRanking;
+import com.hooptap.sdkbrandclub.Models.HooptapListResponse;
 import com.hooptap.sdkbrandclub.Models.HooptapAccion;
 import com.hooptap.sdkbrandclub.Models.HooptapUser;
 import com.hooptap.sdkbrandclub.Models.Options;
+import com.hooptap.sdkbrandclub.Models.OptionsMapper;
 import com.hooptap.sdkbrandclub.Models.RegisterModel;
 import com.hooptap.sdkbrandclub.Models.ResponseError;
+import com.hooptap.sdkbrandclub.Utilities.Constants;
 import com.hooptap.sdkbrandclub.Utilities.ParseActions;
 import com.hooptap.sdkbrandclub.Utilities.Utils;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -60,12 +63,12 @@ public abstract class HooptapApi {
         new Command("userLoginPost", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
             @Override
             public void onSuccess(Object output) {
-                //Nos guardamos el token que nos llega del login
                 Utils.setToken(output);
-                //Añadimos la key necesaria para que nuestro mapeador sepa que clase tenemos que devolver.
-                JSONObject response = addValueToJson("itemType", "User", ParseObjects.getObjectJson(output));
-                //Tratamos la respuesta para devolver un objeto correcto al usuario
-                HooptapUser user = ParseObjects.getObjectParse(response);
+
+                JSONObject jsonResponse = ParseObjects.getObjectJson(output);
+                OptionsMapper options = setClassAndSubClasForMapper(Constants.USER);
+                HooptapUser user = ParseObjects.getObjectParse(jsonResponse, options);
+
                 cb.onSuccess(user);
             }
 
@@ -230,8 +233,8 @@ public abstract class HooptapApi {
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
         data.put("user_id", user_id);
         data.put("api_key", Hooptap.getApiKey());
-        data.put("good_id", good_id);
         data.put("token", Hooptap.getToken());
+        data.put("good_id", good_id);
 
         HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
             @Override
@@ -260,7 +263,7 @@ public abstract class HooptapApi {
      * @param options Opciones de configuracion
      * @param cb      Callback que recibira la informacion de la peticion
      */
-    public static void getBadges(final String user_id, final Options options, final HooptapCallback<HooptapResponse> cb) {
+    public static void getBadges(final String user_id, final Options options, final HooptapCallback<HooptapListResponse> cb) {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
         data.put("api_key", Hooptap.getApiKey());
@@ -277,17 +280,17 @@ public abstract class HooptapApi {
         new Command("userUserIdBadgesGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
             @Override
             public void onSuccess(Object output) {
+                //FIX PACO - Cambiar cuando este paginado
                 String value = new Gson().toJson(output);
-                try{
+                try {
                     JSONObject json = new JSONObject(value);
-                    Log.e("JSON1",json+" /");
                     json.put("items", json.remove("response"));
-                    Log.e("JSON2",json+" /");
-                    JSONObject response = addValueToJson("itemType", "List", json);
-                    HooptapResponse htResponse = ParseObjects.getObjectParse(response);
-                    Log.e("TAMANO",htResponse.getItemArray().size()+" /");
+                    OptionsMapper options = setClassAndSubClasForMapper(Constants.LIST, Constants.BADGE);
+                    HooptapListResponse htResponse = ParseObjects.getObjectParse(json, options);
                     cb.onSuccess(htResponse);
-                }catch (Exception e){e.printStackTrace();}
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -320,8 +323,9 @@ public abstract class HooptapApi {
         new Command("userUserIdGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
             @Override
             public void onSuccess(Object output) {
-                JSONObject response = addValueToJson("itemType", "User", ParseObjects.getObjectJson(output));
-                HooptapUser user = ParseObjects.getObjectParse(response);
+                JSONObject jsonResponse = ParseObjects.getObjectJson(output);
+                OptionsMapper options = setClassAndSubClasForMapper(Constants.USER);
+                HooptapUser user = ParseObjects.getObjectParse(jsonResponse, options);
                 cb.onSuccess(user);
             }
 
@@ -339,7 +343,7 @@ public abstract class HooptapApi {
      * @param item_id Identificador del item
      * @param cb      Callback que recibira la informacion de la peticion
      */
-    public static void getItemDetail(final String user_id, final String item_id, final HooptapCallback<JSONObject> cb) {
+    public static void getItemDetail(final String user_id, final String item_id, final HooptapCallback<HooptapItem> cb) {
 
         LinkedHashMap<String, String> data = new LinkedHashMap<>();
         data.put("user_id", user_id);
@@ -357,7 +361,15 @@ public abstract class HooptapApi {
         new Command("userUserIdItemItemIdGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
             @Override
             public void onSuccess(Object output) {
-                cb.onSuccess((JSONObject) ParseObjects.getObjectJson(output));
+                try {
+
+                    JSONObject jsonResponse = ParseObjects.getObjectJson(output);
+                    OptionsMapper options = setClassAndSubClasForMapper(jsonResponse.getString("itemType"));
+                    HooptapItem item = ParseObjects.getObjectParse(jsonResponse, options);
+                    cb.onSuccess(item);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -375,7 +387,7 @@ public abstract class HooptapApi {
      * @param options Opciones de configuracion
      * @param cb      Callback que recibira la informacion de la peticion
      */
-    public static void getItems(final String user_id, final Options options, final HooptapCallback<JSONObject> cb) {
+    public static void getItems(final String user_id, final Options options, final HooptapCallback<HooptapListResponse> cb) {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
         data.put("api_key", Hooptap.getApiKey());
@@ -393,7 +405,14 @@ public abstract class HooptapApi {
         new Command("userUserIdItemGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
             @Override
             public void onSuccess(Object output) {
-                cb.onSuccess((JSONObject) ParseObjects.getObjectJson(output));
+                try {
+                    JSONObject jsonResponse = ParseObjects.getObjectJson(output);
+                    OptionsMapper options = setClassAndSubClasForMapper(Constants.LIST);
+                    HooptapListResponse htResponse = ParseObjects.getObjectParse(jsonResponse, options);
+                    cb.onSuccess(htResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -403,6 +422,7 @@ public abstract class HooptapApi {
         });
 
     }
+
 
     /**
      * LEVELS
@@ -417,10 +437,11 @@ public abstract class HooptapApi {
         data.put("api_key", Hooptap.getApiKey());
         data.put("user_id", user_id);
         data.put("token", Hooptap.getToken());
+
         HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
             @Override
             public void retry() {
-                getItems(user_id, options, cb);
+                getLevels(user_id, options, cb);
             }
         };
 
@@ -689,33 +710,38 @@ public abstract class HooptapApi {
     }
 
     /**
-     * RANKING
+     * RANKING DETAIL
      *
-     * @param user_id Identificador del usuario
+     * @param ranking_id Identificador del ranking
      * @param options Opciones de configuracion
      * @param cb      Callback que recibira la informacion de la peticion
      */
-    public static void getRanking(final String user_id, final Options options, final String ranking_filter, final HooptapCallback<JSONObject> cb) {
+    public static void getRankingDetail(final String ranking_id, final Options options, final HooptapCallback<HooptapRanking> cb) {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
-        data.put("user_id", user_id);
+        data.put("user_id", ranking_id);
         data.put("page_size", options.getPageSize() + "");
         data.put("api_key", Hooptap.getApiKey());
         data.put("page_number", options.getPageNumber() + "");
-        data.put("filter", ranking_filter);
+        data.put("filter", "");
         data.put("token", Hooptap.getToken());
 
         HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
             @Override
             public void retry() {
-                getRanking(user_id, options, ranking_filter, cb);
+                getRankingDetail(ranking_id, options, cb);
             }
         };
 
         new Command("userUserIdRankingGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
             @Override
             public void onSuccess(Object output) {
-                cb.onSuccess((JSONObject) ParseObjects.getObjectJson(output));
+
+                JSONObject jsonResponse = ParseObjects.getObjectJson(output);
+                OptionsMapper options = setClassAndSubClasForMapper(Constants.RANKING);
+                HooptapRanking rankingDetail = ParseObjects.getObjectParse(jsonResponse, options);
+
+                cb.onSuccess(rankingDetail);
             }
 
             @Override
@@ -724,6 +750,44 @@ public abstract class HooptapApi {
             }
         });
 
+    }
+
+    /**
+     * RANKING LIST
+     *
+     * @param options Opciones de configuracion
+     * @param cb      Callback que recibira la informacion de la peticion
+     */
+    public static void getRankingList(final Options options, final HooptapCallback<HooptapListResponse> cb) {
+
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("page_size", options.getPageSize() + "");
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("page_number", options.getPageNumber() + "");
+        data.put("filter", "");
+        data.put("token", Hooptap.getToken());
+
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                getRankingList(options, cb);
+            }
+        };
+
+        new Command("rankingGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
+            @Override
+            public void onSuccess(Object output) {
+                JSONObject jsonResponse = ParseObjects.getObjectJson(output);
+                OptionsMapper options = setClassAndSubClasForMapper(Constants.LIST, Constants.RANKING);
+                HooptapListResponse listResponse= ParseObjects.getObjectParse(jsonResponse, options);
+                cb.onSuccess(listResponse);
+            }
+
+            @Override
+            public void onError(ResponseError var) {
+                cb.onError(var);
+            }
+        });
     }
 
     /**
@@ -856,13 +920,29 @@ public abstract class HooptapApi {
 
     }
 
-    private static JSONObject addValueToJson(String key, Object value, JSONObject response) {
-        try {
-            response.put(key, value);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return response;
+//    private static JSONObject addValueToJson(String key, Object value, JSONObject response) {
+//        try {
+//            response.put(key, value);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return response;
+//    }
+
+    private static OptionsMapper setClassAndSubClasForMapper(String className, String subClassName ){
+        OptionsMapper options = new OptionsMapper();
+        options.setClassName(className);
+        options.setSubClassName(subClassName);
+
+        return options;
+    }
+
+    private static OptionsMapper setClassAndSubClasForMapper(String className){
+        OptionsMapper options = new OptionsMapper();
+        options.setClassName(className);
+        options.setSubClassName("");
+
+        return options;
     }
 
 }
