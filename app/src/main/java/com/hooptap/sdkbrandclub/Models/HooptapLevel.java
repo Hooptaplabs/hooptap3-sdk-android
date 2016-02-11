@@ -4,22 +4,31 @@ package com.hooptap.sdkbrandclub.Models;
  * Created by root on 5/01/16.
  */
 public class HooptapLevel extends HooptapItem{
-    String primero;
-    String segundo;
+    int number;
+    int min_points;
+    boolean passed;
 
-    public String getPrimero() {
-        return primero;
+    public boolean isPassed() {
+        return passed;
     }
 
-    public void setPrimero(String primero) {
-        this.primero = primero;
+    public void setPassed(boolean passed) {
+        this.passed = passed;
     }
 
-    public String getSegundo() {
-        return segundo;
+    public int getMin_points() {
+        return min_points;
     }
 
-    public void setSegundo(String segundo) {
-        this.segundo = segundo;
+    public void setMin_points(int min_points) {
+        this.min_points = min_points;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 }

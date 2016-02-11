@@ -5,11 +5,12 @@ package com.hooptap.sdkbrandclub.Utilities;
  */
 public class Constants {
 
-    public static String LIST = "list";
-    public static String BADGE = "badge";
-    public static String GOOD = "good";
-    public static String GAME = "game";
-    public static String USER = "user";
-    public static String RANKING = "ranking";
+    public static String LIST = "List";
+    public static String BADGE = "Badge";
+    public static String GOOD = "Good";
+    public static String GAME = "Game";
+    public static String USER = "User";
+    public static String LEVEL = "Level";
+    public static String RANKING = "Ranking";
 
 }

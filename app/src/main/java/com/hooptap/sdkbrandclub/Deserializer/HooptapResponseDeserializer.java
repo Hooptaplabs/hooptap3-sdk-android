@@ -1,5 +1,7 @@
 package com.hooptap.sdkbrandclub.Deserializer;
 
+import android.util.Log;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -8,7 +10,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.hooptap.sdkbrandclub.Engine.MapperObjects;
 import com.hooptap.sdkbrandclub.Models.HooptapListResponse;
-import com.hooptap.sdkbrandclub.Utilities.Log;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class HooptapResponseDeserializer<T> implements JsonDeserializer<HooptapL
             htResponse.setTotal_pages(total_pages);
             htResponse.setPage_size(page_size);
         }
-        Log.e("DESERIALIZER0", jsonObject+" /");
+        Log.e("DESERIALIZER0", jsonObject + " /");
         JsonArray items = jsonObject.getAsJsonArray("items");
         Log.e("DESERIALIZER", items+" /");
 
@@ -55,7 +56,7 @@ public class HooptapResponseDeserializer<T> implements JsonDeserializer<HooptapL
         for (int i = 0; i < items.size(); i++) {
             JsonElement jsonElement = items.get(i);
             Log.e("ELMENT",jsonElement.getAsJsonObject().toString());
-            if (!jsonElement.getAsJsonObject().get("itemType").isJsonNull()) {
+            if (jsonElement.getAsJsonObject().get("itemType") != null) {
                 itemType = jsonElement.getAsJsonObject().get("itemType").getAsString();
             }else{
                 itemType = itemSubtype;

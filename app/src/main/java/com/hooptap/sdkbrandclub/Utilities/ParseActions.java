@@ -17,8 +17,7 @@ public class ParseActions {
     public static ArrayList<String> actions(JSONObject jsonRespone) {
         arrayActions.clear();
         try {
-            JSONObject jsonActions = jsonRespone.getJSONObject("response");
-            JSONArray jsonArrayItems = jsonActions.getJSONArray("items");
+            JSONArray jsonArrayItems = jsonRespone.getJSONArray("items");
             for (int i = 0; i < jsonArrayItems.length(); i++) {
                 String nameAction = ((JSONObject) jsonArrayItems.get(i)).getString("name");
                 if (!arrayActions.contains(nameAction)) {
@@ -35,8 +34,7 @@ public class ParseActions {
     public static HashMap<String, String> matchingFieldsForAction(JSONObject jsonRespone, String action){
         matchingFields.clear();
         try {
-            JSONObject jsonActions = jsonRespone.getJSONObject("response");
-            JSONArray jsonArrayItems = jsonActions.getJSONArray("items");
+            JSONArray jsonArrayItems = jsonRespone.getJSONArray("items");
             for (int i = 0; i < jsonArrayItems.length(); i++) {
                 String nameAction = ((JSONObject) jsonArrayItems.get(i)).getString("name");
                 if (nameAction.equals(action)){

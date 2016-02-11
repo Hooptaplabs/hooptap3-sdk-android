@@ -1,9 +1,11 @@
 package com.hooptap.sdkbrandclub.Models;
 
+import java.io.Serializable;
+
 /**
  * Created by root on 5/01/16.
  */
-public class HooptapItem {
+public class HooptapItem implements Serializable {
     private String _id;
     private String name;
     private String image;

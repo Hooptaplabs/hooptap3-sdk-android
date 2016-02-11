@@ -3,6 +3,7 @@ package com.hooptap.sdkbrandclub.Engine;
 
 import android.os.AsyncTask;
 import android.os.Build;
+import android.util.Log;
 
 import com.amazonaws.mobileconnectors.apigateway.ApiClientException;
 import com.hooptap.brandclub.HooptapApivClient;
@@ -11,7 +12,6 @@ import com.hooptap.sdkbrandclub.Api.Hooptap;
 import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
 import com.hooptap.sdkbrandclub.Interfaces.HooptapCallbackRetry;
 import com.hooptap.sdkbrandclub.Models.ResponseError;
-import com.hooptap.sdkbrandclub.Utilities.Log;
 import com.hooptap.sdkbrandclub.Utilities.Utils;
 
 import org.json.JSONException;
