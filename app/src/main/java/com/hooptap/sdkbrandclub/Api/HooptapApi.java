@@ -11,13 +11,14 @@ import com.hooptap.sdkbrandclub.Interfaces.HooptapCallbackRetry;
 import com.hooptap.sdkbrandclub.Models.HooptapFilter;
 import com.hooptap.sdkbrandclub.Models.HooptapItem;
 import com.hooptap.sdkbrandclub.Models.HooptapLevel;
+import com.hooptap.sdkbrandclub.Models.HooptapPoint;
 import com.hooptap.sdkbrandclub.Models.HooptapRanking;
 import com.hooptap.sdkbrandclub.Models.HooptapListResponse;
 import com.hooptap.sdkbrandclub.Models.HooptapAccion;
+import com.hooptap.sdkbrandclub.Models.HooptapRegister;
 import com.hooptap.sdkbrandclub.Models.HooptapUser;
 import com.hooptap.sdkbrandclub.Models.HooptapOptions;
 import com.hooptap.sdkbrandclub.Models.OptionsMapper;
-import com.hooptap.sdkbrandclub.Models.RegisterModel;
 import com.hooptap.sdkbrandclub.Models.ResponseError;
 import com.hooptap.sdkbrandclub.Utilities.Constants;
 import com.hooptap.sdkbrandclub.Utilities.ParseActions;
@@ -46,7 +47,7 @@ public abstract class HooptapApi {
      * @param info_user Informacion del usuario
      * @param cb        Callback que recibira la informacion de la peticion
      */
-    public static void registerUser(final RegisterModel info_user, final HooptapCallback<HooptapUser> cb) {
+    public static void registerUser(final HooptapRegister info_user, final HooptapCallback<HooptapUser> cb) {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
         data.put("api_key", Hooptap.getApiKey());
@@ -69,7 +70,6 @@ public abstract class HooptapApi {
                 HooptapUser user = ParseObjects.getObjectParse(jsonResponse, options);
 
                 cb.onSuccess(user);
-                //cb.onSuccess((JSONObject) ParseObjects.getObjectJson(output));
             }
 
             @Override
@@ -514,12 +514,12 @@ public abstract class HooptapApi {
      * @param user_id Identificador del usuario
      * @param cb      Callback que recibira la informacion de la peticion
      */
-    public static void getPoints(final String user_id, final HooptapCallback<JSONObject> cb) {
+    public static void getPoints(final String user_id, final HooptapCallback<HooptapPoint> cb) {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
-        data.put("token", Hooptap.getToken());
         data.put("api_key", Hooptap.getApiKey());
         data.put("user_id", user_id);
+        data.put("token", Hooptap.getToken());
 
         HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
             @Override
@@ -531,7 +531,10 @@ public abstract class HooptapApi {
         new Command("userUserIdPointsGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
             @Override
             public void onSuccess(Object output) {
-                cb.onSuccess((JSONObject) ParseObjects.getObjectJson(output));
+                JSONObject jsonResponse = ParseObjects.getObjectJson(output);
+                OptionsMapper options = setClassAndSubClasForMapper(Constants.POINT);
+                HooptapPoint point = ParseObjects.getObjectParse(jsonResponse, options);
+                cb.onSuccess(point);
             }
 
             @Override

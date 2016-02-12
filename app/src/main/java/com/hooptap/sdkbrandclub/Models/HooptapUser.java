@@ -1,7 +1,5 @@
 package com.hooptap.sdkbrandclub.Models;
 
-import com.hooptap.sdkbrandclub.Utilities.Log;
-
 /**
  * Created by carloscarrasco on 9/2/16.
  */
@@ -20,7 +18,6 @@ public class HooptapUser {
     }
 
     public void setUsername(String username) {
-        Log.e("setUsername", username+"  /");
         this.username = username;
     }
 

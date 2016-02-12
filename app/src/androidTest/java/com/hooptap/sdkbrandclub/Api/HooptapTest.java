@@ -1,4 +1,4 @@
-package com.hooptap.sdkbrandclub;
+package com.hooptap.sdkbrandclub.Api;
 
 import android.app.Activity;
 import android.app.Application;

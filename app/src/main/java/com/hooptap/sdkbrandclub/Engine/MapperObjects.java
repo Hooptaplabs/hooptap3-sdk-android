@@ -3,6 +3,7 @@ package com.hooptap.sdkbrandclub.Engine;
 import com.hooptap.sdkbrandclub.Models.HooptapGame;
 import com.hooptap.sdkbrandclub.Models.HooptapItem;
 import com.hooptap.sdkbrandclub.Models.HooptapLevel;
+import com.hooptap.sdkbrandclub.Models.HooptapPoint;
 import com.hooptap.sdkbrandclub.Models.HooptapRanking;
 import com.hooptap.sdkbrandclub.Models.HooptapListResponse;
 import com.hooptap.sdkbrandclub.Models.HooptapBadge;
@@ -30,6 +31,7 @@ public class MapperObjects {
         addMap(Constants.USER, HooptapUser.class);
         addMap(Constants.RANKING, HooptapRanking.class);
         addMap(Constants.LEVEL, HooptapLevel.class);
+        addMap(Constants.POINT, HooptapPoint.class);
         addMap(Constants.LIST, HooptapListResponse.class);
     }
 
