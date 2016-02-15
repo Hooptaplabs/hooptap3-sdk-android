@@ -1,5 +1,7 @@
 package com.hooptap.sdkbrandclub.Engine;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hooptap.sdkbrandclub.Deserializer.HooptapResponseDeserializer;
@@ -36,11 +38,12 @@ public class ParseObjects {
     }
 
     //Convierte el Object que devuelve el SDK de AWS en un JsonObject y coge lo que hay dentro de response
-    public static JSONObject getObjectJson(Object o) {
+    public static JSONObject convertObjectToJsonResponse(Object o) {
         try {
             Gson g = new Gson();
             String value = g.toJson(o);
-            return new JSONObject(value).getJSONObject("response");
+            JSONObject json = new JSONObject(value);
+            return json.getJSONObject("response");
         } catch (JSONException e) {
             e.printStackTrace();
             return null;

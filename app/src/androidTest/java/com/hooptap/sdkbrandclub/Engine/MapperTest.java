@@ -14,6 +14,7 @@ import com.hooptap.sdkbrandclub.Models.HooptapRanking;
 import com.hooptap.sdkbrandclub.Models.HooptapUser;
 import com.hooptap.sdkbrandclub.Utilities.Constants;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -24,13 +25,14 @@ import static org.junit.Assert.assertThat;
  */
 public class MapperTest extends InstrumentationTestCase {
 
-    public void createMapperObject() {
+    @Before
+    public void setUp(){
         new MapperObjects();
     }
 
     @Test
     public void testCheckBadgeClass() {
-        createMapperObject();
+       
         String nameClassToTest = HooptapBadge.class.getName();
         String nameClassMapper = MapperObjects.getClassFromKey(Constants.BADGE).getName();
 
@@ -39,7 +41,6 @@ public class MapperTest extends InstrumentationTestCase {
 
     @Test
     public void testCheckGoodClass() {
-        createMapperObject();
         String nameClassToTest = HooptapGood.class.getName();
         String nameClassMapper = MapperObjects.getClassFromKey(Constants.GOOD).getName();
 
@@ -48,7 +49,6 @@ public class MapperTest extends InstrumentationTestCase {
 
     @Test
     public void testCheckGameClass() {
-        createMapperObject();
         String nameClassToTest = HooptapGame.class.getName();
         String nameClassMapper = MapperObjects.getClassFromKey(Constants.GAME).getName();
 
@@ -57,7 +57,7 @@ public class MapperTest extends InstrumentationTestCase {
 
     @Test
     public void testCheckUserClass() {
-        createMapperObject();
+        
         String nameClassToTest = HooptapUser.class.getName();
         String nameClassMapper = MapperObjects.getClassFromKey(Constants.USER).getName();
 
@@ -66,7 +66,7 @@ public class MapperTest extends InstrumentationTestCase {
 
     @Test
     public void testCheckRankingClass() {
-        createMapperObject();
+        
         String nameClassToTest = HooptapRanking.class.getName();
         String nameClassMapper = MapperObjects.getClassFromKey(Constants.RANKING).getName();
 
@@ -74,7 +74,7 @@ public class MapperTest extends InstrumentationTestCase {
     }
     @Test
     public void testCheckLevelClass() {
-        createMapperObject();
+        
         String nameClassToTest = HooptapLevel.class.getName();
         String nameClassMapper = MapperObjects.getClassFromKey(Constants.LEVEL).getName();
 
@@ -82,7 +82,7 @@ public class MapperTest extends InstrumentationTestCase {
     }
     @Test
     public void testCheckPointsClass() {
-        createMapperObject();
+        
         String nameClassToTest = HooptapPoint.class.getName();
         String nameClassMapper = MapperObjects.getClassFromKey(Constants.POINT).getName();
 
@@ -90,7 +90,7 @@ public class MapperTest extends InstrumentationTestCase {
     }
     @Test
     public void testCheckListClass() {
-        createMapperObject();
+        
         String nameClassToTest = HooptapListResponse.class.getName();
         String nameClassMapper = MapperObjects.getClassFromKey(Constants.LIST).getName();
 
@@ -99,7 +99,7 @@ public class MapperTest extends InstrumentationTestCase {
 
     @Test
     public void testCheckOtherKeyClass() {
-        createMapperObject();
+        
         String nameClassToTest = HooptapItem.class.getName();
         String nameClassMapper = MapperObjects.getClassFromKey("Item").getName();
 

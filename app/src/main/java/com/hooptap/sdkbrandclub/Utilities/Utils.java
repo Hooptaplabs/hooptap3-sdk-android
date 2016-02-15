@@ -1,17 +1,11 @@
 package com.hooptap.sdkbrandclub.Utilities;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
-import android.util.*;
+import android.util.Base64;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.hooptap.sdkbrandclub.Api.Hooptap;
-import com.hooptap.sdkbrandclub.Models.HooptapItem;
-import com.hooptap.sdkbrandclub.Models.HooptapLevel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,11 +13,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by root on 22/12/15.
@@ -144,10 +134,10 @@ public class Utils {
 
     }
 
-    public static String loadJSONFromAsset(Context context) {
+    public static String loadJSONFromAsset(Context context, String nameJson) {
         String json = null;
         try {
-            InputStream is = context.getAssets().open("json.json");
+            InputStream is = context.getAssets().open(nameJson + ".json");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);

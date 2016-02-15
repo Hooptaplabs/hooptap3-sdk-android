@@ -52,4 +52,5 @@ public class HooptapListResponse<T> {
     public void setItemArray(ArrayList<T> mappedResponse) {
         this.items = mappedResponse;
     }
+
 }

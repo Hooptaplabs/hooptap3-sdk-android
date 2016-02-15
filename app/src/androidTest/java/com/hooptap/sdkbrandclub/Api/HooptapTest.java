@@ -1,23 +1,10 @@
 package com.hooptap.sdkbrandclub.Api;
 
-import android.app.Activity;
-import android.app.Application;
-import android.content.SharedPreferences;
-import android.test.ApplicationTestCase;
 import android.test.InstrumentationTestCase;
 
-import com.hooptap.sdkbrandclub.Api.Hooptap;
-import com.hooptap.sdkbrandclub.Utilities.Log;
-import com.hooptap.sdkbrandclub.Utilities.Utils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 

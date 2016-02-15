@@ -24,6 +24,11 @@ android {
         }
     }
 
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
 }
 
 
@@ -36,7 +41,7 @@ uploadArchives {
 }
 
 task jarTask(type: Jar) {
-    baseName="my-sdk-android"
+    baseName = "my-sdk-android"
     from 'src/main/java'
 }
 
@@ -90,6 +95,8 @@ android.libraryVariants.all { variant ->
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.google.android.gms:play-services-location:7.5.0'
+    androidTestCompile 'org.unitils:unitils-core:3.3'
+
 
     androidTestCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test:runner:0.4'

@@ -1,13 +1,15 @@
 package com.hooptap.sdkbrandclub.Engine;
 
+import android.util.Log;
+
+import com.hooptap.sdkbrandclub.Models.HooptapBadge;
 import com.hooptap.sdkbrandclub.Models.HooptapGame;
+import com.hooptap.sdkbrandclub.Models.HooptapGood;
 import com.hooptap.sdkbrandclub.Models.HooptapItem;
 import com.hooptap.sdkbrandclub.Models.HooptapLevel;
+import com.hooptap.sdkbrandclub.Models.HooptapListResponse;
 import com.hooptap.sdkbrandclub.Models.HooptapPoint;
 import com.hooptap.sdkbrandclub.Models.HooptapRanking;
-import com.hooptap.sdkbrandclub.Models.HooptapListResponse;
-import com.hooptap.sdkbrandclub.Models.HooptapBadge;
-import com.hooptap.sdkbrandclub.Models.HooptapGood;
 import com.hooptap.sdkbrandclub.Models.HooptapUser;
 import com.hooptap.sdkbrandclub.Utilities.Constants;
 
@@ -40,6 +42,7 @@ public class MapperObjects {
     }
 
     public static Class getClassFromKey(String key) {
+        Log.d("getClassFromKey", key);
         if (mapper.containsKey(key))
             return mapper.get(key);
         else

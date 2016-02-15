@@ -1,0 +1,26 @@
+{
+  "code": "0000",
+  "message": "Success",
+  "time": "2016-02-15T08:54:58.933Z",
+  "timestamp": 1455526498933,
+  "response": {
+	"items": [
+	  {
+		"_id": "557019c2a5a27f5815eb75d9",
+		"name": "Burger Lover",
+		"desc": "Mmmmm Tasty!",
+		"image_on": "https://hooptap.s3.amazonaws.com/images/55ba09e9efef5aa001428248/14383482067410.png",
+		"image_off": "https://hooptap.s3.amazonaws.com/images/55ba09e9efef5aa001428248/14383482067410.png",
+		"itemType": "Badge",
+		"progress": 0
+	  }
+	],
+	"paging": {
+	  "current_page": 1,
+	  "page_size": 10,
+	  "total_pages": 1,
+	  "item_count": 1
+	},
+	"next": "?page_number=2"
+  }
+}

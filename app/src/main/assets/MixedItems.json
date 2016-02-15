@@ -1,0 +1,89 @@
+{
+	"code": "0000",
+	"message": "Success",
+	"time": "2016-02-08T10:54:06.906Z",
+	"timestamp": 1454928846906,
+	"response": {
+		"items": [{
+			"_id": "5579aaab16721c325c6ae396",
+			"name": "How much does it cost??",
+			"image": "https://hooptap.s3.amazonaws.com/images/game/14333240813430.jpg",
+			"end_msgOK": "Great! You're right!",
+			"end_msgNO": "Oops! No!",
+			"url_game": "https://comun-ht.s3.amazonaws.com/html5/MatchWordsWithPictures/game/index.html?bucket=hooptap&configId=5579aaab16721c325c6ae396&app=46576686f6f707461702e627",
+			"product": "557019c2a5a27f5815eb75d7",
+			"creation_date": "2015-06-02T10:43:54.377Z",
+			"min_points": 4,
+			"orientation": "portrait",
+			"has_attempts": false,
+			"extra_data": "{\"grid_size\":\"1\",\"has_instructions\":\"0\",\"subtype\":\"html5\",\"game_bg\":\"https://hooptap.s3.amazonaws.com/images/14332418315830.jpg\"}",
+			"points": 0,
+			"lock_end_date": "2030-01-01T00:00:00.000Z",
+			"lock_start_date": "2015-06-02T10:43:00.000Z",
+			"lock_type": 0,
+			"container": ["5579acb416721c325c6ae397"],
+			"game_type": "matchwordswithpictures",
+			"itemType": "Game",
+			"url_detail": "http://api.hooptap.com/api/v1.1.0/item/556d88ea1af5e7135d20a019",
+			"exclusive": false,
+			"state": true,
+			"date_end": "2015-06-30T18:00:00.000Z",
+			"date_start": "2015-05-31T18:00:00.000Z",
+			"has_validation": false,
+			"instructions": "",
+			"desc": "asdasd",
+			"__v": 0,
+			"segments": ["DEFAULT"],
+			"locked": false,
+			"image2": ""
+		}, {
+			"_id": "55702655a5a27f5815eb766d",
+			"name": "Un pedazo de viaje",
+			"image": "https://hooptap.s3.amazonaws.com/images/good/14334131927590.jpg",
+			"desc": "A las Islas Canarias",
+			"product": "557019c2a5a27f5815eb75d7",
+			"creation_date": "2015-06-04T10:20:05.040Z",
+			"price": [{
+				"reward": "5571c80a3de8545f1f29cfd7",
+				"_id": "5582d7d832862a450a1e34de",
+				"value": 1
+			}],
+			"code_type": "qr",
+			"base_code": "",
+			"url_detail": "http://api.hooptap.com/api/v1.1.0/good/55702655a5a27f5815eb766d",
+			"stock_per_user_time": {
+				"interval": "hour",
+				"count": 1
+			},
+			"finite_stock_per_user_time": false,
+			"finite_stock_per_user": false,
+			"stock_time": {
+				"count": 1
+			},
+			"finite_stock_time": false,
+			"finite_stock": false,
+			"date_end": "2015-08-22T10:19:00.000Z",
+			"date_start": "2015-05-31T10:19:00.000Z",
+			"itemType": "Good",
+			"enabled": true,
+			"__v": 0,
+			"segments": ["ALL"],
+			"shop_redeem": false
+            },{
+                  "_id": "5576bd06d97c19a7424a73ce",
+                  "name": "Player",
+                  "desc": "Play your first game: once you start, you won’t stop..",
+                  "image_on": "http://hooptap.s3.amazonaws.com/badges/1jugon.png",
+                  "image_off": "http://hooptap.s3.amazonaws.com/badges/0jugon.png",
+                  "itemType": "Badge",
+                  "progress": 0
+                  }],
+		"paging": {
+			"current_page": 1,
+			"page_size": 5,
+			"total_pages": 13,
+			"item_count": 65
+		},
+		"next": "http://api.dev.hooptap.com:8080/api/v2.0/User/565c120fb531922d1ca5646e/item?page_number=2"
+	}
+}
