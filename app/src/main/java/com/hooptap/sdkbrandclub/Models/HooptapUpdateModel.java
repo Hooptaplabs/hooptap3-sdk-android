@@ -4,14 +4,14 @@ package com.hooptap.sdkbrandclub.Models;
  * Created by carloscarrasco on 12/2/16.
  */
 
-import com.hooptap.brandclub.model.UserModel;
+import com.hooptap.brandclub.model.UserUpdateModel;
 
 import java.math.BigDecimal;
 
 /**
  * Created by root on 21/12/15.
  */
-public class HooptapRegister extends UserModel {
+public class HooptapUpdateModel extends UserUpdateModel {
 
     public transient String username;
     public transient String surname;
@@ -21,7 +21,6 @@ public class HooptapRegister extends UserModel {
     public transient String phone_number;
     public transient String image;
     public transient BigDecimal gender;
-    public transient String password;
 
     public String getUsername() {
         username = super.getUsername();
@@ -93,6 +92,7 @@ public class HooptapRegister extends UserModel {
         super.setImage(image);
     }
 
+
     public BigDecimal getGender() {
         gender = super.getGender();
         return super.getGender();
@@ -101,16 +101,6 @@ public class HooptapRegister extends UserModel {
     public void setGender(BigDecimal gender) {
         this.gender = gender;
         super.setGender(gender);
-    }
-
-    public String getPassword() {
-        password = super.getPassword();
-        return super.getPassword();
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-        super.setPassword(password);
     }
 
 }

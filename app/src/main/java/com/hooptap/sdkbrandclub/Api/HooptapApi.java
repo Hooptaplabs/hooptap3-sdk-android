@@ -17,6 +17,7 @@ import com.hooptap.sdkbrandclub.Models.HooptapOptions;
 import com.hooptap.sdkbrandclub.Models.HooptapPoint;
 import com.hooptap.sdkbrandclub.Models.HooptapRanking;
 import com.hooptap.sdkbrandclub.Models.HooptapRegister;
+import com.hooptap.sdkbrandclub.Models.HooptapUpdateModel;
 import com.hooptap.sdkbrandclub.Models.HooptapUser;
 import com.hooptap.sdkbrandclub.Models.OptionsMapper;
 import com.hooptap.sdkbrandclub.Models.ResponseError;
@@ -61,6 +62,47 @@ public abstract class HooptapApi {
         };
 
         new Command("userPost", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
+            @Override
+            public void onSuccess(Object output) {
+                Utils.setToken(output);
+
+                JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
+                OptionsMapper options = setClassAndSubClasForMapper(Constants.USER);
+                HooptapUser user = ParseObjects.getObjectParse(jsonResponse, options);
+
+                cb.onSuccess(user);
+            }
+
+            @Override
+            public void onError(ResponseError var) {
+                cb.onError(var);
+            }
+        });
+
+    }
+
+    /**
+     * UPDATE USER
+     *
+     * @param info_user Informacion del usuario
+     * @param cb        Callback que recibira la informacion de la peticion
+     */
+    public static void updateUser(final String user_id, final HooptapUpdateModel info_user, final HooptapCallback<HooptapUser> cb) {
+
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("token", Hooptap.getToken());
+        data.put("id", user_id);
+        data.put("info_user", info_user);
+
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                updateUser(user_id, info_user, cb);
+            }
+        };
+
+        new Command("userIdPut", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
             @Override
             public void onSuccess(Object output) {
                 Utils.setToken(output);
@@ -137,10 +179,10 @@ public abstract class HooptapApi {
         interaction.setActionData(interaction_data);
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
-        data.put("user_id", user_id);
         data.put("accion", accion);
         data.put("api_key", Hooptap.getApiKey());
         data.put("token", Hooptap.getToken());
+        data.put("id", user_id);
         data.put("interaction_data", interaction);
 
         HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
@@ -150,7 +192,7 @@ public abstract class HooptapApi {
             }
         };
 
-        new Command("userUserIdActionActionNamePost", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
+        new Command("userIdActionActionNamePost", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
             @Override
             public void onSuccess(Object output) {
                 cb.onSuccess((JSONObject) ParseObjects.convertObjectToJsonResponse(output));
@@ -236,9 +278,8 @@ public abstract class HooptapApi {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
         data.put("api_key", Hooptap.getApiKey());
-        data.put("user_id", user_id);
         data.put("token", Hooptap.getToken());
-        //data.put("options", options);
+        data.put("id", user_id);
 
         HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
             @Override
@@ -246,7 +287,7 @@ public abstract class HooptapApi {
                 getBadges(user_id, options, cb);
             }
         };
-        new Command("userUserIdBadgesGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
+        new Command("userIdBadgesGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
             @Override
             public void onSuccess(Object output) {
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
@@ -272,8 +313,8 @@ public abstract class HooptapApi {
 
         LinkedHashMap<String, String> data = new LinkedHashMap<>();
         data.put("api_key", Hooptap.getApiKey());
-        data.put("user_id", user_id);
         data.put("token", Hooptap.getToken());
+        data.put("id", user_id);
 
         HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
             @Override
@@ -282,7 +323,7 @@ public abstract class HooptapApi {
             }
         };
 
-        new Command("userUserIdGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
+        new Command("userIdGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
             @Override
             public void onSuccess(Object output) {
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
@@ -308,10 +349,10 @@ public abstract class HooptapApi {
     public static void getItemDetail(final String user_id, final String item_id, final HooptapCallback<HooptapItem> cb) {
 
         LinkedHashMap<String, String> data = new LinkedHashMap<>();
-        data.put("user_id", user_id);
         data.put("api_key", Hooptap.getApiKey());
         data.put("item_id", item_id);
         data.put("token", Hooptap.getToken());
+        data.put("id", user_id);
 
         HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
             @Override
@@ -320,7 +361,7 @@ public abstract class HooptapApi {
             }
         };
 
-        new Command("userUserIdItemItemIdGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
+        new Command("userIdItemItemIdGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
             @Override
             public void onSuccess(Object output) {
                 try {
@@ -352,9 +393,8 @@ public abstract class HooptapApi {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
         data.put("api_key", Hooptap.getApiKey());
-        data.put("user_id", user_id);
         data.put("token", Hooptap.getToken());
-        //data.put("options", options);
+        data.put("id", user_id);
 
         HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
             @Override
@@ -363,7 +403,7 @@ public abstract class HooptapApi {
             }
         };
 
-        new Command("userUserIdItemGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
+        new Command("userIdItemGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
             @Override
             public void onSuccess(Object output) {
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
@@ -391,8 +431,8 @@ public abstract class HooptapApi {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
         data.put("api_key", Hooptap.getApiKey());
-        data.put("userId", user_id);
         data.put("token", Hooptap.getToken());
+        data.put("id", user_id);
 
         HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
             @Override
@@ -401,7 +441,7 @@ public abstract class HooptapApi {
             }
         };
 
-        new Command("userUserIdLevelGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
+        new Command("userIdLevelGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
             @Override
             public void onSuccess(Object output) {
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
@@ -471,9 +511,9 @@ public abstract class HooptapApi {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
         data.put("reward_id", reward_id);
-        data.put("user_id", user_id);
         data.put("token", Hooptap.getToken());
         data.put("api_key", Hooptap.getApiKey());
+        data.put("id", user_id);
 
         HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
             @Override
@@ -482,7 +522,7 @@ public abstract class HooptapApi {
             }
         };
 
-        new Command("userUserIdRewardRewardIdLevelGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
+        new Command("userIdRewardRewardIdLevelGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
             @Override
             public void onSuccess(Object output) {
                 cb.onSuccess((JSONObject) ParseObjects.convertObjectToJsonResponse(output));
@@ -506,8 +546,8 @@ public abstract class HooptapApi {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
         data.put("api_key", Hooptap.getApiKey());
-        data.put("user_id", user_id);
         data.put("token", Hooptap.getToken());
+        data.put("id", user_id);
 
         HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
             @Override
@@ -516,7 +556,7 @@ public abstract class HooptapApi {
             }
         };
 
-        new Command("userUserIdPointsGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
+        new Command("userIdPointsGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
             @Override
             public void onSuccess(Object output) {
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
@@ -578,10 +618,10 @@ public abstract class HooptapApi {
     public static void getRankingDetail(final String user_id, final String ranking_id, final HooptapOptions options, final HooptapCallback<HooptapRanking> cb) {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
-        data.put("userId", user_id);
         data.put("api_key", Hooptap.getApiKey());
+        data.put("rankingId", ranking_id);
         data.put("token", Hooptap.getToken());
-        data.put("id", ranking_id);
+        data.put("id", user_id);
 
         HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
             @Override
@@ -590,7 +630,7 @@ public abstract class HooptapApi {
             }
         };
 
-        new Command("userUserIdRankingIdGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
+        new Command("userIdRankingRankingIdGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
             @Override
             public void onSuccess(Object output) {
 
@@ -654,12 +694,12 @@ public abstract class HooptapApi {
      * @param options Opciones de configuracion
      * @param cb      Callback que recibira la informacion de la peticion
      */
-    public static void getUserFeed(final String user_id, final HooptapOptions options, final HooptapCallback<JSONObject> cb) {
+    public static void getUserFeed(final String user_id, final HooptapOptions options, final HooptapCallback<HooptapListResponse> cb) {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
         data.put("api_key", Hooptap.getApiKey());
-        data.put("user_id", user_id);
         data.put("token", Hooptap.getToken());
+        data.put("id", user_id);
 
         HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
             @Override
@@ -668,10 +708,14 @@ public abstract class HooptapApi {
             }
         };
 
-        new Command("userUserIdFeedGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
+        new Command("userIdFeedGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
             @Override
             public void onSuccess(Object output) {
-                cb.onSuccess((JSONObject) ParseObjects.convertObjectToJsonResponse(output));
+                JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
+                OptionsMapper options = setClassAndSubClasForMapper(Constants.LIST);
+                HooptapListResponse listResponse = ParseObjects.getObjectParse(jsonResponse, options);
+                cb.onSuccess(listResponse);
+                //cb.onSuccess((JSONObject) ParseObjects.convertObjectToJsonResponse(output));
             }
 
             @Override
@@ -692,8 +736,8 @@ public abstract class HooptapApi {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
         data.put("api_key", Hooptap.getApiKey());
-        data.put("user_id", user_id);
         data.put("token", Hooptap.getToken());
+        data.put("id", user_id);
 
         HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
             @Override
@@ -702,7 +746,7 @@ public abstract class HooptapApi {
             }
         };
 
-        new Command("userUserIdRewardCountGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
+        new Command("userIdRewardCountGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
             @Override
             public void onSuccess(Object output) {
                 cb.onSuccess((JSONObject) ParseObjects.convertObjectToJsonResponse(output));

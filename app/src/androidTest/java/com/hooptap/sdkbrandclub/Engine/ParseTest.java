@@ -23,9 +23,6 @@ import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.util.ArrayList;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.beans.SamePropertyValuesAs.samePropertyValuesAs;
-import static org.junit.Assert.assertThat;
 import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 
 /**
@@ -40,7 +37,7 @@ public class ParseTest extends InstrumentationTestCase {
 
     @Test
     public void testConvertObjectAWSToJsonResponse() {
-        LinkedTreeMap objectAWSToParse = generateResponseLikeAWS(getJsonFromAssets("Badges"));
+        LinkedTreeMap objectAWSToParse = generateResponseLikeAWS(getJsonFromAssets("Badge"));
         JSONObject parsedObject = ParseObjects.convertObjectToJsonResponse(objectAWSToParse);
         try {
             JSONAssert.assertEquals(parsedObject.toString(), getJsonFromAssets("BadgesResponse"), false);
@@ -87,7 +84,7 @@ public class ParseTest extends InstrumentationTestCase {
         array.add(badge);
         htListResponseStatic.setItemArray(array);
 
-        LinkedTreeMap objectAWSToParse = generateResponseLikeAWS(getJsonFromAssets("Badges"));
+        LinkedTreeMap objectAWSToParse = generateResponseLikeAWS(getJsonFromAssets("Badge"));
         JSONObject parsedObject = ParseObjects.convertObjectToJsonResponse(objectAWSToParse);
 
         OptionsMapper options = new OptionsMapper();

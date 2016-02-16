@@ -2,55 +2,65 @@ package com.hooptap.sdkbrandclub.Engine;
 
 import android.test.InstrumentationTestCase;
 
-import com.google.gson.Gson;
-import com.google.gson.internal.LinkedTreeMap;
-import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
-import com.hooptap.sdkbrandclub.Interfaces.HooptapCallbackRetry;
-import com.hooptap.sdkbrandclub.Models.HooptapBadge;
-import com.hooptap.sdkbrandclub.Models.HooptapListResponse;
-import com.hooptap.sdkbrandclub.Models.OptionsMapper;
-import com.hooptap.sdkbrandclub.Models.ResponseError;
-import com.hooptap.sdkbrandclub.Utilities.Constants;
-import com.hooptap.sdkbrandclub.Utilities.Utils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.skyscreamer.jsonassert.JSONAssert;
 
-import java.util.ArrayList;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 
-import static org.mockito.Mockito.when;
-import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Created by carloscarrasco on 5/2/16.
  */
 public class CommandTest extends InstrumentationTestCase {
 
-    @Before
-    public void setUp(){
-        new MapperObjects();
+    private static <T> T invokeStaticMethod(Class targetClass, String methodName, Class[] argClasses,
+                                            Object[] argObjects) throws InvocationTargetException {
+        try {
+            Method method = targetClass.getDeclaredMethod(methodName, argClasses);
+            method.setAccessible(true);
+
+            Constructor constructor = targetClass.getDeclaredConstructor();
+            constructor.setAccessible(true);
+            return (T) method.invoke(constructor.newInstance(), argObjects);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Test
-    public void comand(){
-        Command comand = new Command("userUserIdBadgesGet", null, null);
+    public void testGetParametersOfReflectionMethod() {
 
-        comand.executeMethod(new HooptapCallback<Object>() {
-            @Override
-            public void onSuccess(Object output) {
+        Class[] argClasses = {String.class};
+        Object[] argObjects = {"userUserIdBadgesGet"};
 
-            }
+        try {
+            Class[] classArray = invokeStaticMethod(Command.class, "getParametersOfReflectionMethod", argClasses, argObjects);
+            assertThat(classArray[0].getCanonicalName(), is("java.lang.String"));
+            assertThat(classArray.length, is(3));
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
 
-            @Override
-            public void onError(ResponseError var) {
-
-            }
-        });
     }
+
+    @Test
+    public void testMethodByReflection() {
+        Class[] argClasses = {String.class, Class[].class};
+        Class[] clas = new Class[]{String.class, String.class, String.class};
+        Object[] argObjects = {"userUserIdBadgesGet", clas};
+
+        try {
+            Method method = invokeStaticMethod(Command.class, "getMethodByReflection", argClasses, argObjects);
+            assertThat(method.getName(), is("userUserIdBadgesGet"));
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

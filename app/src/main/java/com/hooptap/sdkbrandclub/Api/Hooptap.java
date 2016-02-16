@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.amazonaws.mobileconnectors.apigateway.ApiClientFactory;
-import com.hooptap.brandclub.HooptapApivClient;
+import com.hooptap.brandclub.HooptapVClient;
 import com.hooptap.sdkbrandclub.Engine.MapperObjects;
 import com.hooptap.sdkbrandclub.Utilities.TinyDB;
 import com.hooptap.sdkbrandclub.Utilities.Utils;
@@ -22,7 +22,7 @@ import org.json.JSONObject;
  */
 
 public class Hooptap {
-    private static HooptapApivClient sClientService;
+    private static HooptapVClient sClientService;
     public static Context context;
     private static Boolean htEnableDebug;
     private static TinyDB tinydb;
@@ -30,7 +30,7 @@ public class Hooptap {
     /**
      * @return El objeto Hooptap para poder utilizarlo posteriormente
      */
-    public static HooptapApivClient getClient() {
+    public static HooptapVClient getClient() {
         return sClientService;
     }
 
@@ -111,7 +111,7 @@ public class Hooptap {
         public Hooptap build() {
             if (sClientService == null) {
                 apiClientFactory = new ApiClientFactory();
-                sClientService = apiClientFactory.build(HooptapApivClient.class);
+                sClientService = apiClientFactory.build(HooptapVClient.class);
                 //Inicializo el mapeador
                 new MapperObjects();
             }
