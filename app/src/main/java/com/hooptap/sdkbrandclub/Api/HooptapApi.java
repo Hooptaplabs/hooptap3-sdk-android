@@ -51,6 +51,7 @@ public abstract class HooptapApi {
     public static void registerUser(final HooptapRegister info_user, final HooptapCallback<HooptapUser> cb) {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        Log.e("APIKEY",Hooptap.getApiKey()+" /");
         data.put("api_key", Hooptap.getApiKey());
         data.put("info_user", info_user);
 

@@ -9,7 +9,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.hooptap.sdkbrandclub.Engine.MapperObjects;
+import com.hooptap.sdkbrandclub.Models.HooptapLevel;
 import com.hooptap.sdkbrandclub.Models.HooptapListResponse;
+import com.hooptap.sdkbrandclub.Models.HooptapReward;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -17,12 +19,12 @@ import java.util.ArrayList;
 /**
  * Created by carloscarrasco on 9/2/16.
  */
-public class HooptapResponseDeserializer<T> implements JsonDeserializer<HooptapListResponse> {
+public class HooptapRewardDeserializer<T> implements JsonDeserializer<HooptapListResponse> {
 
     private String itemSubtype;
     private String itemType;
 
-    public HooptapResponseDeserializer(String subtype) {
+    public HooptapRewardDeserializer(String subtype) {
         this.itemSubtype = subtype;
     }
 
@@ -30,23 +32,25 @@ public class HooptapResponseDeserializer<T> implements JsonDeserializer<HooptapL
     public HooptapListResponse deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context)
             throws JsonParseException {
 
-        HooptapListResponse htResponse = new HooptapListResponse();
+        HooptapReward reward = new HooptapReward();
 
         final JsonObject jsonObject = json.getAsJsonObject();
-        //Parseo la parte de paginacion
-        if (jsonObject.getAsJsonObject("paging") != null) {
-            JsonObject paging = jsonObject.getAsJsonObject("paging");
 
-            final int current_page = paging.get("current_page").getAsInt();
-            final int page_size = paging.get("page_size").getAsInt();
-            final int total_pages = paging.get("total_pages").getAsInt();
-            final int item_count = paging.get("item_count").getAsInt();
+        reward.setIdentificator(jsonObject.get("_id").getAsString());
+        reward.setReason(jsonObject.get("reason").getAsString());
+        reward.setReason_type(jsonObject.get("reason_type").getAsString());
 
-            htResponse.setItem_count(item_count);
-            htResponse.setCurrent_page(current_page);
-            htResponse.setTotal_pages(total_pages);
-            htResponse.setPage_size(page_size);
-        }
+        HooptapLevel item = new HooptapLevel();
+        item.setDescription("desc");
+        item.setMin_points(5);
+        item.setNumber(1);
+        item.setImage("https://hooptap.s3.amazonaws.com/images/560914db4871f62672e3ecff/item/14437809765700.png");
+        item.setName("Conductor ocasional");
+        item.setIdentificator("56b0a1d169b4d2970a68a580");
+        reward.setReward(item);
+
+
+
         Log.e("DESERIALIZER0", jsonObject + " /");
         JsonArray items = jsonObject.getAsJsonArray("items");
         Log.e("DESERIALIZER", items+" /");

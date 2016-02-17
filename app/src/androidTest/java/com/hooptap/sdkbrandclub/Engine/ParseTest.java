@@ -1,28 +1,27 @@
 package com.hooptap.sdkbrandclub.Engine;
 
 import android.test.InstrumentationTestCase;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
-import com.hooptap.sdkbrandclub.Api.HooptapApi;
 import com.hooptap.sdkbrandclub.Models.HooptapBadge;
+import com.hooptap.sdkbrandclub.Models.HooptapLevel;
 import com.hooptap.sdkbrandclub.Models.HooptapListResponse;
+import com.hooptap.sdkbrandclub.Models.HooptapReward;
 import com.hooptap.sdkbrandclub.Models.OptionsMapper;
 import com.hooptap.sdkbrandclub.Utilities.Constants;
 import com.hooptap.sdkbrandclub.Utilities.Utils;
-
-import junit.framework.Assert;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.util.ArrayList;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 
 /**
@@ -31,7 +30,7 @@ import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEqua
 public class ParseTest extends InstrumentationTestCase {
 
     @Before
-    public void setUp(){
+    public void setUp() {
         new MapperObjects();
     }
 
@@ -63,7 +62,7 @@ public class ParseTest extends InstrumentationTestCase {
     }
 
     @Test
-    public void testObjectParseToBadgesList(){
+    public void testObjectParseToBadgesList() {
 
         HooptapListResponse htListResponseStatic = new HooptapListResponse();
         htListResponseStatic.setCurrent_page(1);
@@ -97,7 +96,7 @@ public class ParseTest extends InstrumentationTestCase {
     }
 
     @Test
-    public void testObjectParseToBadgesDetails(){
+    public void testObjectParseToBadgesDetails() {
 
         HooptapBadge badge = new HooptapBadge();
         badge.setIdentificator("557019c2a5a27f5815eb75d9");
@@ -119,12 +118,60 @@ public class ParseTest extends InstrumentationTestCase {
 
     }
 
+    @Test
+    public void testObjectParseToRewardListCheckingOnlyId() {
+
+        HooptapReward reward = new HooptapReward();
+        reward.setIdentificator("56b374b16abe38f4578734dc");
+
+        LinkedTreeMap objectAWSToParse = generateResponseLikeAWS(getJsonFromAssets("Feed"));
+        JSONObject parsedObject = ParseObjects.convertObjectToJsonResponse(objectAWSToParse);
+
+        OptionsMapper options = new OptionsMapper();
+        options.setClassName(Constants.LIST);
+        options.setSubClassName(Constants.REWARD);
+
+        HooptapListResponse htListResponse = ParseObjects.getObjectParse(parsedObject, options);
+        assertThat(reward.getIdentificator(), is(((HooptapReward) htListResponse.getItemArray().get(0)).getIdentificator()));
+        //assertReflectionEquals(htListResponseStatic, htListResponse);
+
+    }
+
+    @Test
+    public void testObjectParseToRewardListCheckingObjectComplete() {
+
+        HooptapReward reward = new HooptapReward();
+        reward.setIdentificator("56b374b16abe38f4578734dc");
+        reward.setReason("level_up");
+        reward.setReason_type("level");
+        HooptapLevel item = new HooptapLevel();
+        item.setDescription("desc");
+        item.setMin_points(5);
+        item.setNumber(1);
+        item.setImage("https://hooptap.s3.amazonaws.com/images/560914db4871f62672e3ecff/item/14437809765700.png");
+        item.setName("Conductor ocasional");
+        item.setIdentificator("56b0a1d169b4d2970a68a580");
+        reward.setReward(item);
+
+        LinkedTreeMap objectAWSToParse = generateResponseLikeAWS(getJsonFromAssets("Feed"));
+        JSONObject parsedObject = ParseObjects.convertObjectToJsonResponse(objectAWSToParse);
+
+        OptionsMapper options = new OptionsMapper();
+        options.setClassName(Constants.LIST);
+        options.setSubClassName(Constants.REWARD);
+
+        HooptapListResponse htListResponse = ParseObjects.getObjectParse(parsedObject, options);
+        assertReflectionEquals(reward, is(((HooptapReward) htListResponse.getItemArray().get(0))));
+        //assertReflectionEquals(htListResponseStatic, htListResponse);
+
+    }
+
     public String getJsonFromAssets(String nameJson) {
         String jsonString = Utils.loadJSONFromAsset(getInstrumentation().getTargetContext(), nameJson);
         return jsonString;
     }
 
-    public LinkedTreeMap generateResponseLikeAWS(String jsonString){
+    public LinkedTreeMap generateResponseLikeAWS(String jsonString) {
         Gson g = new Gson();
         return g.fromJson(jsonString, LinkedTreeMap.class);
     }

@@ -1,11 +1,11 @@
 package com.hooptap.sdkbrandclub.Engine;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.hooptap.sdkbrandclub.Deserializer.HooptapResponseDeserializer;
+import com.hooptap.sdkbrandclub.Deserializer.HooptapListResponseDeserializer;
+import com.hooptap.sdkbrandclub.Deserializer.HooptapRewardDeserializer;
 import com.hooptap.sdkbrandclub.Models.HooptapListResponse;
+import com.hooptap.sdkbrandclub.Models.HooptapReward;
 import com.hooptap.sdkbrandclub.Models.OptionsMapper;
 
 import org.json.JSONException;
@@ -22,7 +22,8 @@ public class ParseObjects {
             final GsonBuilder gsonBuilder = new GsonBuilder();
             //Parseamos de forma manual la clase HooptapListResponse ya que el array puede contener varios tipos
             //Los tipos pueden venir dentro de su JSON como itemType o si no vienen usaremos el que nos llega en options
-            gsonBuilder.registerTypeAdapter(HooptapListResponse.class, new HooptapResponseDeserializer<T>(options.getSubClassName()));
+            gsonBuilder.registerTypeAdapter(HooptapListResponse.class, new HooptapListResponseDeserializer<T>(options.getSubClassName()));
+            gsonBuilder.registerTypeAdapter(HooptapReward.class, new HooptapRewardDeserializer<>(options.getSubClassName()));
             final Gson gson = gsonBuilder.create();
 
             String itemNameClass = options.getClassName();

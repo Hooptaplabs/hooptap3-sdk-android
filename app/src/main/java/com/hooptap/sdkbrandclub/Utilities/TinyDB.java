@@ -25,7 +25,7 @@ public class TinyDB {
     private String lastImagePath = "";
 
     public TinyDB(Context appContext) {
-        preferences = PreferenceManager.getDefaultSharedPreferences(appContext);
+        preferences = appContext.getSharedPreferences("@HTApiAWS", Context.MODE_PRIVATE);
     }
 
 

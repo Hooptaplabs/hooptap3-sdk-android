@@ -116,6 +116,7 @@ public class Command<T> {
 
     private void generateErrorWithCallback(Exception exception) {
         if (exception != null && exception.getCause() instanceof ApiClientException) {
+            Log.d("generateErro", "ApiClientException ");
             ResponseError error = getError(((ApiClientException) exception.getCause()).getErrorMessage());
             if (error != null) {
                 asyncRespone.onError(getError(((ApiClientException) exception.getCause()).getErrorMessage()));
@@ -123,12 +124,13 @@ public class Command<T> {
                 cbRetry.retry();
             }
         } else {
+            Log.d("generateErro", "NO ApiClientException ");
             ResponseError responseError = new ResponseError();
-            if (exception !=null){
+            if (exception != null) {
                 exception.printStackTrace();
-                Log.d("EXCEP", exception.getMessage()+" /");
+                Log.d("EXCEP", exception.getMessage() + " /" + exception);
                 responseError.setReason(exception.getLocalizedMessage());
-            }else{
+            } else {
                 responseError.setReason("Unknow Error");
             }
             asyncRespone.onError(responseError);

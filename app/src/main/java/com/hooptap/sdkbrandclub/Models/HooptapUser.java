@@ -10,6 +10,7 @@ public class HooptapUser {
     private String email;
     private String phone_number;
     private String image;
+    private String postal_code;
     private int gender;
     private String _id;
 
@@ -75,5 +76,13 @@ public class HooptapUser {
 
     public void set_id(String _id) {
         this._id = _id;
+    }
+
+    public String getPostal_code() {
+        return postal_code;
+    }
+
+    public void setPostal_code(String postal_code) {
+        this.postal_code = postal_code;
     }
 }
