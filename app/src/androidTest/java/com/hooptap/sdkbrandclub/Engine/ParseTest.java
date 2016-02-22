@@ -161,8 +161,8 @@ public class ParseTest extends InstrumentationTestCase {
         options.setSubClassName(Constants.REWARD);
 
         HooptapListResponse htListResponse = ParseObjects.getObjectParse(parsedObject, options);
-        assertReflectionEquals(reward, is(((HooptapReward) htListResponse.getItemArray().get(0))));
-        //assertReflectionEquals(htListResponseStatic, htListResponse);
+
+        assertReflectionEquals(reward.getReward(), ((HooptapReward)htListResponse.getItemArray().get(0)).getReward());
 
     }
 

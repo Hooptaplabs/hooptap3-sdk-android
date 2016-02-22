@@ -3,12 +3,14 @@ package com.hooptap.sdkbrandclub.Api;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.hooptap.brandclub.model.InputActionDoneModel;
 import com.hooptap.brandclub.model.InputLoginModel;
+import com.hooptap.brandclub.model.InputRenewTokenModel;
 import com.hooptap.sdkbrandclub.Engine.Command;
 import com.hooptap.sdkbrandclub.Engine.ParseObjects;
 import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
 import com.hooptap.sdkbrandclub.Interfaces.HooptapCallbackRetry;
-import com.hooptap.sdkbrandclub.Models.HooptapAccion;
+import com.hooptap.sdkbrandclub.Models.HooptapAction;
 import com.hooptap.sdkbrandclub.Models.HooptapFilter;
 import com.hooptap.sdkbrandclub.Models.HooptapItem;
 import com.hooptap.sdkbrandclub.Models.HooptapLevel;
@@ -51,7 +53,7 @@ public abstract class HooptapApi {
     public static void registerUser(final HooptapRegister info_user, final HooptapCallback<HooptapUser> cb) {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
-        Log.e("APIKEY",Hooptap.getApiKey()+" /");
+        Log.e("APIKEY", Hooptap.getApiKey() + " /");
         data.put("api_key", Hooptap.getApiKey());
         data.put("info_user", info_user);
 
@@ -174,17 +176,17 @@ public abstract class HooptapApi {
      * @param accion           Nombre de la accion
      * @param cb               Callback que recibira la informacion de la peticion
      */
-    public static void doAction(final String user_id, final String interaction_data, final String accion, final HooptapCallback<JSONObject> cb) {
+    public static void doAction(final String user_id, final String interaction_data, final String accion, final HooptapCallback<HooptapAction> cb) {
 
-        HooptapAccion interaction = new HooptapAccion();
+        InputActionDoneModel interaction = new InputActionDoneModel();
         interaction.setActionData(interaction_data);
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
-        data.put("accion", accion);
+        data.put("actionName", accion);
         data.put("api_key", Hooptap.getApiKey());
         data.put("token", Hooptap.getToken());
         data.put("id", user_id);
-        data.put("interaction_data", interaction);
+        data.put("actionData", interaction);
 
         HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
             @Override
@@ -196,7 +198,10 @@ public abstract class HooptapApi {
         new Command("userIdActionActionNamePost", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
             @Override
             public void onSuccess(Object output) {
-                cb.onSuccess((JSONObject) ParseObjects.convertObjectToJsonResponse(output));
+                JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
+                OptionsMapper options = setClassAndSubClasForMapper(Constants.ACTION);
+                HooptapAction action = ParseObjects.getObjectParse(jsonResponse, options);
+                cb.onSuccess(action);
             }
 
             @Override
@@ -713,7 +718,7 @@ public abstract class HooptapApi {
             @Override
             public void onSuccess(Object output) {
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
-                OptionsMapper options = setClassAndSubClasForMapper(Constants.LIST);
+                OptionsMapper options = setClassAndSubClasForMapper(Constants.LIST, Constants.REWARD);
                 HooptapListResponse listResponse = ParseObjects.getObjectParse(jsonResponse, options);
                 cb.onSuccess(listResponse);
                 //cb.onSuccess((JSONObject) ParseObjects.convertObjectToJsonResponse(output));

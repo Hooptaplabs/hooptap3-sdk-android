@@ -2,8 +2,10 @@ package com.hooptap.sdkbrandclub.Engine;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.hooptap.sdkbrandclub.Deserializer.HooptapActionDeserializer;
 import com.hooptap.sdkbrandclub.Deserializer.HooptapListResponseDeserializer;
 import com.hooptap.sdkbrandclub.Deserializer.HooptapRewardDeserializer;
+import com.hooptap.sdkbrandclub.Models.HooptapAction;
 import com.hooptap.sdkbrandclub.Models.HooptapListResponse;
 import com.hooptap.sdkbrandclub.Models.HooptapReward;
 import com.hooptap.sdkbrandclub.Models.OptionsMapper;
@@ -20,10 +22,11 @@ public class ParseObjects {
         try {
 
             final GsonBuilder gsonBuilder = new GsonBuilder();
-            //Parseamos de forma manual la clase HooptapListResponse ya que el array puede contener varios tipos
+            //Parseamos de forma manual algunas clases ya que tienen varibles que no se pueden parsear directamente
             //Los tipos pueden venir dentro de su JSON como itemType o si no vienen usaremos el que nos llega en options
             gsonBuilder.registerTypeAdapter(HooptapListResponse.class, new HooptapListResponseDeserializer<T>(options.getSubClassName()));
-            gsonBuilder.registerTypeAdapter(HooptapReward.class, new HooptapRewardDeserializer<>(options.getSubClassName()));
+            gsonBuilder.registerTypeAdapter(HooptapReward.class, new HooptapRewardDeserializer<>());
+            gsonBuilder.registerTypeAdapter(HooptapAction.class, new HooptapActionDeserializer<>());
             final Gson gson = gsonBuilder.create();
 
             String itemNameClass = options.getClassName();

@@ -8,9 +8,9 @@ public class HooptapUser {
     private String surname;
     private String birth;
     private String email;
-    private String phone_number;
+    private String phoneNumber;
     private String image;
-    private String postal_code;
+    private String postalCode;
     private int gender;
     private String _id;
 
@@ -39,11 +39,11 @@ public class HooptapUser {
     }
 
     public String getPhone_number() {
-        return phone_number;
+        return phoneNumber;
     }
 
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
+    public void setPhone_number(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getEmail() {
@@ -79,10 +79,10 @@ public class HooptapUser {
     }
 
     public String getPostal_code() {
-        return postal_code;
+        return postalCode;
     }
 
-    public void setPostal_code(String postal_code) {
-        this.postal_code = postal_code;
+    public void setPostal_code(String postalCode) {
+        this.postalCode = postalCode;
     }
 }

@@ -17,8 +17,8 @@ public class HooptapRegister extends UserModel {
     public transient String surname;
     public transient String email;
     public transient String birth;
-    public transient String postal_code;
-    public transient String phone_number;
+    public transient String postalCode;
+    public transient String phoneNumber;
     public transient String image;
     public transient BigDecimal gender;
     public transient String password;
@@ -64,22 +64,22 @@ public class HooptapRegister extends UserModel {
     }
 
     public String getPostalCode() {
-        postal_code = super.getPostalCode();
+        postalCode = super.getPostalCode();
         return super.getPostalCode();
     }
 
     public void setPostalCode(String postalCode) {
-        this.postal_code = postalCode;
+        this.postalCode = postalCode;
         super.setPostalCode(postalCode);
     }
 
     public String getPhoneNumber() {
-        phone_number = super.getPhoneNumber();
+        phoneNumber = super.getPhoneNumber();
         return super.getPhoneNumber();
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phone_number = phoneNumber;
+        this.phoneNumber = phoneNumber;
         super.setPhoneNumber(phoneNumber);
     }
 

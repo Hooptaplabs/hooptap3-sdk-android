@@ -47,18 +47,16 @@ public class HooptapListResponseDeserializer<T> implements JsonDeserializer<Hoop
             htResponse.setTotal_pages(total_pages);
             htResponse.setPage_size(page_size);
         }
-        Log.e("DESERIALIZER0", jsonObject + " /");
+
         JsonArray items = jsonObject.getAsJsonArray("items");
-        Log.e("DESERIALIZER", items+" /");
 
         ArrayList<T> itemsArray = new ArrayList<>();
         //Recorro los items, saco su tipo y genero su objeto correspondiente de forma automatica
         for (int i = 0; i < items.size(); i++) {
             JsonElement jsonElement = items.get(i);
-            Log.e("ELMENT",jsonElement.getAsJsonObject().toString());
             if (jsonElement.getAsJsonObject().get("itemType") != null) {
                 itemType = jsonElement.getAsJsonObject().get("itemType").getAsString();
-            }else{
+            } else {
                 itemType = itemSubtype;
             }
             Class cls = MapperObjects.getClassFromKey(itemType);
@@ -68,8 +66,4 @@ public class HooptapListResponseDeserializer<T> implements JsonDeserializer<Hoop
 
         return htResponse;
     }
-
-//    public void setSubType(String itemSubtype){
-//        subtype = itemSubtype;
-//    }
 }

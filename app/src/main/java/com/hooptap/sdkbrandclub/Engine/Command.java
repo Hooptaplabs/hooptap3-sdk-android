@@ -3,6 +3,7 @@ package com.hooptap.sdkbrandclub.Engine;
 
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.StrictMode;
 import android.util.Log;
 
 import com.amazonaws.mobileconnectors.apigateway.ApiClientException;
@@ -30,8 +31,9 @@ public class Command<T> {
     private HooptapVClient client;
     private Method action;
     private Method[] declaredMethods = HooptapVClient.class.getDeclaredMethods();
-    private int attempts = 0;
     private HooptapCallback asyncRespone;
+    private String errorRenewToken;
+    private int attempts;
 
     private Command() {
     }
@@ -118,8 +120,10 @@ public class Command<T> {
         if (exception != null && exception.getCause() instanceof ApiClientException) {
             Log.d("generateErro", "ApiClientException ");
             ResponseError error = getError(((ApiClientException) exception.getCause()).getErrorMessage());
+            Log.e("ERROR",error+" /");
             if (error != null) {
-                asyncRespone.onError(getError(((ApiClientException) exception.getCause()).getErrorMessage()));
+                asyncRespone.onError(error);
+                //asyncRespone.onError(getError(((ApiClientException) exception.getCause()).getErrorMessage()));
             } else {
                 cbRetry.retry();
             }
@@ -141,7 +145,6 @@ public class Command<T> {
      * Funcion encargada de obtener el mensaje de error de la llamada
      */
     private ResponseError getError(String errorMessage) {
-        Log.e("HooptapDebug", "Error: " + errorMessage);
         ResponseError responseError = new ResponseError();
         JSONObject error;
         try {
@@ -149,8 +152,8 @@ public class Command<T> {
             responseError = new ResponseError(error);
             //419 error de caducidad del token
             if (responseError.getStatus() == 419) {
-                updateToken();
-                return null;
+                String oldToken = Hooptap.getToken().substring(("Bearer ").length());
+                return renewToken(oldToken);
             }
             return responseError;
         } catch (JSONException e) {
@@ -161,31 +164,24 @@ public class Command<T> {
 
     }
 
-    /**
-     * Funcion encargada de renovar el token, realizara tres intentos, en caso de que no se
-     * pueda realizar se enviara un error.
-     */
-    private void updateToken() {
-        Log.e("prueba", "renovar token");
-        attempts++;
-        if (attempts <= 3) {
-            String oldToken = Hooptap.getToken().substring(("Bearer ").length());
-            renewToken(String.valueOf(oldToken));
-        } else {
-            attempts = 0;
-            ResponseError responseError = new ResponseError();
-            responseError.setReason("No se ha podido renovar token");
-            asyncRespone.onError(responseError);
-        }
+    private ResponseError renewToken(String oldToken) {
 
-    }
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
-    private Object renewToken(String oldToken) {
         InputRenewTokenModel renewTokenModel = new InputRenewTokenModel();
         renewTokenModel.setToken(oldToken);
-        Object nuevoToken = client.userIdTokenPut(Hooptap.getApiKey(), (String) hashmap.get("user_id"), oldToken, renewTokenModel);
-        Utils.setToken(nuevoToken);
-        return nuevoToken;
+        try {
+            Object nuevoToken = client.userIdTokenPut(Hooptap.getApiKey(), oldToken, (String) hashmap.get("id"), renewTokenModel);
+            Utils.setToken(nuevoToken);
+            return null;
+        } catch (Exception e) {
+            ResponseError responseError = new ResponseError();
+            Log.e("ERROR",e.getLocalizedMessage()+" / "+e.getMessage());
+            responseError.setReason(e.getMessage());
+            asyncRespone.onError(responseError);
+            return responseError;
+        }
     }
 
 }

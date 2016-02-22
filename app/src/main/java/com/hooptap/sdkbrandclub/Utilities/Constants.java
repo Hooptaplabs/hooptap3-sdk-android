@@ -14,5 +14,6 @@ public class Constants {
     public static String POINT = "Point";
     public static String RANKING = "Ranking";
     public static String REWARD = "Reward";
+    public static String ACTION = "Action";
 
 }
