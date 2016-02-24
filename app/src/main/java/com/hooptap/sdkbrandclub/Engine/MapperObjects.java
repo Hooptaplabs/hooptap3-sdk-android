@@ -2,8 +2,7 @@ package com.hooptap.sdkbrandclub.Engine;
 
 import android.util.Log;
 
-import com.hooptap.sdkbrandclub.Api.HooptapApi;
-import com.hooptap.sdkbrandclub.Models.HooptapAction;
+import com.hooptap.sdkbrandclub.Models.HooptapActionResult;
 import com.hooptap.sdkbrandclub.Models.HooptapBadge;
 import com.hooptap.sdkbrandclub.Models.HooptapGame;
 import com.hooptap.sdkbrandclub.Models.HooptapGood;
@@ -12,7 +11,7 @@ import com.hooptap.sdkbrandclub.Models.HooptapLevel;
 import com.hooptap.sdkbrandclub.Models.HooptapListResponse;
 import com.hooptap.sdkbrandclub.Models.HooptapPoint;
 import com.hooptap.sdkbrandclub.Models.HooptapRanking;
-import com.hooptap.sdkbrandclub.Models.HooptapReward;
+import com.hooptap.sdkbrandclub.Models.HooptapFeed;
 import com.hooptap.sdkbrandclub.Models.HooptapUser;
 import com.hooptap.sdkbrandclub.Utilities.Constants;
 
@@ -38,8 +37,8 @@ public class MapperObjects {
         addMap(Constants.LEVEL, HooptapLevel.class);
         addMap(Constants.POINT, HooptapPoint.class);
         addMap(Constants.LIST, HooptapListResponse.class);
-        addMap(Constants.REWARD, HooptapReward.class);
-        addMap(Constants.ACTION, HooptapAction.class);
+        addMap(Constants.REWARD, HooptapFeed.class);
+        addMap(Constants.ACTION, HooptapActionResult.class);
     }
 
     private void addMap(String key, Class hooptapClass) {

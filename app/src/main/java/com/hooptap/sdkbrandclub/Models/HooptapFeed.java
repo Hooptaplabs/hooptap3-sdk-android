@@ -3,11 +3,11 @@ package com.hooptap.sdkbrandclub.Models;
 /**
  * Created by carloscarrasco on 17/2/16.
  */
-public class HooptapReward<T> extends HooptapItem {
+public class HooptapFeed<T> extends HooptapItem {
     private String reason;
     private String reason_type;
     private String reason_text;
-    private T reward;
+    private T feed;
 
     public String getReason() {
         return reason;
@@ -33,11 +33,11 @@ public class HooptapReward<T> extends HooptapItem {
         this.reason_text = reason_text;
     }
 
-    public T getReward() {
-        return reward;
+    public T getFeed() {
+        return feed;
     }
 
-    public void setReward(T reward) {
-        this.reward = reward;
+    public void setFeed(T feed) {
+        this.feed = feed;
     }
 }

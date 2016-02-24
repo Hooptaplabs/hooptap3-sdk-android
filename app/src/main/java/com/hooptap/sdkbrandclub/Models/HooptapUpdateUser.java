@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 /**
  * Created by root on 21/12/15.
  */
-public class HooptapUpdateModel extends UserUpdateModel {
+public class HooptapUpdateUser extends UserUpdateModel {
 
     public transient String username;
     public transient String surname;

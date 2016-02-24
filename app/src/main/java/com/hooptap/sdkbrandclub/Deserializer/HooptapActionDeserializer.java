@@ -9,9 +9,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.hooptap.sdkbrandclub.Engine.MapperObjects;
-import com.hooptap.sdkbrandclub.Models.HooptapAction;
+import com.hooptap.sdkbrandclub.Models.HooptapActionResult;
 import com.hooptap.sdkbrandclub.Models.HooptapLevel;
-import com.hooptap.sdkbrandclub.Models.HooptapReward;
 import com.hooptap.sdkbrandclub.Utilities.Constants;
 
 import java.lang.reflect.Type;
@@ -20,17 +19,17 @@ import java.util.ArrayList;
 /**
  * Created by carloscarrasco on 9/2/16.
  */
-public class HooptapActionDeserializer<T> implements JsonDeserializer<HooptapAction> {
+public class HooptapActionDeserializer<T> implements JsonDeserializer<HooptapActionResult> {
 
     private String itemType;
 
     @Override
-    public HooptapAction deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context)
+    public HooptapActionResult deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context)
             throws JsonParseException {
 
         final JsonObject jsonItem = json.getAsJsonObject();
 
-        HooptapAction action = new HooptapAction();
+        HooptapActionResult action = new HooptapActionResult();
 
         final JsonObject jsonObject = json.getAsJsonObject();
         JsonArray rewards = jsonObject.getAsJsonArray("rewards");

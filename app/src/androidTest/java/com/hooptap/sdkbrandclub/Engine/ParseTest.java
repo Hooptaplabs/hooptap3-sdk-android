@@ -7,7 +7,7 @@ import com.google.gson.internal.LinkedTreeMap;
 import com.hooptap.sdkbrandclub.Models.HooptapBadge;
 import com.hooptap.sdkbrandclub.Models.HooptapLevel;
 import com.hooptap.sdkbrandclub.Models.HooptapListResponse;
-import com.hooptap.sdkbrandclub.Models.HooptapReward;
+import com.hooptap.sdkbrandclub.Models.HooptapFeed;
 import com.hooptap.sdkbrandclub.Models.OptionsMapper;
 import com.hooptap.sdkbrandclub.Utilities.Constants;
 import com.hooptap.sdkbrandclub.Utilities.Utils;
@@ -121,7 +121,7 @@ public class ParseTest extends InstrumentationTestCase {
     @Test
     public void testObjectParseToRewardListCheckingOnlyId() {
 
-        HooptapReward reward = new HooptapReward();
+        HooptapFeed reward = new HooptapFeed();
         reward.setIdentificator("56b374b16abe38f4578734dc");
 
         LinkedTreeMap objectAWSToParse = generateResponseLikeAWS(getJsonFromAssets("Feed"));
@@ -132,7 +132,7 @@ public class ParseTest extends InstrumentationTestCase {
         options.setSubClassName(Constants.REWARD);
 
         HooptapListResponse htListResponse = ParseObjects.getObjectParse(parsedObject, options);
-        assertThat(reward.getIdentificator(), is(((HooptapReward) htListResponse.getItemArray().get(0)).getIdentificator()));
+        assertThat(reward.getIdentificator(), is(((HooptapFeed) htListResponse.getItemArray().get(0)).getIdentificator()));
         //assertReflectionEquals(htListResponseStatic, htListResponse);
 
     }
@@ -140,7 +140,7 @@ public class ParseTest extends InstrumentationTestCase {
     @Test
     public void testObjectParseToRewardListCheckingObjectComplete() {
 
-        HooptapReward reward = new HooptapReward();
+        HooptapFeed reward = new HooptapFeed();
         reward.setIdentificator("56b374b16abe38f4578734dc");
         reward.setReason("level_up");
         reward.setReason_type("level");
@@ -162,7 +162,7 @@ public class ParseTest extends InstrumentationTestCase {
 
         HooptapListResponse htListResponse = ParseObjects.getObjectParse(parsedObject, options);
 
-        assertReflectionEquals(reward.getReward(), ((HooptapReward)htListResponse.getItemArray().get(0)).getReward());
+        assertReflectionEquals(reward.getReward(), ((HooptapFeed)htListResponse.getItemArray().get(0)).getReward());
 
     }
 
