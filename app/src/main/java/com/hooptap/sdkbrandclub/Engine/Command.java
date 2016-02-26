@@ -40,6 +40,7 @@ public class Command<T> {
 
     public Command(String methodName, LinkedHashMap hashmap, HooptapCallbackRetry cbRetry) {
         this.hashmap = hashmap;
+        Log.e("SIZE DATA", hashmap.size()+" /");
         this.cbRetry = cbRetry;
         client = Hooptap.getClient();
 
@@ -95,6 +96,7 @@ public class Command<T> {
         protected Object doInBackground(Void... params) {
             try {
                 Object[] args = createArgumentsFromHasmap();
+                Log.e("SIZE DATA 1",  args.length+" /");
                 object = action.invoke(client, args);
             } catch (Exception e) {
                 errorHappends = true;

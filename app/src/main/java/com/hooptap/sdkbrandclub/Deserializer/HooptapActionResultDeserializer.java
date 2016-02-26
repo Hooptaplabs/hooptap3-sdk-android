@@ -19,7 +19,7 @@ import java.util.ArrayList;
 /**
  * Created by carloscarrasco on 9/2/16.
  */
-public class HooptapActionDeserializer<T> implements JsonDeserializer<HooptapActionResult> {
+public class HooptapActionResultDeserializer<T> implements JsonDeserializer<HooptapActionResult> {
 
     private String itemType;
 

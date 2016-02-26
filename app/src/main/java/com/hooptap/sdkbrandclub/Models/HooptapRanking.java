@@ -7,13 +7,13 @@ import java.util.ArrayList;
  */
 public class HooptapRanking extends HooptapItem{
 
-    private ArrayList<HooptapUser> items;
+    String type;
 
-    public ArrayList<HooptapUser> getUsers() {
-        return items;
+    public String getType() {
+        return type;
     }
 
-    public void setUsers(ArrayList<HooptapUser> items) {
-        this.items = items;
+    public void setType(String type) {
+        this.type = type;
     }
 }

@@ -10,9 +10,11 @@ import com.hooptap.sdkbrandclub.Models.HooptapItem;
 import com.hooptap.sdkbrandclub.Models.HooptapLevel;
 import com.hooptap.sdkbrandclub.Models.HooptapListResponse;
 import com.hooptap.sdkbrandclub.Models.HooptapPoint;
+import com.hooptap.sdkbrandclub.Models.HooptapQuest;
 import com.hooptap.sdkbrandclub.Models.HooptapRanking;
 import com.hooptap.sdkbrandclub.Models.HooptapFeed;
 import com.hooptap.sdkbrandclub.Models.HooptapUser;
+import com.hooptap.sdkbrandclub.Models.HooptapUserRanking;
 import com.hooptap.sdkbrandclub.Utilities.Constants;
 
 import java.util.HashMap;
@@ -33,12 +35,14 @@ public class MapperObjects {
         addMap(Constants.GOOD, HooptapGood.class);
         addMap(Constants.GAME, HooptapGame.class);
         addMap(Constants.USER, HooptapUser.class);
+        addMap(Constants.USER_RANKING, HooptapUserRanking.class);
         addMap(Constants.RANKING, HooptapRanking.class);
         addMap(Constants.LEVEL, HooptapLevel.class);
         addMap(Constants.POINT, HooptapPoint.class);
         addMap(Constants.LIST, HooptapListResponse.class);
         addMap(Constants.REWARD, HooptapFeed.class);
         addMap(Constants.ACTION, HooptapActionResult.class);
+        addMap(Constants.QUEST, HooptapQuest.class);
     }
 
     private void addMap(String key, Class hooptapClass) {

@@ -9,6 +9,7 @@ public class HooptapQuest<T> extends HooptapItem{
     private boolean sequential;
     private boolean active;
     private boolean finished;
+    private int numCompletedSteps;
     private ArrayList<HooptapStep>steps;
     private ArrayList<T>rewards;
 
@@ -50,5 +51,13 @@ public class HooptapQuest<T> extends HooptapItem{
 
     public void setRewards(ArrayList<T> rewards) {
         this.rewards = rewards;
+    }
+
+    public int getNumCompletedSteps() {
+        return numCompletedSteps;
+    }
+
+    public void setNumCompletedSteps(int numCompletedSteps) {
+        this.numCompletedSteps = numCompletedSteps;
     }
 }

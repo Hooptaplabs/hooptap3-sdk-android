@@ -17,7 +17,7 @@ import com.hooptap.sdkbrandclub.Models.HooptapOptions;
 import com.hooptap.sdkbrandclub.Models.HooptapPoint;
 import com.hooptap.sdkbrandclub.Models.HooptapRanking;
 import com.hooptap.sdkbrandclub.Models.HooptapRegister;
-import com.hooptap.sdkbrandclub.Models.HooptapUpdateUser;
+import com.hooptap.sdkbrandclub.Models.HooptapUserUpdate;
 import com.hooptap.sdkbrandclub.Models.HooptapUser;
 import com.hooptap.sdkbrandclub.Models.OptionsMapper;
 import com.hooptap.sdkbrandclub.Models.ResponseError;
@@ -87,7 +87,7 @@ public abstract class HooptapApi {
      * @param info_user Informacion del usuario
      * @param cb        Callback que recibira la informacion de la peticion
      */
-    public static void updateUser(final String user_id, final HooptapUpdateUser info_user, final HooptapCallback<HooptapUser> cb) {
+    public static void updateUser(final String user_id, final HooptapUserUpdate info_user, final HooptapCallback<HooptapUser> cb) {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
         data.put("api_key", Hooptap.getApiKey());
@@ -265,6 +265,51 @@ public abstract class HooptapApi {
         });
 
     }
+
+    /**
+     * USER QUESTS
+     *
+     * @param options    Opciones de configuracion
+     * @param cb         Callback que recibira la informacion de la peticion
+     */
+    public static void getUserQuests(final String user_id, final HooptapOptions options, final HooptapFilter filter,
+                                     final HooptapCallback<HooptapListResponse> cb) {
+
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("page_size", options.getPageSize() + "");
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("page_number", options.getPageNumber() + "");
+        data.put("token", Hooptap.getToken());
+        data.put("filter", filter.toString());
+        data.put("id", user_id);
+
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                getUserQuests(user_id, options, filter, cb);
+            }
+        };
+
+        new Command("userIdQuestGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
+            @Override
+            public void onSuccess(Object output) {
+
+                JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
+                OptionsMapper options = setClassAndSubClasForMapper(Constants.LIST, Constants.QUEST);
+                HooptapListResponse listQuest = ParseObjects.getObjectParse(jsonResponse, options);
+
+                cb.onSuccess(listQuest);
+            }
+
+            @Override
+            public void onError(ResponseError var) {
+                cb.onError(var);
+            }
+        });
+
+    }
+
+
 
     /**
      * BADGES
@@ -584,14 +629,14 @@ public abstract class HooptapApi {
 
 
     /**
-     * RANKING DETAIL
+     * RANKING USERS
      *
      * @param ranking_id Identificador del ranking
      * @param options    Opciones de configuracion
      * @param cb         Callback que recibira la informacion de la peticion
      */
-    public static void getRankingDetail(final String user_id, final String ranking_id, final HooptapOptions options,
-                                        final HooptapFilter filter, final HooptapCallback<HooptapRanking> cb) {
+    public static void getRankingUsers(final String user_id, final String ranking_id, final HooptapOptions options,
+                                        final HooptapFilter filter, final HooptapCallback<HooptapListResponse> cb) {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
         data.put("page_size", options.getPageSize() + "");
@@ -605,11 +650,50 @@ public abstract class HooptapApi {
         HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
             @Override
             public void retry() {
-                getRankingDetail(user_id, ranking_id, options, filter, cb);
+                getRankingUsers(user_id, ranking_id, options, filter, cb);
             }
         };
 
         new Command("userIdRankingRankingIdGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
+            @Override
+            public void onSuccess(Object output) {
+
+                JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
+                OptionsMapper options = setClassAndSubClasForMapper(Constants.LIST, Constants.USER_RANKING);
+                HooptapListResponse listUSers = ParseObjects.getObjectParse(jsonResponse, options);
+
+                cb.onSuccess(listUSers);
+            }
+
+            @Override
+            public void onError(ResponseError var) {
+                cb.onError(var);
+            }
+        });
+
+    }
+
+    /**
+     * RANKING DETAIL
+     *
+     * @param ranking_id Identificador del ranking
+     * @param cb         Callback que recibira la informacion de la peticion
+     */
+    public static void getRankingDetail(final String ranking_id, final HooptapCallback<HooptapRanking> cb) {
+
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("token", Hooptap.getToken());
+        data.put("rankingId", ranking_id);
+
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                getRankingDetail(ranking_id, cb);
+            }
+        };
+
+        new Command("rankingIdGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
             @Override
             public void onSuccess(Object output) {
 
@@ -634,7 +718,8 @@ public abstract class HooptapApi {
      * @param options Opciones de configuracion
      * @param cb      Callback que recibira la informacion de la peticion
      */
-    public static void getRankingList(final HooptapOptions options, final HooptapFilter filter, final HooptapCallback<HooptapListResponse> cb) {
+    public static void getRankingList(final HooptapOptions options, final HooptapFilter filter,
+                                      final HooptapCallback<HooptapListResponse> cb) {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
         data.put("page_size", options.getPageSize() + "");
