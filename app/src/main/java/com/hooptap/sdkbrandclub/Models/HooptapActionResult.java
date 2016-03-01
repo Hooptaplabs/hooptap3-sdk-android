@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class HooptapActionResult<T> implements Serializable {
     public ArrayList<T> rewards;
     public HooptapLevel level;
-
+    public HooptapQuest quest;
 
     public ArrayList<T> getRewards() {
         return rewards;
@@ -25,5 +25,13 @@ public class HooptapActionResult<T> implements Serializable {
 
     public void setLevel(HooptapLevel level) {
         this.level = level;
+    }
+
+    public HooptapQuest getQuest() {
+        return quest;
+    }
+
+    public void setQuest(HooptapQuest quest) {
+        this.quest = quest;
     }
 }

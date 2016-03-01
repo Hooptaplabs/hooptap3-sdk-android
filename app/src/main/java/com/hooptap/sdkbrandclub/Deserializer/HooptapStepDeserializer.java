@@ -1,5 +1,7 @@
 package com.hooptap.sdkbrandclub.Deserializer;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -8,6 +10,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.hooptap.sdkbrandclub.Engine.ParseObjects;
 import com.hooptap.sdkbrandclub.Models.HooptapAction;
+import com.hooptap.sdkbrandclub.Models.HooptapActionResult;
 import com.hooptap.sdkbrandclub.Models.HooptapStep;
 
 import java.lang.reflect.Type;
@@ -22,15 +25,18 @@ public class HooptapStepDeserializer<T> implements JsonDeserializer<HooptapStep>
     public HooptapStep deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context)
             throws JsonParseException {
 
+        Gson innerGson = new Gson();
+        Gson gson = ParseObjects.gsonBuilder.create();
+
         final JsonObject jsonStep = json.getAsJsonObject();
 
-        HooptapStep step = context.deserialize(jsonStep, HooptapStep.class);
+        HooptapStep step = innerGson.fromJson(jsonStep, HooptapStep.class);
 
         ArrayList<HooptapAction> actionsArray = new ArrayList<>();
-        JsonArray actionsJsonArray = jsonStep.getAsJsonArray("matching_fields");
-        for (int i = 0; i < actionsJsonArray.size(); i++) {
-            JsonObject actionJson = actionsJsonArray.get(i).getAsJsonObject();
-            HooptapAction action = ParseObjects.gson.fromJson(actionJson, HooptapAction.class);
+        JsonArray actionsJsonArray = jsonStep.getAsJsonArray("actions");
+        for (int f = 0; f < actionsJsonArray.size(); f++) {
+            JsonObject actionJson = actionsJsonArray.get(f).getAsJsonObject();
+            HooptapAction action = gson.fromJson(actionJson, HooptapAction.class);
             actionsArray.add(action);
         }
         step.setActions(actionsArray);

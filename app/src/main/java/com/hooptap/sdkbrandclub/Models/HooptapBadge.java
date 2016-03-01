@@ -5,8 +5,6 @@ package com.hooptap.sdkbrandclub.Models;
  */
 public class HooptapBadge extends HooptapItem{
     private int progress;
-    private String image_on;
-    private String image_off;
 
     public int getProgress() {
         return progress;
@@ -14,21 +12,5 @@ public class HooptapBadge extends HooptapItem{
 
     public void setProgress(int progress) {
         this.progress = progress;
-    }
-
-    public String getImageOn() {
-        return image_on;
-    }
-
-    public void setImageOn(String imageOn) {
-        this.image_on = imageOn;
-    }
-
-    public String getImageOff() {
-        return image_off;
-    }
-
-    public void setImageOff(String imageOff) {
-        this.image_off = imageOff;
     }
 }

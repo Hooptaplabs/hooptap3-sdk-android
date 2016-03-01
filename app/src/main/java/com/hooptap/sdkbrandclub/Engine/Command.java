@@ -121,6 +121,7 @@ public class Command<T> {
     private void generateErrorWithCallback(Exception exception) {
         if (exception != null && exception.getCause() instanceof ApiClientException) {
             Log.d("generateErro", "ApiClientException ");
+            exception.printStackTrace();
             ResponseError error = getError(((ApiClientException) exception.getCause()).getErrorMessage());
             Log.e("ERROR",error+" /");
             if (error != null) {

@@ -2,6 +2,8 @@ package com.hooptap.sdkbrandclub.Deserializer;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -9,6 +11,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.hooptap.sdkbrandclub.Engine.MapperObjects;
+import com.hooptap.sdkbrandclub.Engine.ParseObjects;
+import com.hooptap.sdkbrandclub.Models.HooptapAction;
 import com.hooptap.sdkbrandclub.Models.HooptapListResponse;
 
 import java.lang.reflect.Type;
@@ -29,6 +33,8 @@ public class HooptapListResponseDeserializer<T> implements JsonDeserializer<Hoop
     @Override
     public HooptapListResponse deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context)
             throws JsonParseException {
+
+        Gson gson = ParseObjects.gsonBuilder.create();
 
         HooptapListResponse htResponse = new HooptapListResponse();
 
@@ -60,7 +66,7 @@ public class HooptapListResponseDeserializer<T> implements JsonDeserializer<Hoop
                 itemType = itemSubtype;
             }
             Class cls = MapperObjects.getClassFromKey(itemType);
-            itemsArray.add((T) context.deserialize(jsonElement, cls));
+            itemsArray.add((T) gson.fromJson(jsonElement, cls));
         }
         htResponse.setItemArray(itemsArray);
 

@@ -1,43 +1,18 @@
 package com.hooptap.sdkbrandclub.Models;
 
+import java.util.ArrayList;
+
 /**
  * Created by carloscarrasco on 24/2/16.
  */
-public class HooptapAction extends HooptapItem {
-    private String key;
-    private int value;
-    private String comparison;
-    private String type;
+public class HooptapAction<T> extends HooptapItem {
+    ArrayList<HooptapActionFields> actionFields = new ArrayList<>();
 
-    public String getKey() {
-        return key;
+    public ArrayList<HooptapActionFields> getActionFields() {
+        return actionFields;
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-    public String getComparison() {
-        return comparison;
-    }
-
-    public void setComparison(String comparison) {
-        this.comparison = comparison;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+    public void setActionFields(ArrayList<HooptapActionFields> actionFields) {
+        this.actionFields = actionFields;
     }
 }

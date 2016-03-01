@@ -1,11 +1,15 @@
 package com.hooptap.sdkbrandclub.Deserializer;
 
+import android.util.Log;
+
+import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.hooptap.sdkbrandclub.Engine.MapperObjects;
+import com.hooptap.sdkbrandclub.Engine.ParseObjects;
 import com.hooptap.sdkbrandclub.Models.HooptapFeed;
 
 import java.lang.reflect.Type;
@@ -13,13 +17,15 @@ import java.lang.reflect.Type;
 /**
  * Created by carloscarrasco on 9/2/16.
  */
-public class HooptapRewardDeserializer<T> implements JsonDeserializer<HooptapFeed> {
+public class HooptapFeedDeserializer<T> implements JsonDeserializer<HooptapFeed> {
 
     private String itemType;
 
     @Override
     public HooptapFeed deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context)
             throws JsonParseException {
+
+        Gson gson = ParseObjects.gsonBuilder.create();
 
         final JsonObject jsonItem = json.getAsJsonObject();
 
@@ -40,8 +46,8 @@ public class HooptapRewardDeserializer<T> implements JsonDeserializer<HooptapFee
         itemType = itemType.substring(0, 1).toUpperCase() + itemType.substring(1);
 
         Class cls = MapperObjects.getClassFromKey(itemType);
-
-        reward.setFeed((T) context.deserialize(reason_data, cls));
+        Log.e("PARSE-FEED",itemType+" / "+cls.getName()+" / "+ reason_data);
+        reward.setFeed(gson.fromJson(reason_data, cls));
         return reward;
 
     }

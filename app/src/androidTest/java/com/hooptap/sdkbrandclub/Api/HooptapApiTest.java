@@ -65,5 +65,39 @@ public class HooptapApiTest extends InstrumentationTestCase {
         });
     }
 
+    @Test
+    public void testHooptapApiQuests(){
+
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("page_size", "0");
+        data.put("api_key", "56d404ab36815b2972abb1fc");
+        data.put("page_number", "0");
+        data.put("filter", "");
+        data.put("token", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3N1ZXIiOiI1NmQ0MDRhYjM2ODE1YjI5NzJhYmIxZmMiLCJhcGlLZXlzIjpbIjU2Y2Q3ZWY4YTkzMzkzN2M0MDM4OTdjOCJdLCJleHBpcmF0aW9uIjoxNDU2ODIxODAzMzI4LCJpYXQiOjE0NTY3MzU0MDMsImV4cCI6MTQ1NjgyMTgwM30.Ll8pI1b_uIADn2OMtpi-pz9sOD-SPwVrGDJhUQtuvlg\n");
+        data.put("user_id", "55827fb88d1d8e411aa06c13");
+
+        Log.d("testHooptapApiQuests", "testHooptapApiQuests");
+        new Command("userIdQuestGet", data, null).executeMethod(new HooptapCallback<Object>() {
+            @Override
+            public void onSuccess(Object output) {
+
+                JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
+                Log.e("onSuccess",jsonResponse+"");
+                JSONObject jsonResponseStatic = ParseObjects.convertObjectToJsonResponse(output);
+                try {
+                    JSONAssert.assertEquals(jsonResponse, jsonResponseStatic, false);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(ResponseError var) {
+                Log.d("OUTPUTERROR", var.getReason() + "");
+                assertThat(var.getReason(), is("3"));
+            }
+        });
+    }
+
 
 }

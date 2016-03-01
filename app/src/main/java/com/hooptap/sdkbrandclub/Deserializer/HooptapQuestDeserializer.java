@@ -1,5 +1,6 @@
 package com.hooptap.sdkbrandclub.Deserializer;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -22,17 +23,22 @@ public class HooptapQuestDeserializer<T> implements JsonDeserializer<HooptapQues
     public HooptapQuest deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context)
             throws JsonParseException {
 
+        Gson innerGson = new Gson();
+        Gson gson = ParseObjects.gsonBuilder.create();
+
         final JsonObject jsonItem = json.getAsJsonObject();
 
-        HooptapQuest hooptapQuest = context.deserialize(jsonItem, HooptapQuest.class);
+        HooptapQuest hooptapQuest = innerGson.fromJson(jsonItem, HooptapQuest.class);
         hooptapQuest.setNumCompletedSteps(jsonItem.get("completed_steps").getAsJsonArray().size());
 
         ArrayList<HooptapStep> arrayListSteps = new ArrayList<>();
-        JsonArray stepsJsonArray = jsonItem.getAsJsonArray("steps");
-        for (int i = 0; i < stepsJsonArray.size(); i++) {
-            JsonObject stepJson = stepsJsonArray.get(i).getAsJsonObject();
-            HooptapStep step = ParseObjects.gson.fromJson(stepJson, HooptapStep.class);
-            arrayListSteps.add(step);
+        if (jsonItem.has("steps")) {
+            JsonArray stepsJsonArray = jsonItem.getAsJsonArray("steps");
+            for (int i = 0; i < stepsJsonArray.size(); i++) {
+                JsonObject stepJson = stepsJsonArray.get(i).getAsJsonObject();
+                HooptapStep step = gson.fromJson(stepJson, HooptapStep.class);
+                arrayListSteps.add(step);
+            }
         }
         hooptapQuest.setSteps(arrayListSteps);
 

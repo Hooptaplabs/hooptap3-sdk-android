@@ -151,7 +151,7 @@ public class ParseTest extends InstrumentationTestCase {
         item.setImage("https://hooptap.s3.amazonaws.com/images/560914db4871f62672e3ecff/item/14437809765700.png");
         item.setName("Conductor ocasional");
         item.setIdentificator("56b0a1d169b4d2970a68a580");
-        reward.setReward(item);
+        reward.setFeed(item);
 
         LinkedTreeMap objectAWSToParse = generateResponseLikeAWS(getJsonFromAssets("Feed"));
         JSONObject parsedObject = ParseObjects.convertObjectToJsonResponse(objectAWSToParse);
@@ -162,7 +162,7 @@ public class ParseTest extends InstrumentationTestCase {
 
         HooptapListResponse htListResponse = ParseObjects.getObjectParse(parsedObject, options);
 
-        assertReflectionEquals(reward.getReward(), ((HooptapFeed)htListResponse.getItemArray().get(0)).getReward());
+        assertReflectionEquals(reward.getFeed(), ((HooptapFeed)htListResponse.getItemArray().get(0)).getFeed());
 
     }
 

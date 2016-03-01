@@ -4,7 +4,6 @@ package com.hooptap.sdkbrandclub.Models;
  * Created by root on 5/01/16.
  */
 public class HooptapLevel extends HooptapItem{
-    int number;
     int min_points;
     boolean passed;
 
@@ -22,13 +21,5 @@ public class HooptapLevel extends HooptapItem{
 
     public void setMin_points(int min_points) {
         this.min_points = min_points;
-    }
-
-    public int getNumber() {
-        return number;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
     }
 }

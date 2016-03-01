@@ -7,6 +7,7 @@ import com.hooptap.sdkbrandclub.Engine.Command;
 import com.hooptap.sdkbrandclub.Engine.ParseObjects;
 import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
 import com.hooptap.sdkbrandclub.Interfaces.HooptapCallbackRetry;
+import com.hooptap.sdkbrandclub.Models.HooptapAction;
 import com.hooptap.sdkbrandclub.Models.HooptapActionResult;
 import com.hooptap.sdkbrandclub.Models.HooptapFilter;
 import com.hooptap.sdkbrandclub.Models.HooptapItem;
@@ -22,14 +23,11 @@ import com.hooptap.sdkbrandclub.Models.HooptapUser;
 import com.hooptap.sdkbrandclub.Models.OptionsMapper;
 import com.hooptap.sdkbrandclub.Models.ResponseError;
 import com.hooptap.sdkbrandclub.Utilities.Constants;
-import com.hooptap.sdkbrandclub.Utilities.ParseActions;
 import com.hooptap.sdkbrandclub.Utilities.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 
@@ -192,7 +190,7 @@ public abstract class HooptapApi {
             @Override
             public void onSuccess(Object output) {
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
-                OptionsMapper options = setClassAndSubClasForMapper(Constants.ACTION);
+                OptionsMapper options = setClassAndSubClasForMapper(Constants.ACTION_RESULT);
                 HooptapActionResult action = ParseObjects.getObjectParse(jsonResponse, options);
                 cb.onSuccess(action);
             }
@@ -205,7 +203,7 @@ public abstract class HooptapApi {
 
     }
 
-    public static void getActions(final HooptapOptions options, final HooptapFilter filter, final HooptapCallback<ArrayList<String>> cb) {
+    public static void getActions(final HooptapOptions options, final HooptapFilter filter, final HooptapCallback<HooptapListResponse> cb) {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
         data.put("page_size", options.getPageSize() + "");
@@ -225,37 +223,11 @@ public abstract class HooptapApi {
         new Command("engineActionGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
             @Override
             public void onSuccess(Object output) {
-                cb.onSuccess(ParseActions.actions((JSONObject) ParseObjects.convertObjectToJsonResponse(output)));
-            }
-
-            @Override
-            public void onError(ResponseError var) {
-                cb.onError(var);
-            }
-        });
-
-    }
-
-    public static void getMatchingFieldsForAction(final String action, final HooptapOptions options, final HooptapFilter filter, final HooptapCallback<HashMap<String, String>> cb) {
-
-        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
-        data.put("page_size", options.getPageSize() + "");
-        data.put("api_key", Hooptap.getApiKey());
-        data.put("page_number", options.getPageNumber() + "");
-        data.put("filter", filter.filterToString());
-        data.put("token", Hooptap.getToken());
-
-        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
-            @Override
-            public void retry() {
-                getMatchingFieldsForAction(action, options, filter, cb);
-            }
-        };
-
-        new Command("engineActionGet", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
-            @Override
-            public void onSuccess(Object output) {
-                cb.onSuccess(ParseActions.matchingFieldsForAction((JSONObject) ParseObjects.convertObjectToJsonResponse(output), action));
+                JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
+                Log.e("getActions",jsonResponse+" /");
+                OptionsMapper options = setClassAndSubClasForMapper(Constants.LIST, Constants.ACTION);
+                HooptapListResponse listActions = ParseObjects.getObjectParse(jsonResponse, options);
+                cb.onSuccess(listActions);
             }
 
             @Override
@@ -279,8 +251,8 @@ public abstract class HooptapApi {
         data.put("page_size", options.getPageSize() + "");
         data.put("api_key", Hooptap.getApiKey());
         data.put("page_number", options.getPageNumber() + "");
-        data.put("token", Hooptap.getToken());
         data.put("filter", filter.toString());
+        data.put("token", Hooptap.getToken());
         data.put("id", user_id);
 
         HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
@@ -295,6 +267,7 @@ public abstract class HooptapApi {
             public void onSuccess(Object output) {
 
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
+                Log.e("getUserQuests",jsonResponse+" /");
                 OptionsMapper options = setClassAndSubClasForMapper(Constants.LIST, Constants.QUEST);
                 HooptapListResponse listQuest = ParseObjects.getObjectParse(jsonResponse, options);
 
@@ -309,7 +282,48 @@ public abstract class HooptapApi {
 
     }
 
+    /**
+     * JOIN QUEST
+     *
+     * @param cb         Callback que recibira la informacion de la peticion
+     */
+    public static void activeUserQuest(final String user_id, final String quest_id,
+                                     final HooptapCallback<Boolean> cb) {
 
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("questId", quest_id);
+        data.put("api_key", Hooptap.getApiKey());
+        data.put("token", Hooptap.getToken());
+        data.put("id", user_id);
+
+        HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
+            @Override
+            public void retry() {
+                activeUserQuest(user_id, quest_id, cb);
+            }
+        };
+
+        new Command("userIdQuestQuestIdPost", data, cbRetry).executeMethod(new HooptapCallback<Object>() {
+            @Override
+            public void onSuccess(Object output) {
+
+                JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
+                boolean active = false;
+                try {
+                    active = jsonResponse.getBoolean("active");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                cb.onSuccess(active);
+            }
+
+            @Override
+            public void onError(ResponseError var) {
+                cb.onError(var);
+            }
+        });
+
+    }
 
     /**
      * BADGES
@@ -433,17 +447,20 @@ public abstract class HooptapApi {
      * @param options Opciones de configuracion
      * @param cb      Callback que recibira la informacion de la peticion
      */
-    public static void getItems(final String user_id, final HooptapOptions options, final HooptapCallback<HooptapListResponse> cb) {
+    public static void getItems(final String user_id, final HooptapOptions options, final HooptapFilter filter, final HooptapCallback<HooptapListResponse> cb) {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("page_size", options.getPageSize() + "");
         data.put("api_key", Hooptap.getApiKey());
+        data.put("page_number", options.getPageNumber() + "");
+        data.put("filter", filter.toString());
         data.put("token", Hooptap.getToken());
         data.put("id", user_id);
 
         HooptapCallbackRetry cbRetry = new HooptapCallbackRetry() {
             @Override
             public void retry() {
-                getItems(user_id, options, cb);
+                getItems(user_id, options, filter, cb);
             }
         };
 
@@ -761,7 +778,10 @@ public abstract class HooptapApi {
     public static void getUserFeed(final String user_id, final HooptapOptions options, final HooptapFilter filter, final HooptapCallback<HooptapListResponse> cb) {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("page_size", options.getPageSize() + "");
         data.put("api_key", Hooptap.getApiKey());
+        data.put("page_number", options.getPageNumber() + "");
+        data.put("filter", filter.toString());
         data.put("token", Hooptap.getToken());
         data.put("id", user_id);
 
@@ -776,7 +796,7 @@ public abstract class HooptapApi {
             @Override
             public void onSuccess(Object output) {
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
-                OptionsMapper options = setClassAndSubClasForMapper(Constants.LIST, Constants.REWARD);
+                OptionsMapper options = setClassAndSubClasForMapper(Constants.LIST, Constants.FEED);
                 HooptapListResponse listResponse = ParseObjects.getObjectParse(jsonResponse, options);
                 cb.onSuccess(listResponse);
             }
