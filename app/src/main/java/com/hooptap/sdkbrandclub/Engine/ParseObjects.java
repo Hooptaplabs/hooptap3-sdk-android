@@ -2,6 +2,7 @@ package com.hooptap.sdkbrandclub.Engine;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.hooptap.sdkbrandclub.Deserializer.HooptapActionDeserializer;
 import com.hooptap.sdkbrandclub.Deserializer.HooptapActionResultDeserializer;
 import com.hooptap.sdkbrandclub.Deserializer.HooptapListResponseDeserializer;
 import com.hooptap.sdkbrandclub.Deserializer.HooptapQuestDeserializer;
