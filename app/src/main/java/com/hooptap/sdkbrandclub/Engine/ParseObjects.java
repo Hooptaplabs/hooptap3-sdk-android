@@ -2,7 +2,7 @@ package com.hooptap.sdkbrandclub.Engine;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.hooptap.sdkbrandclub.Deserializer.HooptapActionDeserializer;
+import com.hooptap.sdkbrandclub.Deserializer.HooptapActionsDeserializer;
 import com.hooptap.sdkbrandclub.Deserializer.HooptapActionResultDeserializer;
 import com.hooptap.sdkbrandclub.Deserializer.HooptapListResponseDeserializer;
 import com.hooptap.sdkbrandclub.Deserializer.HooptapQuestDeserializer;
@@ -34,7 +34,7 @@ public class ParseObjects {
             gsonBuilder.registerTypeAdapter(HooptapFeed.class, new HooptapFeedDeserializer<>());
             gsonBuilder.registerTypeAdapter(HooptapActionResult.class, new HooptapActionResultDeserializer<>());
             gsonBuilder.registerTypeAdapter(HooptapQuest.class, new HooptapQuestDeserializer<>());
-            gsonBuilder.registerTypeAdapter(HooptapAction.class, new HooptapActionDeserializer<>());
+            gsonBuilder.registerTypeAdapter(HooptapAction.class, new HooptapActionsDeserializer<>());
             Gson gson = gsonBuilder.create();
 
             String itemNameClass = options.getClassName();
