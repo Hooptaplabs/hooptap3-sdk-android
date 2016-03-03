@@ -49,6 +49,13 @@ public class Hooptap {
     }
 
     /**
+     * @return El User Id que obtenemos al hacer un registro o un login
+     */
+    public static String getUserId() {
+        return getTinyDB().getString("ht_user_id");
+    }
+
+    /**
      * Metodo que asigna el Api Key al objeto Hooptap para permitir el acceso a la API
      *
      * @param apiKey necesario para poder realizar las peticiones e identificar al cliente

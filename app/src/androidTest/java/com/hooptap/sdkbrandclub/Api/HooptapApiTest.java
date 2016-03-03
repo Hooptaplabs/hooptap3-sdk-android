@@ -7,13 +7,8 @@ import com.hooptap.sdkbrandclub.Engine.Command;
 import com.hooptap.sdkbrandclub.Engine.MapperObjects;
 import com.hooptap.sdkbrandclub.Engine.ParseObjects;
 import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
-import com.hooptap.sdkbrandclub.Interfaces.HooptapCallbackRetry;
-import com.hooptap.sdkbrandclub.Models.HooptapListResponse;
-import com.hooptap.sdkbrandclub.Models.OptionsMapper;
 import com.hooptap.sdkbrandclub.Models.ResponseError;
-import com.hooptap.sdkbrandclub.Utilities.Constants;
 
-import org.hamcrest.MatcherAssert;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -31,6 +26,7 @@ import static org.junit.Assert.assertThat;
 public class HooptapApiTest extends InstrumentationTestCase {
 
     private String outputBadges = "{code=0000, message=Success, time=2016-02-16T12:53:36.262Z, timestamp=1.455627216262E12, response={items=[{_id=557019c2a5a27f5815eb75d9, name=Burger Lover, desc=Mmmmm Tasty!, image_on=https://hooptap.s3.amazonaws.com/images/55ba09e9efef5aa001428248/14383482067410.png, image_off=https://hooptap.s3.amazonaws.com/images/55ba09e9efef5aa001428248/14383482067410.png, itemType=Badge, progress=0.0}], paging={current_page=1.0, page_size=10.0, total_pages=1.0, item_count=1.0}, next=?page_number=2}}";
+    private
 
     @Before
     public void setUp(){
@@ -45,7 +41,7 @@ public class HooptapApiTest extends InstrumentationTestCase {
         data.put("user_id", "55827fb88d1d8e411aa06c13");
         data.put("token", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3N1ZXIiOiI1NmMyZmExNGM0MzNiMjllN2I4NWU0MWYiLCJhcGlLZXkiOiI0NjU3NjY4NmY2ZjcwNzQ2MTcwMmU2MjciLCJleHBpcmF0aW9uIjoxNDU1NzA3MTc0Mjk2LCJpYXQiOjE0NTU2MjA3NzQsImV4cCI6MTQ1NTcwNzE3NH0.IHV-G6bw3i1M8AoAeiSzBgSWgZOpA_9dpBOlHjxQal8");
 
-        new Command("userUserIdBadgesGet", data, null).executeMethod(new HooptapCallback<Object>() {
+        new Command("userUserIdBadgesGet", data).executeMethod(new HooptapCallback<Object>() {
             @Override
             public void onSuccess(Object output) {
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
@@ -77,7 +73,7 @@ public class HooptapApiTest extends InstrumentationTestCase {
         data.put("user_id", "55827fb88d1d8e411aa06c13");
 
         Log.d("testHooptapApiQuests", "testHooptapApiQuests");
-        new Command("userIdQuestGet", data, null).executeMethod(new HooptapCallback<Object>() {
+        new Command("userIdQuestGet", data).executeMethod(new HooptapCallback<Object>() {
             @Override
             public void onSuccess(Object output) {
 

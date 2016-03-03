@@ -74,8 +74,7 @@ public class ParseTest extends InstrumentationTestCase {
         badge.setIdentificator("557019c2a5a27f5815eb75d9");
         badge.setName("Burger Lover");
         badge.setDescription("Mmmmm Tasty!");
-        badge.setImageOff("https://hooptap.s3.amazonaws.com/images/55ba09e9efef5aa001428248/14383482067410.png");
-        badge.setImageOn("https://hooptap.s3.amazonaws.com/images/55ba09e9efef5aa001428248/14383482067410.png");
+        badge.setImage("https://hooptap.s3.amazonaws.com/images/55ba09e9efef5aa001428248/14383482067410.png");
         badge.setItemType("Badge");
         badge.setProgress(0);
 
@@ -102,8 +101,7 @@ public class ParseTest extends InstrumentationTestCase {
         badge.setIdentificator("557019c2a5a27f5815eb75d9");
         badge.setName("Burger Lover");
         badge.setDescription("Mmmmm Tasty!");
-        badge.setImageOff("https://hooptap.s3.amazonaws.com/images/55ba09e9efef5aa001428248/14383482067410.png");
-        badge.setImageOn("https://hooptap.s3.amazonaws.com/images/55ba09e9efef5aa001428248/14383482067410.png");
+        badge.setImage("https://hooptap.s3.amazonaws.com/images/55ba09e9efef5aa001428248/14383482067410.png");
         badge.setItemType("Badge");
         badge.setProgress(0);
 
@@ -119,7 +117,7 @@ public class ParseTest extends InstrumentationTestCase {
     }
 
     @Test
-    public void testObjectParseToRewardListCheckingOnlyId() {
+    public void testObjectParseToFeedListCheckingOnlyId() {
 
         HooptapFeed reward = new HooptapFeed();
         reward.setIdentificator("56b374b16abe38f4578734dc");
@@ -129,7 +127,7 @@ public class ParseTest extends InstrumentationTestCase {
 
         OptionsMapper options = new OptionsMapper();
         options.setClassName(Constants.LIST);
-        options.setSubClassName(Constants.REWARD);
+        options.setSubClassName(Constants.FEED);
 
         HooptapListResponse htListResponse = ParseObjects.getObjectParse(parsedObject, options);
         assertThat(reward.getIdentificator(), is(((HooptapFeed) htListResponse.getItemArray().get(0)).getIdentificator()));
@@ -147,7 +145,6 @@ public class ParseTest extends InstrumentationTestCase {
         HooptapLevel item = new HooptapLevel();
         item.setDescription("desc");
         item.setMin_points(5);
-        item.setNumber(1);
         item.setImage("https://hooptap.s3.amazonaws.com/images/560914db4871f62672e3ecff/item/14437809765700.png");
         item.setName("Conductor ocasional");
         item.setIdentificator("56b0a1d169b4d2970a68a580");
@@ -158,7 +155,7 @@ public class ParseTest extends InstrumentationTestCase {
 
         OptionsMapper options = new OptionsMapper();
         options.setClassName(Constants.LIST);
-        options.setSubClassName(Constants.REWARD);
+        options.setSubClassName(Constants.FEED);
 
         HooptapListResponse htListResponse = ParseObjects.getObjectParse(parsedObject, options);
 
