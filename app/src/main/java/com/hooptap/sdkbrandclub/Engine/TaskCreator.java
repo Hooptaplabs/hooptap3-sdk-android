@@ -1,11 +1,8 @@
 package com.hooptap.sdkbrandclub.Engine;
 
 
-import android.os.AsyncTask;
-import android.os.Build;
-
 import com.hooptap.brandclub.HooptapVClient;
-import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
+import com.hooptap.sdkbrandclub.Interfaces.TaskWrapperInterface;
 
 import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
@@ -13,13 +10,13 @@ import java.util.LinkedHashMap;
 /**
  * Created by Team Hooptap on 23/12/15.
  */
-public class Command<T> {
+public class TaskCreator {
 
     private LinkedHashMap hashmap_data = new LinkedHashMap();
     private Method method;
     private Method[] declaredMethods = HooptapVClient.class.getDeclaredMethods();
 
-    public Command(String methodName, LinkedHashMap hashmap_data) {
+    public TaskCreator(String methodName, LinkedHashMap hashmap_data) {
         this.hashmap_data = hashmap_data;
 
         Class[] parameters = getParametersOfReflectionMethod(methodName);
@@ -47,13 +44,11 @@ public class Command<T> {
         }
     }
 
-    public void executeMethod(HooptapCallback asyncRespone) {
-        WrapperTask wrapper = new WrapperTask(asyncRespone, method, hashmap_data);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            wrapper.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        } else {
-            wrapper.execute();
-        }
+    public TaskWrapperInterface getWrapperTask() {
+        TaskConfiguration taskConfigurator = new TaskConfiguration();
+        taskConfigurator.setMethod(method);
+        taskConfigurator.setHasmap_data(hashmap_data);
+        return new TaskWrapper(taskConfigurator).getTask();
     }
 
 }

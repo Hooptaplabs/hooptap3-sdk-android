@@ -3,7 +3,9 @@ package com.hooptap.sdkbrandclub.Engine;
 import android.util.Log;
 
 import com.amazonaws.mobileconnectors.apigateway.ApiClientException;
-import com.hooptap.sdkbrandclub.Interfaces.HooptapCallbackError;
+import com.hooptap.sdkbrandclub.Interfaces.ErrorManagerInterface;
+import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
+import com.hooptap.sdkbrandclub.Interfaces.TaskRetryCallback;
 import com.hooptap.sdkbrandclub.Models.ResponseError;
 
 import org.json.JSONException;
@@ -12,19 +14,38 @@ import org.json.JSONObject;
 /**
  * Created by carloscarrasco on 2/3/16.
  */
-public class ErrorManager {
+public class ErrorManager implements ErrorManagerInterface{
 
-    public ErrorManager(WrapperTask wrapperTask, Exception exception, HooptapCallbackError hooptapCallbackError) {
+    private final TaskWrapper wrapperTask;
+    private HooptapCallback callbackResponse;
+    private TaskRetryCallback callbackRetry;
+
+    public ErrorManager(TaskWrapper wrapperTask) {
+        this.wrapperTask = wrapperTask;
+    }
+
+    public void setCallbackRetry(TaskRetryCallback callbackRetry) {
+        this.callbackRetry = callbackRetry;
+    }
+
+    @Override
+    public void setCallbackResponse(HooptapCallback callbackResponse) {
+        this.callbackResponse = callbackResponse;
+    }
+
+    public void setException(Exception exception) {
         if (exception != null && exception.getCause() instanceof ApiClientException) {
             exception.printStackTrace();
             String jsonStringError = ((ApiClientException) exception.getCause()).getErrorMessage();
+            Log.e("ERORMANAGEr",jsonStringError+" (/");
             if (isErrorAboutTokenExpired(jsonStringError)) {
-                boolean tokenRenew = wrapperTask.renewToken();
+                boolean tokenRenew = wrapperTask.renewToken(callbackResponse);
+                Log.e("ERORMANAGEr1",tokenRenew+" / "+wrapperTask);
                 if (tokenRenew){
-                    hooptapCallbackError.retry();
+                    wrapperTask.retryTask(callbackRetry);
                 }
             } else {
-                hooptapCallbackError.onError(generateError(jsonStringError));
+                callbackResponse.onError(generateError(jsonStringError));
             }
         } else {
             Log.d("generateErro", "NO ApiClientException ");
@@ -36,7 +57,7 @@ public class ErrorManager {
             } else {
                 responseError.setReason("Unknow Error");
             }
-            hooptapCallbackError.onError(responseError);
+            callbackResponse.onError(responseError);
         }
     }
 
@@ -72,4 +93,5 @@ public class ErrorManager {
     }
 
 
+   
 }
