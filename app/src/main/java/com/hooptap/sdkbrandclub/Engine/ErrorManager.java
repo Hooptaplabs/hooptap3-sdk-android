@@ -17,7 +17,7 @@ import org.json.JSONObject;
 public class ErrorManager implements ErrorManagerInterface {
 
     private TaskCallbackWithRetry callbackResponse;
-
+ 
     @Override
     public void setCallbackResponse(TaskCallbackWithRetry callbackResponse) {
         this.callbackResponse = callbackResponse;
