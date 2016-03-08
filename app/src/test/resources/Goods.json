@@ -1,0 +1,183 @@
+{
+	"code": "0000",
+	"message": "Success",
+	"time": "2016-02-08T11:40:36.983Z",
+	"timestamp": 1454931636983,
+	"response": {
+		"items": [{
+			"_id": "55702655a5a27f5815eb766d",
+			"name": "Un pedazo de viaje",
+			"image": "https://hooptap.s3.amazonaws.com/images/good/14334131927590.jpg",
+			"desc": "A las Islas Canarias",
+			"product": "557019c2a5a27f5815eb75d7",
+			"creation_date": "2015-06-04T10:20:05.040Z",
+			"price": [{
+				"reward": "5571c80a3de8545f1f29cfd7",
+				"_id": "5582d7d832862a450a1e34de",
+				"value": 1
+			}],
+			"code_type": "qr",
+			"base_code": "",
+			"url_detail": "http://api.hooptap.com/api/v1.1.0/good/55702655a5a27f5815eb766d",
+			"stock_per_user_time": {
+				"interval": "hour",
+				"count": 1
+			},
+			"finite_stock_per_user_time": false,
+			"finite_stock_per_user": false,
+			"stock_time": {
+				"count": 1
+			},
+			"finite_stock_time": false,
+			"finite_stock": false,
+			"date_end": "2015-08-22T10:19:00.000Z",
+			"date_start": "2015-05-31T10:19:00.000Z",
+			"itemType": "Good",
+			"enabled": true,
+			"__v": 0,
+			"segments": ["ALL"],
+			"shop_redeem": false
+		}, {
+			"_id": "557ae630ef25ad35682dcade",
+			"name": "Swarosvky Elements watch",
+			"image": "https://hooptap.s3.amazonaws.com/images/good/14341176819570.jpg",
+			"desc": "To wear everyday or in a special occasion, you will never take your Swarovsky Elements watch off.\n•\tDial with 8 inlaid crystals.\n•\tStainless steel 18 carats gold-plated case. \n•\tDiameter: 3,8 cm.\n•\tAnalogic movement PC32.\n•\tAdjustable strap made of polyurethane.\n•\tSubmersible 3 ATM.\n",
+			"product": "557019c2a5a27f5815eb75d7",
+			"creation_date": "2015-06-12T14:01:20.975Z",
+			"price": [{
+				"reward": "5571c80a3de8545f1f29cfd7",
+				"_id": "5582d7d832862a450a1e34de",
+				"value": 1
+			}],
+			"code_type": "code",
+			"base_code": "",
+			"url_detail": "http://api.hooptap.com/api/v1.1.0/good/557ae630ef25ad35682dcade",
+			"stock_per_user_time": {
+				"count": 1,
+				"interval": "hour"
+			},
+			"finite_stock_per_user_time": false,
+			"finite_stock_per_user": false,
+			"stock_time": {
+				"count": 1
+			},
+			"finite_stock_time": false,
+			"finite_stock": false,
+			"date_end": "2016-01-02T14:00:00.000Z",
+			"date_start": "2015-06-11T11:59:00.000Z",
+			"itemType": "Good",
+			"enabled": false,
+			"__v": 0,
+			"segments": ["ALL"],
+			"shop_redeem": false
+		}, {
+			"_id": "557ae67fef25ad35682dcae5",
+			"name": "SPA for two  ",
+			"image": "https://hooptap.s3.amazonaws.com/images/good/14341177592920.jpg",
+			"desc": "An “only girls day” with SPA, a treat for lovers who want a bit of calmness, a relaxing afternoon with your sister… Share it with whoever you like!\n\nThis experience includes:\n\na guided access to the thermal circuit with jet pool set at 34º, pool with hydromassage pool at 34º, relax pool 38º, muscle toning pool 10º, footbath, therma, Turkish bath, Scottish shower and bithermal shower with essential oils.\n\nThis experience is valid for 2 peopl\te, any day of the year, upon reservation and  upon availability. The length of this activity is 1 hour and 30 minutes. \n\nThe validity of this gift voucher is 10 months.\n\nDon’t forget  your sandals, cap, swimsuit and towel!",
+			"product": "557019c2a5a27f5815eb75d7",
+			"creation_date": "2015-06-12T14:01:20.976Z",
+			"price": [{
+				"reward": "5571c80a3de8545f1f29cfd7",
+				"_id": "5582d7d832862a450a1e34de",
+				"value": 1
+			}],
+			"code_type": "qr",
+			"base_code": "",
+			"url_detail": "http://api.hooptap.com/api/v1.1.0/good/557ae67fef25ad35682dcae5",
+			"stock_per_user_time": {
+				"count": 1,
+				"interval": "hour"
+			},
+			"finite_stock_per_user_time": false,
+			"finite_stock_per_user": false,
+			"stock_time": {
+				"count": 1
+			},
+			"finite_stock_time": false,
+			"finite_stock": false,
+			"date_end": "2016-01-29T14:01:00.000Z",
+			"date_start": "2015-06-12T12:01:00.000Z",
+			"itemType": "Good",
+			"enabled": true,
+			"__v": 0,
+			"segments": ["ALL"],
+			"shop_redeem": false
+		}, {
+			"_id": "557ae6f7ef25ad35682dcaf5",
+			"name": "Wine tasting ",
+			"image": "https://hooptap.s3.amazonaws.com/images/good/14341178799740.jpg",
+			"desc": "Perfect for an escape and for starting with the wine world, this experience for two offers you the opportunity to spend a day in a winery and taste their best wines. \n\nThis experience includes:\n•\tA visit to the vineyards and a winegrowing course\n•\tA visit to the winery with an oenology course\n•\tA tasting course, tasting 4 different wines\n•\tAn aperitif with the region’s products\n•\tA dossier with explanations about the course\n\nThis experience is valid for 2 people, every Saturday and Sunday from 11:00 to 14:00 (arrange visit). The length of this activity is around 3 hours. At the end of the visit, you can enjoy a tasting menu in the restaurant placed in the same property.\n\nThe validity of this gift voucher is 10 months. The winery has a service of product sale and parking. People younger than 18 must be accompanied by an adult. ",
+			"product": "557019c2a5a27f5815eb75d7",
+			"creation_date": "2015-06-12T14:01:20.974Z",
+			"price": [{
+				"reward": "5571c80a3de8545f1f29cfd7",
+				"_id": "5582d7d832862a450a1e34de",
+				"value": 1
+			}],
+			"code_type": "qr",
+			"base_code": "",
+			"url_detail": "http://api.hooptap.com/api/v1.1.0/good/557ae6f7ef25ad35682dcaf5",
+			"stock_per_user_time": {
+				"interval": "hour",
+				"count": 1
+			},
+			"finite_stock_per_user_time": false,
+			"finite_stock_per_user": false,
+			"stock_time": {
+				"count": 1
+			},
+			"finite_stock_time": false,
+			"finite_stock": false,
+			"date_end": "2016-01-01T15:04:00.000Z",
+			"date_start": "2015-06-12T14:04:00.000Z",
+			"itemType": "Good",
+			"enabled": false,
+			"__v": 0,
+			"segments": ["ALL"],
+			"shop_redeem": false
+		}, {
+			"_id": "557ae744ef25ad35682dcafd",
+			"name": "California&Co sunglasses",
+			"image": "https://hooptap.s3.amazonaws.com/images/good/14341179579040.jpg",
+			"desc": "For the mountain, beach or city, when you try your California&Co on, you won’t take them off.\n\nProtect yourself in style against the sun wherever you go with these sunglasses that have their own personality, just as you.\n\n•\tLens diameter: 54 mm.\n•\tNosepiece width: 15 mm.\n•\tSidepiece length: 140 mm.\n•\tLens protection: Category 3.\n•\tCrystal colors: Green, maroon, blue or orange.",
+			"product": "557019c2a5a27f5815eb75d7",
+			"creation_date": "2015-06-12T14:01:20.975Z",
+			"price": [{
+				"reward": "5571c80a3de8545f1f29cfd7",
+				"_id": "55ed6122315ba1300850bd1a",
+				"value": 1
+			}],
+			"code_type": "code",
+			"base_code": "",
+			"url_detail": "http://api.hooptap.com/api/v1.1.0/good/557ae744ef25ad35682dcafd",
+			"stock_per_user_time": {
+				"count": 1,
+				"interval": "hour"
+			},
+			"finite_stock_per_user_time": false,
+			"finite_stock_per_user": false,
+			"stock_time": {
+				"count": 1
+			},
+			"finite_stock_time": false,
+			"finite_stock": false,
+			"date_end": "2016-01-01T13:04:00.000Z",
+			"date_start": "2015-06-12T10:04:00.000Z",
+			"itemType": "Good",
+			"enabled": true,
+			"__v": 0,
+			"segments": ["ALL"],
+			"shop_redeem": false,
+			"locked": false,
+			"terms_conditions": "Terms"
+		}],
+		"paging": {
+			"current_page": 1,
+			"page_size": 5,
+			"total_pages": 2,
+			"item_count": 7
+		},
+		"next": "http://api.dev.hooptap.com:8080/api/v2.0/user/565c120fb531922d1ca5646e/marketplace/good?page_number=2"
+	}
+}

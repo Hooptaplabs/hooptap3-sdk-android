@@ -1,0 +1,120 @@
+{
+  "code": "0000",
+  "message": "Success",
+  "time": "2016-02-17T16:07:51.012Z",
+  "timestamp": 1455725271012,
+  "response": {
+    "items": [{
+      "_id": "56b374b16abe38f4578734dc",
+      "user": "565ffc2e561d100b7951c703",
+      "product": "565c7a3b4933895d35b45a3d",
+      "reason": "level_up",
+      "reason_type": "level",
+      "reason_data": {
+        "desc": "desc",
+        "min_points": 5,
+        "image": "https://hooptap.s3.amazonaws.com/images/560914db4871f62672e3ecff/item/14437809765700.png",
+        "number": 1,
+        "name": "Conductor ocasional",
+        "_id": "56b0a1d169b4d2970a68a580"
+      },
+      "creation_date": "2016-02-04T15:56:33.315Z",
+      "deleted": false,
+      "__v": 0
+    }, {
+      "_id": "56b374b66abe38f4578734df",
+      "user": "565f5229561d100b7951a2bc",
+      "product": "565c7a3b4933895d35b45a3d",
+      "reason": "register",
+      "reason_type": "user",
+      "reason_data": {},
+      "creation_date": "2016-02-04T15:56:38.024Z",
+      "deleted": false,
+      "__v": 0
+    }, {
+      "_id": "56b374b66abe38f4578734df",
+      "user": "565f5229561d100b7951a2bc",
+      "product": "565c7a3b4933895d35b45a3d",
+      "reason": "achieve",
+      "reason_type": "reward",
+      "reason_data": {
+        "_id": "55f6d8a33c14368f2b01d485",
+        "user": "557019c2a5a27f5815eb75d9",
+        "reward": "557019c2a5a27f5815eb75d9",
+        "type": "badge",
+        "product": "557019c2a5a27f5815eb75d7",
+        "progress": 100,
+        "creation_date": "2015-09-14T14:24:35.977Z",
+        "deleted": false,
+        "__v": 0
+      },
+      "creation_date": "2016-02-04T15:56:38.024Z",
+      "deleted": false,
+      "__v": 0
+    }, {
+      "_id": "56c2dcdd2c583cda4434f1ff",
+      "user": "557019c2a5a27f5815eb75d9",
+      "product": "557019c2a5a27f5815eb75d7",
+      "reason": "earn",
+      "reason_type": "reward",
+      "reason_data": {
+        "quantity": 10,
+        "product": "557019c2a5a27f5815eb75d7",
+        "user": "557019c2a5a27f5815eb75d9",
+        "reward": "5571c80a3de8545f1f29cfd7",
+        "type": "point",
+        "_id": "56c2dcdd2c583cda4434f1fe",
+        "creation_date": "2016-02-16T08:25:01.338Z",
+        "deleted": false
+      },
+      "creation_date": "2016-02-16T08:25:01.349Z",
+      "deleted": false,
+      "__v": 0
+    }, {
+      "_id": "56c1fce31287f5794d7cc3f0",
+      "user": "557019c2a5a27f5815eb75d9",
+      "product": "557019c2a5a27f5815eb75d7",
+      "reason": "earn",
+      "reason_type": "reward",
+      "reason_data": {
+        "quantity": 50,
+        "product": "557019c2a5a27f5815eb75d7",
+        "user": "557019c2a5a27f5815eb75d9",
+        "reward": "5571c80a3de8545f1f29cfd7",
+        "type": "point",
+        "_id": "56c1fce31287f5794d7cc3ef",
+        "creation_date": "2016-02-15T16:29:23.429Z",
+        "deleted": false
+      },
+      "creation_date": "2016-02-15T16:29:23.431Z",
+      "deleted": false,
+      "__v": 0
+    }, {
+      "_id": "56c1fc641287f5794d7cc3ee",
+      "user": "557019c2a5a27f5815eb75d9",
+      "product": "557019c2a5a27f5815eb75d7",
+      "reason": "earn",
+      "reason_type": "reward",
+      "reason_data": {
+        "quantity": -52,
+        "product": "557019c2a5a27f5815eb75d7",
+        "user": "557019c2a5a27f5815eb75d9",
+        "reward": "5571c80a3de8545f1f29cfd7",
+        "type": "point",
+        "_id": "56c1fc641287f5794d7cc3ed",
+        "creation_date": "2016-02-15T16:27:16.375Z",
+        "deleted": false
+      },
+      "creation_date": "2016-02-15T16:27:16.378Z",
+      "deleted": false,
+      "__v": 0
+    }],
+    "paging": {
+      "current_page": 1,
+      "page_size": 5,
+      "total_pages": 2,
+      "item_count": 10
+    },
+    "next": "http://api.dev.hooptap.com:8080/api/v2.0/user/557019c2a5a27f5815eb75d9/feed?page_number=2"
+  }
+}

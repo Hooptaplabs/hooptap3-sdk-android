@@ -23,6 +23,9 @@ android {
             testCoverageEnabled = true
         }
     }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
@@ -106,7 +109,14 @@ dependencies {
     androidTestCompile "com.google.dexmaker:dexmaker:1.2"
     androidTestCompile "com.google.dexmaker:dexmaker-mockito:1.2"
 
+    testCompile 'org.unitils:unitils-core:3.3'
+    testCompile 'junit:junit:4.12'
+
     compile 'com.android.support.test:runner:0.4'
+    testCompile "org.robolectric:robolectric:3.0"
+    testCompile 'junit:junit:4.12'
+    testCompile "org.mockito:mockito-core:1.+"
+    testCompile 'org.hamcrest:hamcrest-library:1.3'
 }
 
 

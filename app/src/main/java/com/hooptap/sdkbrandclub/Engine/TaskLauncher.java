@@ -1,7 +1,6 @@
 package com.hooptap.sdkbrandclub.Engine;
 
-import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
-import com.hooptap.sdkbrandclub.Interfaces.TaskRetryCallback;
+import com.hooptap.sdkbrandclub.Interfaces.TaskCallbackWithRetry;
 import com.hooptap.sdkbrandclub.Interfaces.TaskWrapperInterface;
 
 /**
@@ -14,13 +13,7 @@ public class TaskLauncher {
         this.task = task;
     }
 
-    public void executeTask(final HooptapCallback callback) {
-        task.executeTask(callback, new TaskRetryCallback() {
-            @Override
-            public void retryTask(TaskWrapperInterface retryTask) {
-                task = retryTask;
-                executeTask(callback);
-            }
-        });
+    public void executeTask(final TaskCallbackWithRetry callback) {
+        task.executeTask(callback);
     }
 }

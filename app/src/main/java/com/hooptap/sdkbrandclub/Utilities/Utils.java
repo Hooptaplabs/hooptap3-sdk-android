@@ -1,21 +1,13 @@
 package com.hooptap.sdkbrandclub.Utilities;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.util.Base64;
-import android.util.Log;
-
-import com.google.gson.Gson;
 import com.hooptap.sdkbrandclub.Api.Hooptap;
 import com.hooptap.sdkbrandclub.Engine.ParseObjects;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 
 /**
  * Created by root on 22/12/15.
@@ -44,10 +36,9 @@ public class Utils {
 
     }
 
-    public static String loadJSONFromAsset(Context context, String nameJson) {
+    public static String loadJSONFromAsset(InputStream is) {
         String json = null;
         try {
-            InputStream is = context.getAssets().open(nameJson + ".json");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
@@ -59,6 +50,5 @@ public class Utils {
         }
         return json;
     }
-
 
 }

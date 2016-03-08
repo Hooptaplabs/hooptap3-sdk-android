@@ -1,7 +1,6 @@
 package com.hooptap.sdkbrandclub.Models;
 
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -13,20 +12,16 @@ public class ResponseError {
     private String reason;
     private String timestamp;
 
-    public ResponseError() {
-
-    }
-
-    public ResponseError(JSONObject response) {
+    public void setData(String response) {
         try {
-            this.status = response.getInt("httpErrorCode");
-            this.reason = response.getString("message");
-            this.timestamp = response.getString("timestamp");
-
-        } catch (JSONException e) {
-            e.printStackTrace();
+            JSONObject jsonResponse = new JSONObject(response);
+            this.status = jsonResponse.getInt("httpErrorCode");
+            this.reason = jsonResponse.getString("message");
+            this.timestamp = jsonResponse.getString("timestamp");
+        } catch (Exception e) {
+            this.reason = "Unknown error";
+            this.setStatus(500);
         }
-
     }
 
     public int getStatus() {

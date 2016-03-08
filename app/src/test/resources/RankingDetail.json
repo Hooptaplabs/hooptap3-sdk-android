@@ -1,0 +1,35 @@
+{
+	"code": "0000",
+	"message": "Success",
+	"time": "2016-02-10T14:46:39.094Z",
+	"timestamp": 1455115599094,
+	"response": {
+		"users": [{
+				"_id": "565c120fb531922d1ca5646e",
+				"email": "p2@p.com",
+				"password": "$2a$05$87P.a9I33r6zxxMjEJLH2.KX9UnLcDn1tbwyPp7eUDqvFxrAdLOjW",
+				"username": "Pepe",
+				"product": "557019c2a5a27f5815eb75d7",
+				"creation_date": "2015-11-30T09:08:31.121Z",
+				"extra_data": "",
+				"level": 1,
+				"gender": -1,
+				"image": "https://hooptap.s3.amazonaws.com/upload/d5692f04bf03db48bbda5778.jpg",
+				"__v": 0
+			}, {
+				"_id": "565c120fb531922d1ca5646e",
+				"email": "p2@p.com",
+				"password": "$2a$05$87P.a9I33r6zxxMjEJLH2.KX9UnLcDn1tbwyPp7eUDqvFxrAdLOjW",
+				"username": "Pepon",
+				"product": "557019c2a5a27f5815eb75d7",
+				"creation_date": "2015-11-30T09:08:31.121Z",
+				"extra_data": "",
+				"level": 1,
+				"gender": -1,
+				"image": "https://hooptap.s3.amazonaws.com/upload/d5692f04bf03db48bbda5778.jpg",
+				"__v": 0
+			}
+
+		]
+	}
+}

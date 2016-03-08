@@ -7,7 +7,7 @@ public interface TaskWrapperInterface {
 
     TaskWrapperInterface createTask(TaskConfiguratorInterface taskConfigurator);
 
-    void executeTask(HooptapCallback callback, TaskRetryCallback retryCallback);
+    void executeTask(TaskCallbackWithRetry callback);
 
 
 }

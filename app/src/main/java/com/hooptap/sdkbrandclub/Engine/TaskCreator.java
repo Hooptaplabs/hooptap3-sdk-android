@@ -40,7 +40,7 @@ public class TaskCreator {
             Class cls = HooptapVClient.class;
             return cls.getMethod(methodName, argTypes);
         } catch (NoSuchMethodException e) {
-            throw new RuntimeException(new Exception("El metodo que se esta llamando no existe en la interfaz que genera Amazon"));
+            throw new RuntimeException(new Exception("This method dosn't exist"));
         }
     }
 
@@ -48,6 +48,7 @@ public class TaskCreator {
         TaskConfiguration taskConfigurator = new TaskConfiguration();
         taskConfigurator.setMethod(method);
         taskConfigurator.setHasmap_data(hashmap_data);
+        taskConfigurator.setErrorManager(new ErrorManager());
         return new TaskWrapper(taskConfigurator).getTask();
     }
 

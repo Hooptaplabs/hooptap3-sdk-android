@@ -8,8 +8,8 @@ import com.hooptap.brandclub.HooptapVClient;
 import com.hooptap.sdkbrandclub.Api.Hooptap;
 import com.hooptap.sdkbrandclub.Interfaces.ErrorManagerInterface;
 import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
+import com.hooptap.sdkbrandclub.Interfaces.TaskCallbackWithRetry;
 import com.hooptap.sdkbrandclub.Interfaces.TaskConfiguratorInterface;
-import com.hooptap.sdkbrandclub.Interfaces.TaskRetryCallback;
 import com.hooptap.sdkbrandclub.Interfaces.TaskWrapperInterface;
 
 import java.lang.reflect.Method;
@@ -23,7 +23,7 @@ public class TaskAsync extends AsyncTask<Void, Void, Object> implements TaskWrap
     private HooptapVClient client;
     private boolean errorHappends = false;
     private Exception exception;
-    private HooptapCallback asyncRespone;
+    private HooptapCallback resultCallback;
     private Method method;
     private LinkedHashMap hasmap_data;
     private ErrorManagerInterface errorManager;
@@ -57,7 +57,7 @@ public class TaskAsync extends AsyncTask<Void, Void, Object> implements TaskWrap
             errorManager.setException(exception);
         } else {
             if (result != null) {
-                asyncRespone.onSuccess(result);
+                resultCallback.onSuccess(result);
             }
         }
     }
@@ -68,10 +68,9 @@ public class TaskAsync extends AsyncTask<Void, Void, Object> implements TaskWrap
     }
 
     @Override
-    public void executeTask(HooptapCallback resultCallback, TaskRetryCallback retryCallback) {
-        this.asyncRespone = resultCallback;
+    public void executeTask(TaskCallbackWithRetry resultCallback) {
+        this.resultCallback = resultCallback;
         errorManager.setCallbackResponse(resultCallback);
-        errorManager.setCallbackRetry(retryCallback);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             this.executeOnExecutor(android.os.AsyncTask.THREAD_POOL_EXECUTOR);
         } else {
