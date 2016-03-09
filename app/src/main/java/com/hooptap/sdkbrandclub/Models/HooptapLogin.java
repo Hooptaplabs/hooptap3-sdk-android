@@ -7,17 +7,17 @@ import com.hooptap.brandclub.model.InputLoginModel;
  * Created by carloscarrasco on 23/2/16.
  */
 public class HooptapLogin extends InputLoginModel {
-    public transient String email;
+    public transient String login;
     public transient String password ;
 
-    public String getEmail() {
-        email = super.getEmail();
-        return email;
+    public String getLogin() {
+        login = super.getLogin();
+        return login;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-        super.setEmail(email);
+    public void setLogin(String login) {
+        this.login = login;
+        super.setLogin(login);
     }
 
     public String getPassword() {

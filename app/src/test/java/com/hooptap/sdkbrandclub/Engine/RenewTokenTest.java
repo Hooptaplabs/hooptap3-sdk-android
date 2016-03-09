@@ -5,6 +5,7 @@ import com.hooptap.brandclub.model.InputLoginModel;
 import com.hooptap.sdkbrandclub.Api.Hooptap;
 import com.hooptap.sdkbrandclub.BuildConfig;
 import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
+import com.hooptap.sdkbrandclub.Interfaces.TaskCallbackWithRetry;
 import com.hooptap.sdkbrandclub.Models.HooptapLogin;
 import com.hooptap.sdkbrandclub.Models.ResponseError;
 import com.hooptap.sdkbrandclub.Utilities.Utils;
@@ -43,7 +44,7 @@ public class RenewTokenTest {
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
         data.put("api_key", API_KEY);
         HooptapLogin login = new HooptapLogin();
-        login.setEmail("ca");
+        login.setLogin("ca");
         login.setPassword("ca");
         data.put("info", login);
 
@@ -62,9 +63,14 @@ public class RenewTokenTest {
     public void testFailWhenRenewTokenWithBadApiKey() {
         doLoginForGetValidToken();
         Hooptap.setApiKey(BAD_API_KEY);
-        new RenewToken(new HooptapCallback<Boolean>() {
+        new RenewToken().renewToken(new TaskCallbackWithRetry() {
             @Override
-            public void onSuccess(Boolean var) {
+            public void retry() {
+                Assert.fail("Retry Renew Token, when it should fail");
+            }
+
+            @Override
+            public void onSuccess(Object var) {
                 Assert.fail("Success Renew Token, when it should fail");
             }
 
@@ -79,10 +85,15 @@ public class RenewTokenTest {
     @Test
     public void testSuccessWhenRenewToken() {
         doLoginForGetValidToken();
-        new RenewToken(new HooptapCallback<Boolean>() {
+        new RenewToken().renewToken(new TaskCallbackWithRetry() {
             @Override
-            public void onSuccess(Boolean var) {
-                assertTrue(var);
+            public void retry() {
+                assertTrue(true);
+            }
+
+            @Override
+            public void onSuccess(Object var) {
+                Assert.fail("onSuccess has been called, when it should retry");
             }
 
             @Override

@@ -2,6 +2,7 @@ package com.hooptap.sdkbrandclub.Engine;
 
 
 import com.hooptap.brandclub.HooptapVClient;
+import com.hooptap.sdkbrandclub.Interfaces.TaskCallbackWithRetry;
 import com.hooptap.sdkbrandclub.Interfaces.TaskWrapperInterface;
 
 import java.lang.reflect.Method;
@@ -44,12 +45,20 @@ public class TaskCreator {
         }
     }
 
-    public TaskWrapperInterface getWrapperTask() {
+    public TaskWrapperInterface getWrapperTask(TaskCallbackWithRetry resultCallback) {
         TaskConfiguration taskConfigurator = new TaskConfiguration();
         taskConfigurator.setMethod(method);
         taskConfigurator.setHasmap_data(hashmap_data);
-        taskConfigurator.setErrorManager(new ErrorManager());
+        taskConfigurator.setResultCallback(resultCallback);
+        taskConfigurator.setErrorManager(createErrorManager(resultCallback));
         return new TaskWrapper(taskConfigurator).getTask();
+    }
+
+    private ErrorManager createErrorManager(TaskCallbackWithRetry callbackResponse) {
+        ErrorManager errorManager = new ErrorManager();
+        errorManager.setRenewTokenTask(new RenewToken());
+        errorManager.setCallbackResponse(callbackResponse);
+        return errorManager;
     }
 
 }

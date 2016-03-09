@@ -78,9 +78,7 @@ public abstract class HooptapApi {
         data.put("api_key", Hooptap.getApiKey());
         data.put("info_user", info_user);
 
-        TaskWrapperInterface wrapperTask = new TaskCreator(USER_REGISTER_METHODNAME, data).getWrapperTask();
-
-        new TaskLauncher(wrapperTask).executeTask(new TaskCallbackWithRetry() {
+        TaskWrapperInterface wrapperTask = new TaskCreator(USER_REGISTER_METHODNAME, data).getWrapperTask(new TaskCallbackWithRetry() {
 
             @Override
             public void onSuccess(Object output) {
@@ -104,6 +102,8 @@ public abstract class HooptapApi {
             }
         });
 
+        new TaskLauncher(wrapperTask).executeTask();
+
     }
 
     /**
@@ -118,9 +118,7 @@ public abstract class HooptapApi {
         data.put("api_key", Hooptap.getApiKey());
         data.put("info", userLogin);
 
-        TaskWrapperInterface wrapperTask = new TaskCreator(USER_LOGIN_METHODNAME, data).getWrapperTask();
-
-        new TaskLauncher(wrapperTask).executeTask(new TaskCallbackWithRetry() {
+        TaskWrapperInterface wrapperTask = new TaskCreator(USER_LOGIN_METHODNAME, data).getWrapperTask(new TaskCallbackWithRetry() {
             @Override
             public void onSuccess(Object output) {
                 Utils.setToken(output);
@@ -142,6 +140,8 @@ public abstract class HooptapApi {
                 login(userLogin, cb);
             }
         });
+
+        new TaskLauncher(wrapperTask).executeTask();
     }
 
     /**
@@ -158,13 +158,9 @@ public abstract class HooptapApi {
         data.put("id", user_id);
         data.put("info_user", info_user);
 
-        TaskWrapperInterface wrapperTask = new TaskCreator(USER_UPDATE_METHODNAME, data).getWrapperTask();
-
-        new TaskLauncher(wrapperTask).executeTask(new TaskCallbackWithRetry() {
+        TaskWrapperInterface wrapperTask = new TaskCreator(USER_UPDATE_METHODNAME, data).getWrapperTask(new TaskCallbackWithRetry() {
             @Override
             public void onSuccess(Object output) {
-                Utils.setToken(output);
-
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
                 OptionsMapper options = setClassAndSubClasForMapper(Constants.USER);
                 HooptapUser user = ParseObjects.getObjectParse(jsonResponse, options);
@@ -182,6 +178,8 @@ public abstract class HooptapApi {
                 updateUser(user_id, info_user, cb);
             }
         });
+
+        new TaskLauncher(wrapperTask).executeTask();
     }
 
     /**
@@ -205,9 +203,7 @@ public abstract class HooptapApi {
         data.put("id", user_id);
         data.put("actionData", interaction);
 
-        TaskWrapperInterface wrapperTask = new TaskCreator(ACTION_DO_METHODNAME, data).getWrapperTask();
-
-        new TaskLauncher(wrapperTask).executeTask(new TaskCallbackWithRetry() {
+        TaskWrapperInterface wrapperTask = new TaskCreator(ACTION_DO_METHODNAME, data).getWrapperTask(new TaskCallbackWithRetry() {
             @Override
             public void onSuccess(Object output) {
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
@@ -226,6 +222,8 @@ public abstract class HooptapApi {
                 doAction(user_id, interaction_data, accion, cb);
             }
         });
+
+        new TaskLauncher(wrapperTask).executeTask();
     }
 
     public static void getActions(final HooptapOptions options, final HooptapFilter filter,
@@ -241,8 +239,7 @@ public abstract class HooptapApi {
         Log.e("APIKEY", Hooptap.getApiKey() + " / " + Hooptap.getToken() + " / " +
                 options.getPageSize() + " / " + options.getPageNumber() + "");
 
-        TaskWrapperInterface wrapperTask = new TaskCreator(ACTIONS_LIST_METHODNAME, data).getWrapperTask();
-        new TaskLauncher(wrapperTask).executeTask(new TaskCallbackWithRetry() {
+        TaskWrapperInterface wrapperTask = new TaskCreator(ACTIONS_LIST_METHODNAME, data).getWrapperTask(new TaskCallbackWithRetry() {
             @Override
             public void onSuccess(Object output) {
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
@@ -262,6 +259,7 @@ public abstract class HooptapApi {
                 getActions(options, filter, cb);
             }
         });
+        new TaskLauncher(wrapperTask).executeTask();
     }
 
     /**
@@ -281,8 +279,7 @@ public abstract class HooptapApi {
         data.put("token", Hooptap.getToken());
         data.put("id", user_id);
 
-        TaskWrapperInterface wrapperTask = new TaskCreator(QUEST_USER_METHODNAME, data).getWrapperTask();
-        new TaskLauncher(wrapperTask).executeTask(new TaskCallbackWithRetry() {
+        TaskWrapperInterface wrapperTask = new TaskCreator(QUEST_USER_METHODNAME, data).getWrapperTask(new TaskCallbackWithRetry() {
             @Override
             public void onSuccess(Object output) {
 
@@ -304,6 +301,7 @@ public abstract class HooptapApi {
                 getUserQuests(user_id, options, filter, cb);
             }
         });
+        new TaskLauncher(wrapperTask).executeTask();
     }
 
     /**
@@ -320,8 +318,7 @@ public abstract class HooptapApi {
         data.put("token", Hooptap.getToken());
         data.put("id", user_id);
 
-        TaskWrapperInterface wrapperTask = new TaskCreator(QUEST_DETAIL_METHODNAME, data).getWrapperTask();
-        new TaskLauncher(wrapperTask).executeTask(new TaskCallbackWithRetry() {
+        TaskWrapperInterface wrapperTask = new TaskCreator(QUEST_DETAIL_METHODNAME, data).getWrapperTask(new TaskCallbackWithRetry() {
             @Override
             public void onSuccess(Object output) {
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
@@ -340,6 +337,7 @@ public abstract class HooptapApi {
                 getQuestDetail(quest_id, user_id, cb);
             }
         });
+        new TaskLauncher(wrapperTask).executeTask();
     }
 
     /**
@@ -356,8 +354,7 @@ public abstract class HooptapApi {
         data.put("token", Hooptap.getToken());
         data.put("id", user_id);
 
-        TaskWrapperInterface wrapperTask = new TaskCreator(QUEST_ACTIVE_METHODNAME, data).getWrapperTask();
-        new TaskLauncher(wrapperTask).executeTask(new TaskCallbackWithRetry() {
+        TaskWrapperInterface wrapperTask = new TaskCreator(QUEST_ACTIVE_METHODNAME, data).getWrapperTask(new TaskCallbackWithRetry() {
             @Override
             public void onSuccess(Object output) {
 
@@ -381,6 +378,7 @@ public abstract class HooptapApi {
                 activeUserQuest(user_id, quest_id, cb);
             }
         });
+        new TaskLauncher(wrapperTask).executeTask();
     }
 
     /**
@@ -390,15 +388,17 @@ public abstract class HooptapApi {
      * @param options Opciones de configuracion
      * @param cb      Callback que recibira la informacion de la peticion
      */
-    public static void getBadges(final String user_id, final HooptapOptions options, final HooptapCallback<HooptapListResponse> cb) {
+    public static void getBadges(final String user_id, final HooptapOptions options, final HooptapFilter filter, final HooptapCallback<HooptapListResponse> cb) {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("page_size", options.getPageSize() + "");
         data.put("api_key", Hooptap.getApiKey());
+        data.put("page_number", options.getPageNumber() + "");
+        data.put("filter", filter.filterToString());
         data.put("token", Hooptap.getToken());
         data.put("id", user_id);
 
-        TaskWrapperInterface wrapperTask = new TaskCreator(BADGE_LIST_METHODNAME, data).getWrapperTask();
-        new TaskLauncher(wrapperTask).executeTask(new TaskCallbackWithRetry() {
+        TaskWrapperInterface wrapperTask = new TaskCreator(BADGE_LIST_METHODNAME, data).getWrapperTask(new TaskCallbackWithRetry() {
             @Override
             public void onSuccess(Object output) {
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
@@ -414,9 +414,10 @@ public abstract class HooptapApi {
 
             @Override
             public void retry() {
-                getBadges(user_id, options, cb);
+                getBadges(user_id, options, filter, cb);
             }
         });
+        new TaskLauncher(wrapperTask).executeTask();
     }
 
     /**
@@ -432,8 +433,7 @@ public abstract class HooptapApi {
         data.put("token", Hooptap.getToken());
         data.put("id", badge_id);
 
-        TaskWrapperInterface wrapperTask = new TaskCreator(BADGE_DETAIL_METHODNAME, data).getWrapperTask();
-        new TaskLauncher(wrapperTask).executeTask(new TaskCallbackWithRetry() {
+        TaskWrapperInterface wrapperTask = new TaskCreator(BADGE_DETAIL_METHODNAME, data).getWrapperTask(new TaskCallbackWithRetry() {
             @Override
             public void onSuccess(Object output) {
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
@@ -452,6 +452,7 @@ public abstract class HooptapApi {
                 getBadgeDetail(badge_id, cb);
             }
         });
+        new TaskLauncher(wrapperTask).executeTask();
     }
 
     /**
@@ -468,8 +469,7 @@ public abstract class HooptapApi {
         Log.e("USER_ID", user_id);
         data.put("id", user_id);
 
-        TaskWrapperInterface wrapperTask = new TaskCreator(PROFILE_METHODNAME, data).getWrapperTask();
-        new TaskLauncher(wrapperTask).executeTask(new TaskCallbackWithRetry() {
+        TaskWrapperInterface wrapperTask = new TaskCreator(PROFILE_METHODNAME, data).getWrapperTask(new TaskCallbackWithRetry() {
             @Override
             public void onSuccess(Object output) {
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
@@ -488,6 +488,7 @@ public abstract class HooptapApi {
                 getProfile(user_id, cb);
             }
         });
+        new TaskLauncher(wrapperTask).executeTask();
     }
 
     /**
@@ -505,8 +506,7 @@ public abstract class HooptapApi {
         data.put("filter", filter.filterToString());
         data.put("token", Hooptap.getToken());
 
-        TaskWrapperInterface wrapperTask = new TaskCreator(LEVEL_LIST_METHODNAME, data).getWrapperTask();
-        new TaskLauncher(wrapperTask).executeTask(new TaskCallbackWithRetry() {
+        TaskWrapperInterface wrapperTask = new TaskCreator(LEVEL_LIST_METHODNAME, data).getWrapperTask(new TaskCallbackWithRetry() {
             @Override
             public void onSuccess(Object output) {
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
@@ -525,6 +525,7 @@ public abstract class HooptapApi {
                 getLevels(options, filter, cb);
             }
         });
+        new TaskLauncher(wrapperTask).executeTask();
     }
 
     /**
@@ -540,8 +541,7 @@ public abstract class HooptapApi {
         data.put("token", Hooptap.getToken());
         data.put("id", level_id);
 
-        TaskWrapperInterface wrapperTask = new TaskCreator(LEVEL_DETAIL_METHODNAME, data).getWrapperTask();
-        new TaskLauncher(wrapperTask).executeTask(new TaskCallbackWithRetry() {
+        TaskWrapperInterface wrapperTask = new TaskCreator(LEVEL_DETAIL_METHODNAME, data).getWrapperTask(new TaskCallbackWithRetry() {
             @Override
             public void onSuccess(Object output) {
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
@@ -560,6 +560,7 @@ public abstract class HooptapApi {
                 getLevelDetail(level_id, cb);
             }
         });
+        new TaskLauncher(wrapperTask).executeTask();
     }
 
     /**
@@ -575,8 +576,7 @@ public abstract class HooptapApi {
         data.put("token", Hooptap.getToken());
         data.put("id", user_id);
 
-        TaskWrapperInterface wrapperTask = new TaskCreator(LEVEL_CURRENT_METHODNAME, data).getWrapperTask();
-        new TaskLauncher(wrapperTask).executeTask(new TaskCallbackWithRetry() {
+        TaskWrapperInterface wrapperTask = new TaskCreator(LEVEL_CURRENT_METHODNAME, data).getWrapperTask(new TaskCallbackWithRetry() {
             @Override
             public void onSuccess(Object output) {
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
@@ -600,6 +600,7 @@ public abstract class HooptapApi {
                 getCurrentLevelDetail(user_id, cb);
             }
         });
+        new TaskLauncher(wrapperTask).executeTask();
     }
 
     /**
@@ -615,8 +616,7 @@ public abstract class HooptapApi {
         data.put("token", Hooptap.getToken());
         data.put("id", user_id);
 
-        TaskWrapperInterface wrapperTask = new TaskCreator(LEVEL_NEXT_METHODNAME, data).getWrapperTask();
-        new TaskLauncher(wrapperTask).executeTask(new TaskCallbackWithRetry() {
+        TaskWrapperInterface wrapperTask = new TaskCreator(LEVEL_NEXT_METHODNAME, data).getWrapperTask(new TaskCallbackWithRetry() {
             @Override
             public void onSuccess(Object output) {
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
@@ -646,6 +646,7 @@ public abstract class HooptapApi {
                 getNextLevelDetail(user_id, cb);
             }
         });
+        new TaskLauncher(wrapperTask).executeTask();
     }
 
     /**
@@ -661,8 +662,7 @@ public abstract class HooptapApi {
         data.put("token", Hooptap.getToken());
         data.put("id", user_id);
 
-        TaskWrapperInterface wrapperTask = new TaskCreator(POINTS_METHODNAME, data).getWrapperTask();
-        new TaskLauncher(wrapperTask).executeTask(new TaskCallbackWithRetry() {
+        TaskWrapperInterface wrapperTask = new TaskCreator(POINTS_METHODNAME, data).getWrapperTask(new TaskCallbackWithRetry() {
             @Override
             public void onSuccess(Object output) {
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
@@ -681,6 +681,7 @@ public abstract class HooptapApi {
                 getPoints(user_id, cb);
             }
         });
+        new TaskLauncher(wrapperTask).executeTask();
     }
 
     /**
@@ -699,8 +700,7 @@ public abstract class HooptapApi {
         data.put("filter", filter.toString());
         data.put("token", Hooptap.getToken());
 
-        TaskWrapperInterface wrapperTask = new TaskCreator(RANKING_LIST, data).getWrapperTask();
-        new TaskLauncher(wrapperTask).executeTask(new TaskCallbackWithRetry() {
+        TaskWrapperInterface wrapperTask = new TaskCreator(RANKING_LIST, data).getWrapperTask(new TaskCallbackWithRetry() {
             @Override
             public void onSuccess(Object output) {
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
@@ -719,6 +719,7 @@ public abstract class HooptapApi {
                 getRankingList(options, filter, cb);
             }
         });
+        new TaskLauncher(wrapperTask).executeTask();
     }
 
     /**
@@ -734,8 +735,7 @@ public abstract class HooptapApi {
         data.put("token", Hooptap.getToken());
         data.put("rankingId", ranking_id);
 
-        TaskWrapperInterface wrapperTask = new TaskCreator(RANKING_DETAIL, data).getWrapperTask();
-        new TaskLauncher(wrapperTask).executeTask(new TaskCallbackWithRetry() {
+        TaskWrapperInterface wrapperTask = new TaskCreator(RANKING_DETAIL, data).getWrapperTask(new TaskCallbackWithRetry() {
             @Override
             public void onSuccess(Object output) {
 
@@ -756,6 +756,7 @@ public abstract class HooptapApi {
                 getRankingDetail(ranking_id, cb);
             }
         });
+        new TaskLauncher(wrapperTask).executeTask();
     }
 
     /**
@@ -778,8 +779,7 @@ public abstract class HooptapApi {
         data.put("id", user_id);
 
 
-        TaskWrapperInterface wrapperTask = new TaskCreator(RANKING_USERS_METHODNAME, data).getWrapperTask();
-        new TaskLauncher(wrapperTask).executeTask(new TaskCallbackWithRetry() {
+        TaskWrapperInterface wrapperTask = new TaskCreator(RANKING_USERS_METHODNAME, data).getWrapperTask(new TaskCallbackWithRetry() {
             @Override
             public void onSuccess(Object output) {
 
@@ -800,6 +800,7 @@ public abstract class HooptapApi {
                 getRankingUsers(user_id, ranking_id, options, filter, cb);
             }
         });
+        new TaskLauncher(wrapperTask).executeTask();
     }
 
     /**
@@ -819,8 +820,7 @@ public abstract class HooptapApi {
         data.put("token", Hooptap.getToken());
         data.put("id", user_id);
 
-        TaskWrapperInterface wrapperTask = new TaskCreator(FEED_METHODNAME, data).getWrapperTask();
-        new TaskLauncher(wrapperTask).executeTask(new TaskCallbackWithRetry() {
+        TaskWrapperInterface wrapperTask = new TaskCreator(FEED_METHODNAME, data).getWrapperTask(new TaskCallbackWithRetry() {
             @Override
             public void onSuccess(Object output) {
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
@@ -839,6 +839,7 @@ public abstract class HooptapApi {
                 getUserFeed(user_id, options, filter, cb);
             }
         });
+        new TaskLauncher(wrapperTask).executeTask();
     }
 
     /**
@@ -856,8 +857,7 @@ public abstract class HooptapApi {
         data.put("token", Hooptap.getToken());
         data.put("id", user_id);
 
-        TaskWrapperInterface wrapperTask = new TaskCreator(ITEM_DETAIL_METHODNAME, data).getWrapperTask();
-        new TaskLauncher(wrapperTask).executeTask(new TaskCallbackWithRetry() {
+        TaskWrapperInterface wrapperTask = new TaskCreator(ITEM_DETAIL_METHODNAME, data).getWrapperTask(new TaskCallbackWithRetry() {
             @Override
             public void onSuccess(Object output) {
                 try {
@@ -880,6 +880,7 @@ public abstract class HooptapApi {
                 getItemDetail(user_id, item_id, cb);
             }
         });
+        new TaskLauncher(wrapperTask).executeTask();
     }
 
     /**
@@ -899,8 +900,7 @@ public abstract class HooptapApi {
         data.put("token", Hooptap.getToken());
         data.put("id", user_id);
 
-        TaskWrapperInterface wrapperTask = new TaskCreator(ITEM_LIST_METHODNAME, data).getWrapperTask();
-        new TaskLauncher(wrapperTask).executeTask(new TaskCallbackWithRetry() {
+        TaskWrapperInterface wrapperTask = new TaskCreator(ITEM_LIST_METHODNAME, data).getWrapperTask(new TaskCallbackWithRetry() {
             @Override
             public void onSuccess(Object output) {
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
@@ -919,6 +919,7 @@ public abstract class HooptapApi {
                 getItems(user_id, options, filter, cb);
             }
         });
+        new TaskLauncher(wrapperTask).executeTask();
     }
 
     private static OptionsMapper setClassAndSubClasForMapper(String className, String subClassName) {

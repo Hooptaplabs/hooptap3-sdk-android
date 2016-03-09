@@ -17,12 +17,22 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * Created by carloscarrasco on 8/3/16.
@@ -43,34 +53,7 @@ public class ErrorManagerTest {
         new Hooptap.Builder(RuntimeEnvironment.application).setApiKey(API_KEY).build();
     }
 
-    public void doLoginForGetValidToken() {
-        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
-        data.put("api_key", API_KEY);
-        HooptapLogin login = new HooptapLogin();
-        login.setEmail("ca");
-        login.setPassword("ca");
-        data.put("info", login);
-
-        try {
-            Class[] args = {String.class, InputLoginModel.class};
-            Class cls = HooptapVClient.class;
-            Method method = cls.getMethod(USER_LOGIN_METHODNAME, args);
-            Object responseFromServer = method.invoke(Hooptap.getClient(), data.values().toArray());
-            JSONObject info = ParseObjects.convertObjectToJsonResponse(responseFromServer);
-            try {
-                if (!info.isNull("access_token")) {
-                    String infoToken = info.getString("access_token");
-                    TOKEN_VALID =  "Bearer " + infoToken;
-                }
-            } catch (JSONException e) {
-                Assert.fail("Exception " + e);
-            }
-        } catch (Exception e) {
-            Assert.fail("Exception " + e);
-        }
-    }
-
-    public void generateExceptionWithTokenExpired(){
+    public void generateExceptionWithTokenExpired() {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
         data.put("api_key", API_KEY);
@@ -91,31 +74,150 @@ public class ErrorManagerTest {
     }
 
     @Test
-    public void testTokenExpiredError(){
+    public void testErrorManagerWithTokenExperiredApiClientExceptionAndThenRenewTokenIfIsSuccesCallRetryCallback() {
         generateExceptionWithTokenExpired();
-        System.out.print(exception.getCause().getClass().getSimpleName() + " / " + ((ApiClientException) exception.getCause()).getErrorMessage());
+
+        final RenewToken renewTokenTask = Mockito.mock(RenewToken.class);
+
+        doAnswer(new Answer<Void>() {
+            public Void answer(InvocationOnMock invocation) {
+                ((TaskCallbackWithRetry) invocation.getArguments()[0]).retry();
+                return null;
+            }
+        }).when(renewTokenTask).renewToken(any(TaskCallbackWithRetry.class));
+
         ErrorManager errorManager = new ErrorManager();
         errorManager.setCallbackResponse(new TaskCallbackWithRetry() {
             @Override
             public void retry() {
-
+                verify(renewTokenTask, times(1)).renewToken(any(TaskCallbackWithRetry.class));
             }
 
             @Override
             public void onSuccess(Object var) {
-
+                Assert.fail("onSuccess has been called when retry should be called");
             }
 
             @Override
             public void onError(ResponseError var) {
-
+                Assert.fail("onError has been called when retry should be called");
             }
         });
+        errorManager.setRenewTokenTask(renewTokenTask);
+        errorManager.setException(exception);
+    }
+
+    public void doLoginForGetValidToken() {
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("api_key", API_KEY);
+        HooptapLogin login = new HooptapLogin();
+        login.setLogin("ca");
+        login.setPassword("ca");
+        data.put("info", login);
+
+        try {
+            Class[] args = {String.class, InputLoginModel.class};
+            Class cls = HooptapVClient.class;
+            Method method = cls.getMethod(USER_LOGIN_METHODNAME, args);
+            Object responseFromServer = method.invoke(Hooptap.getClient(), data.values().toArray());
+            Utils.setToken(responseFromServer);
+        } catch (Exception e) {
+            Assert.fail("Exception " + e);
+        }
+    }
+
+    public void generateExceptionRandom() {
+
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("api_key", API_KEY);
+        data.put("token", Hooptap.getToken());
+        data.put("id", "Badge_Id");
+        try {
+            Class[] args = {String.class, String.class, String.class};
+            Class cls = HooptapVClient.class;
+            Method method = cls.getMethod(BADGE_DETAIL_METHODNAME, args);
+            try {
+                method.invoke(Hooptap.getClient(), data.values().toArray());
+            } catch (Exception e) {
+                exception = e;
+                System.out.print(((ApiClientException) exception.getCause()).getErrorMessage());
+            }
+        } catch (Exception e) {
+            Assert.fail("Exception " + e);
+        }
+    }
+
+    @Test
+    public void testErrorManagerWithRandomApiClientExceptionAndThenReturnTheGeneratedError() {
+        doLoginForGetValidToken();
+        generateExceptionRandom();
+
+        ErrorManager errorManager = new ErrorManager();
+        errorManager.setCallbackResponse(new TaskCallbackWithRetry() {
+            @Override
+            public void retry() {
+                Assert.fail("retry has been called when onError should be called");
+            }
+
+            @Override
+            public void onSuccess(Object var) {
+                Assert.fail("onSuccess has been called when onError should be called");
+            }
+
+            @Override
+            public void onError(ResponseError var) {
+                assertThat(var.getReason(), is("Network error communicating with endpoint"));
+            }
+        });
+        errorManager.setRenewTokenTask(null);
         errorManager.setException(exception);
     }
 
     @Test
-    public void testGenericError(){
+    public void testErrorManagerWithNullNormalExceptionAndThenReturnTheGeneratedError() {
+        ErrorManager errorManager = new ErrorManager();
+        errorManager.setCallbackResponse(new TaskCallbackWithRetry() {
+            @Override
+            public void retry() {
+                Assert.fail("retry has been called when onError should be called");
+            }
 
+            @Override
+            public void onSuccess(Object var) {
+                Assert.fail("onSuccess has been called when onError should be called");
+            }
+
+            @Override
+            public void onError(ResponseError var) {
+                assertThat(var.getReason(), is("Unknown error"));
+            }
+        });
+        errorManager.setRenewTokenTask(null);
+        errorManager.setException(null);
+    }
+
+    @Test
+    public void testErrorManagerWithNoNullNormalExceptionAndThenReturnTheGeneratedError() {
+        ErrorManager errorManager = new ErrorManager();
+        errorManager.setCallbackResponse(new TaskCallbackWithRetry() {
+            @Override
+            public void retry() {
+                Assert.fail("retry has been called when onError should be called");
+            }
+
+            @Override
+            public void onSuccess(Object var) {
+                Assert.fail("onSuccess has been called when onError should be called");
+            }
+
+            @Override
+            public void onError(ResponseError var) {
+                assertThat(var.getReason(), is("Custom Error"));
+            }
+        });
+        errorManager.setRenewTokenTask(null);
+
+        Exception e = new Exception("Custom Error");
+        errorManager.setException(e);
     }
 }

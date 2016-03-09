@@ -5,7 +5,6 @@ import com.hooptap.sdkbrandclub.Interfaces.TaskWrapperInterface;
 
 import junit.framework.Assert;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
@@ -31,7 +30,10 @@ public class TaskCreatorTest {
             Method method = cls.getMethod(BADGE_DETAIL_METHODNAME, args);
             taskConfigurator.setMethod(method);
             taskConfigurator.setHasmap_data(data);
-            taskConfigurator.setErrorManager(new ErrorManager());
+            ErrorManager errorManager = new ErrorManager();
+            errorManager.setRenewTokenTask(new RenewToken());
+            taskConfigurator.setErrorManager(errorManager);
+            taskConfigurator.setResultCallback(null);
         } catch (Exception e) {
             Assert.fail("Exception " + e);
         }
@@ -48,7 +50,7 @@ public class TaskCreatorTest {
         data.put("id", "Badge_Id");
 
         TaskCreator taskCreator = new TaskCreator(BADGE_DETAIL_METHODNAME, data);
-        TaskWrapperInterface wrapperTask = taskCreator.getWrapperTask();
+        TaskWrapperInterface wrapperTask = taskCreator.getWrapperTask(null);
 
         TaskWrapperInterface fakeTask = createFakeTaskWrapper();
 

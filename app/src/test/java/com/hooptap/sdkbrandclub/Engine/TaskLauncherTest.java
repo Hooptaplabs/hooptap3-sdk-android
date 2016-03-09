@@ -40,10 +40,10 @@ public class TaskLauncherTest {
         };
 
         TaskWrapperInterface taskfake = Mockito.mock(TaskWrapperInterface.class);
-        new TaskLauncher(taskfake).executeTask(callback);
+        new TaskLauncher(taskfake).executeTask();
 
-
-        verify(taskfake, atLeastOnce()).executeTask(isA(TaskCallbackWithRetry.class));
+        verify(taskfake, atLeastOnce()).executeTask();
+        //verify(taskfake, atLeastOnce()).executeTask(isA(TaskCallbackWithRetry.class));
     }
 
 

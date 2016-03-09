@@ -15,9 +15,23 @@ public class ResponseError {
     public void setData(String response) {
         try {
             JSONObject jsonResponse = new JSONObject(response);
-            this.status = jsonResponse.getInt("httpErrorCode");
-            this.reason = jsonResponse.getString("message");
-            this.timestamp = jsonResponse.getString("timestamp");
+            if (!jsonResponse.isNull("httpErrorCode")) {
+                this.status = jsonResponse.getInt("httpErrorCode");
+            } else {
+                this.setStatus(500);
+            }
+
+            if (!jsonResponse.isNull("message")) {
+                this.reason = jsonResponse.getString("message");
+            } else {
+                this.reason = "Unknown error";
+            }
+
+            if (!jsonResponse.isNull("timestamp")) {
+                this.timestamp = jsonResponse.getString("timestamp");
+            } else {
+                this.timestamp = (System.currentTimeMillis() / 1000) + "";
+            }
         } catch (Exception e) {
             this.reason = "Unknown error";
             this.setStatus(500);

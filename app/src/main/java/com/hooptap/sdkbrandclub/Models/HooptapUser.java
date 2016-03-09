@@ -12,7 +12,7 @@ public class HooptapUser {
     private String image;
     private String postalCode;
     private int gender;
-    private String _id;
+    private String externalId;
 
     public String getUsername() {
         return username;
@@ -70,12 +70,12 @@ public class HooptapUser {
         this.gender = gender;
     }
 
-    public String get_id() {
-        return _id;
+    public String getExternalId() {
+        return externalId;
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
     }
 
     public String getPostal_code() {

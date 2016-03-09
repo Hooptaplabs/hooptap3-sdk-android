@@ -13,7 +13,7 @@ public class TaskLauncher {
         this.task = task;
     }
 
-    public void executeTask(final TaskCallbackWithRetry callback) {
-        task.executeTask(callback);
+    public void executeTask() {
+        task.executeTask();
     }
 }

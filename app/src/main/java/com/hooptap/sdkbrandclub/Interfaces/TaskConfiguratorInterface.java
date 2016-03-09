@@ -13,4 +13,6 @@ public interface TaskConfiguratorInterface {
 
     ErrorManagerInterface getErrorManager();
 
+    TaskCallbackWithRetry getResultCallback();
+
 }

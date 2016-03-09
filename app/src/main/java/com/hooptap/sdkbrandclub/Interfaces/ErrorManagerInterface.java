@@ -1,5 +1,6 @@
 package com.hooptap.sdkbrandclub.Interfaces;
 
+import com.hooptap.sdkbrandclub.Engine.RenewToken;
 import com.hooptap.sdkbrandclub.Engine.TaskWrapper;
 
 /**
@@ -9,4 +10,6 @@ public interface ErrorManagerInterface {
     void setException(Exception e);
 
     void setCallbackResponse(TaskCallbackWithRetry callbackResponse);
+
+    void setRenewTokenTask(RenewToken renewTokenTask);
 }

@@ -33,6 +33,7 @@ public class TaskAsync extends AsyncTask<Void, Void, Object> implements TaskWrap
         this.method = taskConfigurator.getMethod();
         this.hasmap_data = taskConfigurator.getHasmap_data();
         this.errorManager = taskConfigurator.getErrorManager();
+        this.resultCallback = taskConfigurator.getResultCallback();
         client = Hooptap.getClient();
         return this;
     }
@@ -68,9 +69,7 @@ public class TaskAsync extends AsyncTask<Void, Void, Object> implements TaskWrap
     }
 
     @Override
-    public void executeTask(TaskCallbackWithRetry resultCallback) {
-        this.resultCallback = resultCallback;
-        errorManager.setCallbackResponse(resultCallback);
+    public void executeTask() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             this.executeOnExecutor(android.os.AsyncTask.THREAD_POOL_EXECUTOR);
         } else {

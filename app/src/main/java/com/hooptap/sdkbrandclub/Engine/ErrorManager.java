@@ -17,10 +17,16 @@ import org.json.JSONObject;
 public class ErrorManager implements ErrorManagerInterface {
 
     private TaskCallbackWithRetry callbackResponse;
- 
+    private RenewToken renewTokenTask;
+
     @Override
     public void setCallbackResponse(TaskCallbackWithRetry callbackResponse) {
         this.callbackResponse = callbackResponse;
+    }
+
+    @Override
+    public void setRenewTokenTask(RenewToken renewTokenTask) {
+        this.renewTokenTask = renewTokenTask;
     }
 
     public void setException(Exception exception) {
@@ -28,17 +34,7 @@ public class ErrorManager implements ErrorManagerInterface {
             String jsonStringError = ((ApiClientException) exception.getCause()).getErrorMessage();
             Log.e("ERORMANAGEr", jsonStringError + " (/");
             if (isErrorAboutTokenExpired(jsonStringError)) {
-                new RenewToken(new HooptapCallback<Boolean>() {
-                    @Override
-                    public void onSuccess(Boolean var) {
-                        callbackResponse.retry();
-                    }
-
-                    @Override
-                    public void onError(ResponseError var) {
-                        callbackResponse.onError(var);
-                    }
-                });
+                renewTokenTask.renewToken(callbackResponse);
             } else {
                 callbackResponse.onError(generateError(jsonStringError));
             }
@@ -47,7 +43,7 @@ public class ErrorManager implements ErrorManagerInterface {
             ResponseError responseError = new ResponseError();
             if (exception != null) {
                 Log.d("generateErrorWithCallNO", exception.getMessage() + " /" + exception);
-                responseError.setData(exception.getMessage());
+                responseError.setReason(exception.getMessage());
             } else {
                 responseError.setData("");
             }

@@ -1,7 +1,7 @@
 package com.hooptap.sdkbrandclub.Engine;
 
 import com.hooptap.sdkbrandclub.Interfaces.ErrorManagerInterface;
-import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
+import com.hooptap.sdkbrandclub.Interfaces.TaskCallbackWithRetry;
 import com.hooptap.sdkbrandclub.Interfaces.TaskConfiguratorInterface;
 
 import java.lang.reflect.Method;
@@ -14,6 +14,8 @@ public class TaskConfiguration implements TaskConfiguratorInterface {
     private Method method;
     private LinkedHashMap hasmap_data;
     private ErrorManagerInterface errorManager;
+    private TaskCallbackWithRetry resultCallback;
+
 
     public void setMethod(Method method) {
         this.method = method;
@@ -26,6 +28,10 @@ public class TaskConfiguration implements TaskConfiguratorInterface {
 
     public void setErrorManager(ErrorManagerInterface errorManager) {
         this.errorManager = errorManager;
+    }
+
+    public void setResultCallback(TaskCallbackWithRetry resultCallback) {
+        this.resultCallback = resultCallback;
     }
 
     @Override
@@ -41,6 +47,11 @@ public class TaskConfiguration implements TaskConfiguratorInterface {
     @Override
     public ErrorManagerInterface getErrorManager() {
         return errorManager;
+    }
+
+    @Override
+    public TaskCallbackWithRetry getResultCallback() {
+        return resultCallback;
     }
 
 }
