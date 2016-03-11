@@ -2,15 +2,15 @@ package com.hooptap.sdkbrandclub.Engine;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.hooptap.sdkbrandclub.Deserializer.HooptapActionsDeserializer;
 import com.hooptap.sdkbrandclub.Deserializer.HooptapActionResultDeserializer;
+import com.hooptap.sdkbrandclub.Deserializer.HooptapActionsDeserializer;
+import com.hooptap.sdkbrandclub.Deserializer.HooptapFeedDeserializer;
 import com.hooptap.sdkbrandclub.Deserializer.HooptapListResponseDeserializer;
 import com.hooptap.sdkbrandclub.Deserializer.HooptapQuestDeserializer;
-import com.hooptap.sdkbrandclub.Deserializer.HooptapFeedDeserializer;
 import com.hooptap.sdkbrandclub.Models.HooptapAction;
 import com.hooptap.sdkbrandclub.Models.HooptapActionResult;
-import com.hooptap.sdkbrandclub.Models.HooptapListResponse;
 import com.hooptap.sdkbrandclub.Models.HooptapFeed;
+import com.hooptap.sdkbrandclub.Models.HooptapListResponse;
 import com.hooptap.sdkbrandclub.Models.HooptapQuest;
 import com.hooptap.sdkbrandclub.Models.OptionsMapper;
 

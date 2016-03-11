@@ -1,17 +1,11 @@
 package com.hooptap.sdkbrandclub.Api;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.amazonaws.mobileconnectors.apigateway.ApiClientFactory;
-import com.hooptap.brandclub.HooptapVClient;
 import com.hooptap.sdkbrandclub.Engine.MapperObjects;
+import com.hooptap.sdkbrandclub.HooptapVClient;
 import com.hooptap.sdkbrandclub.Utilities.TinyDB;
-import com.hooptap.sdkbrandclub.Utilities.Utils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class Hooptap {
     private static HooptapVClient sClientService;

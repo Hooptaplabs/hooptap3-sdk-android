@@ -1,7 +1,6 @@
 package com.hooptap.sdkbrandclub.Models;
 
-import com.google.gson.annotations.SerializedName;
-import com.hooptap.brandclub.model.InputLoginModel;
+import com.hooptap.sdkbrandclub.model.InputLoginModel;
 
 /**
  * Created by carloscarrasco on 23/2/16.

@@ -29,7 +29,6 @@ public class LocationManager implements
     private WebView webview;
 
     public void getLocation(Context activity, WebView webview){
-        Log.e("GET1","GETLOCATION1");
         this.webview = webview;
 
         createLocationRequest();
@@ -45,18 +44,15 @@ public class LocationManager implements
 
     @Override
     public void onConnected(Bundle bundle) {
-        Log.e("Conected","Conected");
         startLocationUpdates();
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.e("onConnectionSuspended","onConnectionSuspended");
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e("onConnectionFailed","onConnectionFailed");
     }
 
     public void startLocationUpdates() {

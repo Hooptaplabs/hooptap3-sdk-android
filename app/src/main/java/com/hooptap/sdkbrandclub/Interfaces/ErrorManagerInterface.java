@@ -1,7 +1,6 @@
 package com.hooptap.sdkbrandclub.Interfaces;
 
 import com.hooptap.sdkbrandclub.Engine.RenewToken;
-import com.hooptap.sdkbrandclub.Engine.TaskWrapper;
 
 /**
  * Created by carloscarrasco on 3/3/16.

@@ -1,6 +1,5 @@
 package com.hooptap.sdkbrandclub.Engine;
 
-import com.hooptap.sdkbrandclub.Interfaces.TaskCallbackWithRetry;
 import com.hooptap.sdkbrandclub.Interfaces.TaskWrapperInterface;
 
 /**

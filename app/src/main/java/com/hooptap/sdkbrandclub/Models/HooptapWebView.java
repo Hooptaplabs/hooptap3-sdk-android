@@ -75,7 +75,6 @@ public class HooptapWebView extends WebView {
                 if (inter != null) {
                     try {
                         JSONObject jsonGame = new JSONObject(json);
-                        Log.e("FINISH", jsonGame + "");
                         HooptapGameStatus gameStatus = new HooptapGameStatus();
                         gameStatus.setScore(jsonGame.getString("points"));
                         inter.gameDidFinish(gameStatus);
@@ -97,7 +96,6 @@ public class HooptapWebView extends WebView {
             @JavascriptInterface
             @Override
             public void getLocation() {
-                Log.e("GET","GETLOCATION");
                 locationManager = new LocationManager();
                 locationManager.getLocation(context, HooptapWebView.this);
             }
@@ -106,7 +104,6 @@ public class HooptapWebView extends WebView {
     }
 
     public void onDetachedFromWindow(){
-        Log.e("onDetachedFromWindow","onDetachedFromWindow");
         super.onDetachedFromWindow();
         if (locationManager != null){
             if (locationManager.mGoogleApiClient.isConnected()) {

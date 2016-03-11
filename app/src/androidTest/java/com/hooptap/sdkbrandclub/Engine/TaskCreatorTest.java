@@ -2,7 +2,7 @@ package com.hooptap.sdkbrandclub.Engine;
 
 import android.test.InstrumentationTestCase;
 
-import com.hooptap.brandclub.HooptapVClient;
+import com.hooptap.sdkbrandclub.HooptapVClient;
 import com.hooptap.sdkbrandclub.Interfaces.TaskWrapperInterface;
 
 import junit.framework.Assert;

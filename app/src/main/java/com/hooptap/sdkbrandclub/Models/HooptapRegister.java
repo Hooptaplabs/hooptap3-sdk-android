@@ -4,7 +4,7 @@ package com.hooptap.sdkbrandclub.Models;
  * Created by carloscarrasco on 12/2/16.
  */
 
-import com.hooptap.brandclub.model.UserModel;
+import com.hooptap.sdkbrandclub.model.UserModel;
 
 import java.math.BigDecimal;
 
@@ -13,6 +13,7 @@ import java.math.BigDecimal;
  */
 public class HooptapRegister extends UserModel {
 
+    public transient String externalId;
     public transient String username;
     public transient String surname;
     public transient String email;
@@ -22,6 +23,16 @@ public class HooptapRegister extends UserModel {
     public transient String image;
     public transient BigDecimal gender;
     public transient String password;
+
+    public String getExternalId() {
+        externalId = super.getExternalId();
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
+        super.setExternalId(externalId);
+    }
 
     public String getUsername() {
         username = super.getUsername();

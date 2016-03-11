@@ -4,12 +4,8 @@ import android.util.Log;
 
 import com.amazonaws.mobileconnectors.apigateway.ApiClientException;
 import com.hooptap.sdkbrandclub.Interfaces.ErrorManagerInterface;
-import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
 import com.hooptap.sdkbrandclub.Interfaces.TaskCallbackWithRetry;
 import com.hooptap.sdkbrandclub.Models.ResponseError;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Created by carloscarrasco on 2/3/16.
@@ -32,7 +28,6 @@ public class ErrorManager implements ErrorManagerInterface {
     public void setException(Exception exception) {
         if (exception != null && exception.getCause() instanceof ApiClientException) {
             String jsonStringError = ((ApiClientException) exception.getCause()).getErrorMessage();
-            Log.e("ERORMANAGEr", jsonStringError + " (/");
             if (isErrorAboutTokenExpired(jsonStringError)) {
                 renewTokenTask.renewToken(callbackResponse);
             } else {

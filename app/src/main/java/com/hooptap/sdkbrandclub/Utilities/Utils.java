@@ -22,9 +22,9 @@ public class Utils {
     public static void setToken(Object token) {
         JSONObject info = ParseObjects.convertObjectToJsonResponse(token);
         try {
-            if (!info.isNull("_id")) {
-                String user_id = info.getString("_id");
-                Hooptap.getTinyDB().putString("ht_user_id", user_id);
+            if (!info.isNull("externalId")) {
+                String user_id = info.getString("externalId");
+                setUserId(user_id);
             }
             if (!info.isNull("access_token")) {
                 String infoToken = info.getString("access_token");
@@ -34,6 +34,10 @@ public class Utils {
             e.printStackTrace();
         }
 
+    }
+
+    public static void setUserId(String user_id){
+        Hooptap.getTinyDB().putString("ht_user_id", user_id);
     }
 
     public static String loadJSONFromAsset(InputStream is) {

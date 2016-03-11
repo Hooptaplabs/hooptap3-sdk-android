@@ -2,7 +2,6 @@ package com.hooptap.sdkbrandclub.Api;
 
 import android.util.Log;
 
-import com.hooptap.brandclub.model.InputActionDoneModel;
 import com.hooptap.sdkbrandclub.Engine.ParseObjects;
 import com.hooptap.sdkbrandclub.Engine.TaskCreator;
 import com.hooptap.sdkbrandclub.Engine.TaskLauncher;
@@ -27,6 +26,7 @@ import com.hooptap.sdkbrandclub.Models.OptionsMapper;
 import com.hooptap.sdkbrandclub.Models.ResponseError;
 import com.hooptap.sdkbrandclub.Utilities.Constants;
 import com.hooptap.sdkbrandclub.Utilities.Utils;
+import com.hooptap.sdkbrandclub.model.InputActionDoneModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,7 +51,7 @@ public abstract class HooptapApi {
     private static final String QUEST_DETAIL_METHODNAME = "userIdQuestQuestIdGet";
     private static final String QUEST_ACTIVE_METHODNAME = "userIdQuestQuestIdPost";
     private static final String BADGE_LIST_METHODNAME = "userIdBadgesGet";
-    private static final String BADGE_DETAIL_METHODNAME = "rewardIdGet";
+    private static final String BADGE_DETAIL_METHODNAME = "userIdRewardRewardIdGet";
     private static final String PROFILE_METHODNAME = "userIdGet";
     private static final String LEVEL_LIST_METHODNAME = "levelGet";
     private static final String LEVEL_DETAIL_METHODNAME = "levelIdGet";
@@ -74,7 +74,6 @@ public abstract class HooptapApi {
     public static void registerUser(final HooptapRegister info_user, final HooptapCallback<HooptapUser> cb) {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
-        Log.e("APIKEY", Hooptap.getApiKey() + " /");
         data.put("api_key", Hooptap.getApiKey());
         data.put("info_user", info_user);
 
@@ -165,6 +164,8 @@ public abstract class HooptapApi {
                 OptionsMapper options = setClassAndSubClasForMapper(Constants.USER);
                 HooptapUser user = ParseObjects.getObjectParse(jsonResponse, options);
 
+                Utils.setUserId(user.getExternalId());
+
                 cb.onSuccess(user);
             }
 
@@ -236,14 +237,10 @@ public abstract class HooptapApi {
         data.put("filter", filter.toString());
         data.put("token", Hooptap.getToken());
 
-        Log.e("APIKEY", Hooptap.getApiKey() + " / " + Hooptap.getToken() + " / " +
-                options.getPageSize() + " / " + options.getPageNumber() + "");
-
         TaskWrapperInterface wrapperTask = new TaskCreator(ACTIONS_LIST_METHODNAME, data).getWrapperTask(new TaskCallbackWithRetry() {
             @Override
             public void onSuccess(Object output) {
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
-                Log.e("getActions", jsonResponse + " /");
                 OptionsMapper options = setClassAndSubClasForMapper(Constants.LIST, Constants.ACTION);
                 HooptapListResponse listActions = ParseObjects.getObjectParse(jsonResponse, options);
                 cb.onSuccess(listActions);
@@ -282,9 +279,7 @@ public abstract class HooptapApi {
         TaskWrapperInterface wrapperTask = new TaskCreator(QUEST_USER_METHODNAME, data).getWrapperTask(new TaskCallbackWithRetry() {
             @Override
             public void onSuccess(Object output) {
-
                 JSONObject jsonResponse = ParseObjects.convertObjectToJsonResponse(output);
-                Log.e("getUserQuests", jsonResponse + " /");
                 OptionsMapper options = setClassAndSubClasForMapper(Constants.LIST, Constants.QUEST);
                 HooptapListResponse listQuest = ParseObjects.getObjectParse(jsonResponse, options);
 
@@ -426,12 +421,13 @@ public abstract class HooptapApi {
      * @param badge_id Identificador del usuario
      * @param cb       Callback que recibira la informacion de la peticion
      */
-    public static void getBadgeDetail(final String badge_id, final HooptapCallback<HooptapBadge> cb) {
+    public static void getBadgeDetail(final String badge_id, final String user_id, final HooptapCallback<HooptapBadge> cb) {
 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
         data.put("api_key", Hooptap.getApiKey());
         data.put("token", Hooptap.getToken());
-        data.put("id", badge_id);
+        data.put("rewardId", badge_id);
+        data.put("id", user_id);
 
         TaskWrapperInterface wrapperTask = new TaskCreator(BADGE_DETAIL_METHODNAME, data).getWrapperTask(new TaskCallbackWithRetry() {
             @Override
@@ -449,7 +445,7 @@ public abstract class HooptapApi {
 
             @Override
             public void retry() {
-                getBadgeDetail(badge_id, cb);
+                getBadgeDetail(badge_id, user_id, cb);
             }
         });
         new TaskLauncher(wrapperTask).executeTask();
@@ -466,7 +462,6 @@ public abstract class HooptapApi {
         LinkedHashMap<String, String> data = new LinkedHashMap<>();
         data.put("api_key", Hooptap.getApiKey());
         data.put("token", Hooptap.getToken());
-        Log.e("USER_ID", user_id);
         data.put("id", user_id);
 
         TaskWrapperInterface wrapperTask = new TaskCreator(PROFILE_METHODNAME, data).getWrapperTask(new TaskCallbackWithRetry() {

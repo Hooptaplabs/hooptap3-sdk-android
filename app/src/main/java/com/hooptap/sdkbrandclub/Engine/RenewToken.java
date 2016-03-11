@@ -3,13 +3,12 @@ package com.hooptap.sdkbrandclub.Engine;
 import android.os.StrictMode;
 import android.util.Log;
 
-import com.hooptap.brandclub.HooptapVClient;
-import com.hooptap.brandclub.model.InputRenewTokenModel;
 import com.hooptap.sdkbrandclub.Api.Hooptap;
-import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
+import com.hooptap.sdkbrandclub.HooptapVClient;
 import com.hooptap.sdkbrandclub.Interfaces.TaskCallbackWithRetry;
 import com.hooptap.sdkbrandclub.Models.ResponseError;
 import com.hooptap.sdkbrandclub.Utilities.Utils;
+import com.hooptap.sdkbrandclub.model.InputRenewTokenModel;
 
 /**
  * Created by carloscarrasco on 8/3/16.
@@ -30,7 +29,6 @@ public class RenewToken {
             Utils.setToken(newToken);
             callback.retry();
         } catch (Exception e) {
-            Log.e("RENEWTOKEN-ERROR", e.getLocalizedMessage() + " /");
             ResponseError responseError = new ResponseError();
             responseError.setData(e.getMessage());
             callback.onError(responseError);

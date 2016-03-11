@@ -4,11 +4,10 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 
-import com.hooptap.brandclub.HooptapVClient;
 import com.hooptap.sdkbrandclub.Api.Hooptap;
+import com.hooptap.sdkbrandclub.HooptapVClient;
 import com.hooptap.sdkbrandclub.Interfaces.ErrorManagerInterface;
 import com.hooptap.sdkbrandclub.Interfaces.HooptapCallback;
-import com.hooptap.sdkbrandclub.Interfaces.TaskCallbackWithRetry;
 import com.hooptap.sdkbrandclub.Interfaces.TaskConfiguratorInterface;
 import com.hooptap.sdkbrandclub.Interfaces.TaskWrapperInterface;
 
@@ -48,7 +47,6 @@ public class TaskAsync extends AsyncTask<Void, Void, Object> implements TaskWrap
             errorHappends = true;
             exception = e;
         }
-        Log.e("doInBackground", object + " /");
         return object;
     }
 

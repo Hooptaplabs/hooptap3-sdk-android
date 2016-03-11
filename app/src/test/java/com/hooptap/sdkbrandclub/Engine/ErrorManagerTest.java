@@ -1,8 +1,8 @@
 package com.hooptap.sdkbrandclub.Engine;
 
 import com.amazonaws.mobileconnectors.apigateway.ApiClientException;
-import com.hooptap.brandclub.HooptapVClient;
-import com.hooptap.brandclub.model.InputLoginModel;
+import com.hooptap.sdkbrandclub.HooptapVClient;
+import com.hooptap.sdkbrandclub.model.InputLoginModel;
 import com.hooptap.sdkbrandclub.Api.Hooptap;
 import com.hooptap.sdkbrandclub.BuildConfig;
 import com.hooptap.sdkbrandclub.Interfaces.TaskCallbackWithRetry;

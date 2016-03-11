@@ -46,7 +46,6 @@ public class HooptapFeedDeserializer<T> implements JsonDeserializer<HooptapFeed>
         itemType = itemType.substring(0, 1).toUpperCase() + itemType.substring(1);
 
         Class cls = MapperObjects.getClassFromKey(itemType);
-        Log.e("PARSE-FEED",itemType+" / "+cls.getName()+" / "+ reason_data);
         reward.setFeed(gson.fromJson(reason_data, cls));
         return reward;
 

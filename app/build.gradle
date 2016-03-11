@@ -15,7 +15,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -96,7 +96,6 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.google.android.gms:play-services-location:7.5.0'
     compile 'com.google.code.gson:gson:2.+'
-    compile 'com.android.support.test:runner:0.4'
 
     testCompile 'org.unitils:unitils-core:3.3'
     testCompile 'junit:junit:4.12'

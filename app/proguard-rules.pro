@@ -1,90 +1,59 @@
-# Add project specific ProGuard rules here.
-# By default, the flags in this file are appended to flags specified
-# in /System/sdk/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the proguardFiles
-# directive in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+-ignorewarnings
 
-# Add any project specific keep options here:
+##---------------Begin: proguard configuration for Gson ----------
+# Gson uses generic type information stored in a class file when working with
+#fields. Proguard removes such information by default, so configure it to keep
+#all of it.
+-keepattributes Signature
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
+# For using GSON @Expose annotation
+-keepattributes *Annotation*
 
+# Gson specific classes
+-keep class sun.misc.Unsafe { *; }
+#-keep class com.google.gson.stream.** { *; }
 
-#-keep public class Hooptap{ *; }
-#-keep public class HooptapApi{ *; }
-#-keep public class com.hooptap.sdkbrandclub.Customs.HooptapGame{ *; }
-#-keep public class com.hooptap.sdkbrandclub.Interfaces.*
+# Application classes that will be serialized/deserialized over Gson
+-keep class com.google.gson.examples.android.model.** { *; }
 
-#-dontwarn com.squareup.okhttp.**
-#-keep class com.squareup.okhttp.** { *; }
-#-dontwarn com.squareup.okhttp.**
-#-keep interface com.squareup.okhttp.** { *; }
-#-dontwarn com.squareup.okhttp.**
-#-keep class retrofit.** { *; }
-#-keepclasseswithmembers class * {
- #   @retrofit.http.* <methods>;
-#}
-#-dontwarn sun.misc.Unsafe.**
-#-keep class sun.misc.Unsafe { *; }
+##---------------End: proguard configuration for Gson ----------
 
-#-keepattributes *Annotation*
-#-keep public class com.google.vending.licensing.ILicensingService
-#-keep public class com.android.vending.licensing.ILicensingService
--dontwarn com.hooptap.c.**
--dontwarn com.hooptap.a.**
-#-keep class com.hooptap.a.** { *; }
+-keep class com.hooptap.sdkbrandclub.Models.** { *; }
 
-#-keepparameternames
-#-renamesourcefileattribute SourceFile
+-keep public class com.hooptap.sdkbrandclub.Api.** { *; }
+
+-keep class com.hooptap.sdkbrandclub.HooptapVClient{ *; }
+
+-keep class com.hooptap.sdkbrandclub.Interfaces.HooptapCallback{ *; }
+-keep class com.hooptap.sdkbrandclub.Interfaces.HooptapJSInterface{ *; }
+
+-keepparameternames
+-renamesourcefileattribute SourceFile
 -keepattributes Exceptions,InnerClasses,Signature,Deprecated,SourceFile,LineNumberTable,*Annotation*,EnclosingMethod
 
-#-keep class Hooptap { *; }
-#-keep class HooptapApi { *; }
--keep public class com.hooptap.sdkbrandclub.Api.* {
-    public *;
-}
-
--keep public class com.hooptap.sdkbrandclub.Api.HooptapApi {
-    public *;
-}
--keep public class com.hooptap.sdkbrandclub.Customs.* {
-    public *;
-}
-
--keep public class com.hooptap.sdkbrandclub.Interfaces.HooptapJSInterface {
-    public *;
-}
--keep public class com.hooptap.sdkbrandclub.Interfaces.HooptapCallback {
-    public *;
-}
-
 #-keep public class * {
-#    public *;
+ #   public protected *;
 #}
 
-#-keepclassmembernames class * {
-  #  java.lang.Class class$(java.lang.String);
- #   java.lang.Class class$(java.lang.String, boolean);
-#}
+-keepclassmembernames class * {
+    java.lang.Class class$(java.lang.String);
+    java.lang.Class class$(java.lang.String, boolean);
+}
 
-#-keepclasseswithmembernames,includedescriptorclasses class * {
- #   native <methods>;
-#}
+-keepclasseswithmembernames,includedescriptorclasses class * {
+    native <methods>;
+}
 
-#-keepclassmembers,allowoptimization enum * {
- #   public static **[] values();
-  #  public static ** valueOf(java.lang.String);
-#}
+-keepclassmembers,allowoptimization enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
 
-#-keepclassmembers class * implements java.io.Serializable {
- #   static final long serialVersionUID;
-  #  private static final java.io.ObjectStreamField[] serialPersistentFields;
-   # private void writeObject(java.io.ObjectOutputStream);
-    #private void readObject(java.io.ObjectInputStream);
-#    java.lang.Object writeReplace();
- #   java.lang.Object readResolve();
-#}
+-keepclassmembers class * implements java.io.Serializable {
+    static final long serialVersionUID;
+    private static final java.io.ObjectStreamField[] serialPersistentFields;
+    private void writeObject(java.io.ObjectOutputStream);
+    private void readObject(java.io.ObjectInputStream);
+    java.lang.Object writeReplace();
+    java.lang.Object readResolve();
+}
